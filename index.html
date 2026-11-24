@@ -459,9 +459,13 @@
           </div>
         </div>
         <div class="grid grid-cols-3 gap-2 pt-1">
-          <button onclick="iniciarCronometro()" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition"><i class="fa-solid fa-play mr-1"></i> Iniciar</button>
+          <button id="timer-btn-iniciar" onclick="alternarIniciarParar()" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition"><i class="fa-solid fa-play mr-1"></i> Iniciar</button>
           <button onclick="pausarCronometro()" class="py-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-xs transition"><i class="fa-solid fa-pause mr-1"></i> Pausar</button>
           <button onclick="salvarCronometro()" class="py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition"><i class="fa-solid fa-floppy-disk mr-1"></i> Salvar</button>
+        </div>
+        <div id="timer-aviso-notif" class="hidden text-[11px] text-sec bg-card border border-theme rounded-lg p-2.5 space-y-2">
+          <p id="timer-aviso-notif-texto">Ative os avisos do navegador para ser avisada quando o tempo da sessão terminar, mesmo com a aba minimizada.</p>
+          <button id="timer-aviso-notif-btn" onclick="pedirPermissaoNotificacao()" class="w-full py-1.5 rounded-md bg-blue-500/15 border border-blue-500/40 text-blue-400 font-bold"><i class="fa-solid fa-bell mr-1"></i> Ativar avisos</button>
         </div>
       </div>
     </div>
@@ -647,6 +651,35 @@
           <button onclick="salvarErro()" class="px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white transition">Salvar erro</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: INTERVALO DA REVISÃO (CRONÔMETRO) ================= -->
+  <div id="modal-rev-intervalo" class="hidden fixed inset-0 bg-black/75 z-[60] flex items-center justify-center backdrop-blur-sm p-4">
+    <div class="bg-panel w-full max-w-sm rounded-2xl border border-theme shadow-2xl p-6 text-center space-y-4">
+      <i class="fa-solid fa-rotate text-brand text-3xl"></i>
+      <h3 class="font-bold text-base">Concluir esta revisão?</h3>
+      <p class="text-xs text-sec">Escolha quando a próxima revisão deste tópico deve acontecer.</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="responderIntervaloRev(7)" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs">+7 dias</button>
+        <button onclick="responderIntervaloRev(15)" class="py-2 rounded-lg bg-card border border-theme font-bold text-xs hover-bg">+15 dias</button>
+        <button onclick="responderIntervaloRev(30)" class="py-2 rounded-lg bg-card border border-theme font-bold text-xs hover-bg">+30 dias</button>
+      </div>
+      <button onclick="responderIntervaloRev(0)" class="w-full py-2 rounded-lg text-xs font-bold text-sec hover-bg">Agora não (manter revisão pendente)</button>
+    </div>
+  </div>
+
+  <!-- ================= AVISO: DADOS ILEGÍVEIS ================= -->
+  <div id="aviso-dados-ilegiveis" class="hidden fixed inset-0 bg-black/85 z-[70] flex items-center justify-center backdrop-blur-sm p-4">
+    <div class="bg-panel w-full max-w-md rounded-2xl border-2 border-red-500 shadow-2xl p-6 space-y-4">
+      <h3 class="font-bold text-base flex items-center gap-2 text-red-400"><i class="fa-solid fa-triangle-exclamation"></i> Não foi possível ler seus dados</h3>
+      <p class="text-xs text-sec leading-relaxed">Os dados salvos neste navegador estão ilegíveis. Para proteger seu progresso, <strong class="text-main">nada será gravado</strong> até você resolver. Os dados originais continuam guardados.</p>
+      <button onclick="baixarDadosBrutos()" class="w-full py-2.5 rounded-lg bg-card border border-theme text-main font-bold text-xs hover-bg"><i class="fa-solid fa-download mr-1"></i> Baixar cópia dos dados originais</button>
+      <label class="w-full py-2.5 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-upload"></i> Restaurar um backup
+        <input type="file" accept=".json" onchange="importarBackup(event)" class="hidden">
+      </label>
+      <button onclick="document.getElementById('aviso-dados-ilegiveis').classList.add('hidden')" class="w-full py-2 rounded-lg text-xs font-bold text-sec hover-bg">Fechar aviso (continuar sem gravar)</button>
     </div>
   </div>
 
@@ -978,9 +1011,30 @@
       lembretes, planoDia, cadernoErros, cronograma, preferencias
     };
   }
+  // Se os dados salvos não puderem ser lidos, nada é gravado (protege o original).
+  let gravacaoBloqueada = false;
+  let dadosBrutosIlegiveis = null;
   function salvarTudo() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoAtual()));
+    if (gravacaoBloqueada) {
+      document.getElementById('aviso-dados-ilegiveis').classList.remove('hidden');
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoAtual()));
+    }
     atualizarTudoUI();
+  }
+  function baixarArquivo(conteudo, nome) {
+    const blob = new Blob([conteudo], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function baixarDadosBrutos() {
+    baixarArquivo(dadosBrutosIlegiveis || '', `dados_originais_ilegiveis_${hojeISO()}.json`);
   }
 
   // =====================================================================
@@ -1639,6 +1693,101 @@
   let timerSessao = null;         // { diaIdx, sid } quando veio do cronograma
   let timerRevisaoId = null;      // id da revisão em estudo
   let audioCtx = null;
+  // Tempo pelo relógio do sistema: acumulado (ms) + (agora − início do trecho em andamento)
+  const TIMER_KEY = 'central_cronometro_jessica_v1';
+  let timerInicioMs = null;       // Date.now() do início do trecho em andamento (null = parado/pausado)
+  let timerAcumuladoMs = 0;       // ms de trechos anteriores (antes de pausas)
+  let timerAlarmeTimeout = null;  // disparo agendado do alarme (funciona com a aba minimizada)
+
+  function segundosDecorridos() {
+    const emAndamento = timerInicioMs ? Math.max(0, Date.now() - timerInicioMs) : 0;
+    return Math.floor((timerAcumuladoMs + emAndamento) / 1000);
+  }
+  function salvarEstadoTimer() {
+    try {
+      if (!timerInicioMs && timerAcumuladoMs === 0) { localStorage.removeItem(TIMER_KEY); return; }
+      localStorage.setItem(TIMER_KEY, JSON.stringify({
+        estado: timerInicioMs ? 'rodando' : 'pausado',
+        inicio: timerInicioMs,
+        acumuladoMs: timerAcumuladoMs,
+        segundos: segundosDecorridos(),
+        duracaoMin: timerDuracaoMin,
+        alarmeAtivo: timerAlarmeAtivo,
+        alarmeDisparado: timerAlarmeDisparado,
+        sessao: timerSessao,
+        revisaoId: timerRevisaoId,
+        disc: document.getElementById('timer-disc').value,
+        topico: document.getElementById('timer-topico').value,
+        tipo: document.getElementById('timer-tipo').value,
+        origem: document.getElementById('timer-origem').innerText
+      }));
+    } catch (e) { /* armazenamento indisponível: o cronômetro segue só em memória */ }
+  }
+  function restaurarEstadoTimer() {
+    let st = null;
+    try { st = JSON.parse(localStorage.getItem(TIMER_KEY)); } catch (e) { st = null; }
+    if (!st) { atualizarBotoesTimer(); return; }
+    timerAcumuladoMs = Number(st.acumuladoMs) || 0;
+    timerDuracaoMin = Number(st.duracaoMin) || preferencias.duracaoPadrao;
+    timerAlarmeAtivo = !!st.alarmeAtivo;
+    timerAlarmeDisparado = !!st.alarmeDisparado;
+    timerSessao = st.sessao || null;
+    timerRevisaoId = st.revisaoId || null;
+    if (st.disc) {
+      document.getElementById('timer-disc').value = st.disc;
+      popularTopicosTimer();
+      if (st.topico) document.getElementById('timer-topico').value = st.topico;
+    }
+    if (st.tipo) document.getElementById('timer-tipo').value = st.tipo;
+    if (st.origem) setOrigemTimer(st.origem);
+    toggleFloatingTimer(true);
+    if (st.estado === 'rodando' && st.inicio) {
+      timerInicioMs = Number(st.inicio);
+      startTick();
+    } else {
+      timerSeconds = segundosDecorridos();
+      atualizarDisplayCronometro();
+      atualizarBotoesTimer();
+      if (timerAlarmeAtivo && timerAlarmeDisparado) mostrarModalFimSessao();
+    }
+  }
+  function atualizarBotoesTimer() {
+    const btn = document.getElementById('timer-btn-iniciar');
+    if (!btn) return;
+    const rodando = !!timerInterval;
+    btn.innerHTML = rodando
+      ? '<i class="fa-solid fa-stop mr-1"></i> Parar'
+      : `<i class="fa-solid fa-play mr-1"></i> ${timerAcumuladoMs > 0 ? 'Retomar' : 'Iniciar'}`;
+    btn.classList.toggle('bg-brand', !rodando);
+    btn.classList.toggle('bg-red-500', rodando);
+    btn.classList.toggle('hover:bg-red-600', rodando);
+  }
+  function atualizarAvisoNotificacao() {
+    const box = document.getElementById('timer-aviso-notif');
+    if (!box) return;
+    if (!('Notification' in window) || Notification.permission === 'granted') { box.classList.add('hidden'); return; }
+    box.classList.remove('hidden');
+    const negado = Notification.permission === 'denied';
+    document.getElementById('timer-aviso-notif-texto').innerText = negado
+      ? 'Os avisos do navegador estão bloqueados. O alarme tocará só com som: mantenha a aba aberta. Para liberar, ajuste as permissões do site no navegador.'
+      : 'Ative os avisos do navegador para ser avisada quando o tempo da sessão terminar, mesmo com a aba minimizada.';
+    document.getElementById('timer-aviso-notif-btn').classList.toggle('hidden', negado);
+  }
+  function pedirPermissaoNotificacao() {
+    if (!('Notification' in window) || Notification.permission !== 'default') { atualizarAvisoNotificacao(); return; }
+    try {
+      const r = Notification.requestPermission(atualizarAvisoNotificacao);
+      if (r && r.then) r.then(atualizarAvisoNotificacao);
+    } catch (e) { atualizarAvisoNotificacao(); }
+  }
+  function notificarFimSessao(texto) {
+    try {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('⏰ Tempo da sessão concluído', { body: texto, tag: 'central-fim-sessao', requireInteraction: true });
+      }
+    } catch (e) { /* alguns navegadores móveis exigem service worker; o modal e o som continuam */ }
+    try { if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 400]); } catch (e) {}
+  }
 
   function toggleFloatingTimer(expand) {
     document.getElementById('timer-fab').classList.toggle('hidden', expand);
@@ -1658,51 +1807,126 @@
     if (timerInterval) { alert('O cronômetro está rodando. Pause ou salve antes de iniciar outra sessão.'); return true; }
     return false;
   }
+  function alternarIniciarParar() {
+    if (timerInterval) pararCronometro(); else iniciarCronometro();
+  }
+  // Parar: encerra a contagem e só grava após confirmação.
+  function pararCronometro() {
+    pausarCronometro();
+    if (timerSeconds < 10) {
+      if (timerSeconds > 0 && confirm('Menos de 10 segundos no cronômetro. Descartar este tempo?')) descartarCronometro();
+      return;
+    }
+    const { node } = getNodeRef(document.getElementById('timer-disc').value, document.getElementById('timer-topico').value);
+    const quanto = `${Math.floor(timerSeconds / 60)} min ${timerSeconds % 60} s`;
+    const onde = node ? ` em "${node.nome}"` : ' (escolha o tópico antes de salvar)';
+    if (confirm(`Cronômetro parado em ${quanto}.\n\nSalvar este estudo${onde}?`)) { salvarCronometro(); return; }
+    if (confirm('O estudo NÃO foi salvo.\n\nOK = descartar este tempo\nCancelar = manter pausado para salvar ou retomar depois')) descartarCronometro();
+  }
+  function descartarCronometro() {
+    pausarCronometro();
+    timerAcumuladoMs = 0;
+    timerSeconds = 0;
+    timerAlarmeAtivo = false;
+    timerAlarmeDisparado = false;
+    timerSessao = null;
+    timerRevisaoId = null;
+    setOrigemTimer('Cronômetro livre (sem alarme)');
+    atualizarDisplayCronometro();
+    atualizarBotoesTimer();
+    salvarEstadoTimer();
+  }
   function lerDuracao() {
     const v = parseInt(document.getElementById('timer-duracao').value, 10);
     return v > 0 ? v : preferencias.duracaoPadrao;
   }
+  // AudioContext criado/liberado no primeiro clique (exigência dos navegadores)
   function garantirAudio() {
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // som silencioso para destravar o áudio em navegadores móveis
+        const buf = audioCtx.createBuffer(1, 1, 22050);
+        const src = audioCtx.createBufferSource();
+        src.buffer = buf; src.connect(audioCtx.destination); src.start(0);
+      }
       if (audioCtx.state === 'suspended') audioCtx.resume();
     } catch (e) { audioCtx = null; }
   }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+    document.addEventListener(ev, garantirAudio, { passive: true, capture: true }));
   function tocarAlarme() {
+    if (!audioCtx) garantirAudio();
     if (!audioCtx) return;
-    const agora = audioCtx.currentTime;
-    for (let i = 0; i < 3; i++) {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine'; osc.frequency.value = 880;
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      const t = agora + i * 0.45;
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-      osc.start(t); osc.stop(t + 0.4);
+    try { if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+    const agora = audioCtx.currentTime + 0.05;
+    for (let serie = 0; serie < 3; serie++) {
+      for (let i = 0; i < 3; i++) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine'; osc.frequency.value = 880;
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        const t = agora + serie * 1.8 + i * 0.45;
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+        osc.start(t); osc.stop(t + 0.4);
+      }
     }
+  }
+  function tickCronometro() {
+    timerSeconds = segundosDecorridos();
+    atualizarDisplayCronometro();
+    verificarFimSessao();
+  }
+  // Disparo único no horário exato do alarme: não depende de ticks (que o navegador desacelera em segundo plano)
+  function agendarAlarme() {
+    clearTimeout(timerAlarmeTimeout);
+    timerAlarmeTimeout = null;
+    if (!timerAlarmeAtivo || timerAlarmeDisparado || !timerInicioMs) return;
+    const faltaMs = timerDuracaoMin * 60000 - (timerAcumuladoMs + (Date.now() - timerInicioMs));
+    timerAlarmeTimeout = setTimeout(tickCronometro, Math.max(0, faltaMs) + 100);
   }
   function startTick() {
     document.getElementById('timer-fab-badge').classList.remove('hidden');
-    timerInterval = setInterval(() => {
-      timerSeconds++;
-      atualizarDisplayCronometro();
-      verificarFimSessao();
-    }, 1000);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(tickCronometro, 1000);
+    atualizarBotoesTimer();
+    agendarAlarme();
+    tickCronometro();
   }
   function iniciarCronometro() {
     if (timerInterval) return;
     garantirAudio();
-    timerDuracaoMin = lerDuracao();
-    timerAlarmeAtivo = !!timerSessao;
-    timerAlarmeDisparado = false;
+    pedirPermissaoNotificacao();
+    if (timerAcumuladoMs === 0) {   // início do zero (retomar após pausa mantém meta e alarme)
+      timerDuracaoMin = lerDuracao();
+      timerAlarmeAtivo = !!timerSessao;
+      timerAlarmeDisparado = false;
+    }
+    timerInicioMs = Date.now();
     startTick();
+    salvarEstadoTimer();
   }
   function pausarCronometro() {
+    if (timerInicioMs) {
+      timerAcumuladoMs += Math.max(0, Date.now() - timerInicioMs);
+      timerInicioMs = null;
+    }
     clearInterval(timerInterval);
     timerInterval = null;
+    clearTimeout(timerAlarmeTimeout);
+    timerAlarmeTimeout = null;
+    timerSeconds = segundosDecorridos();
+    atualizarDisplayCronometro();
     document.getElementById('timer-fab-badge').classList.add('hidden');
+    atualizarBotoesTimer();
+    salvarEstadoTimer();
+  }
+  function mostrarModalFimSessao() {
+    document.getElementById('fim-sessao-texto').innerText =
+      `Você estudou ${Math.floor(timerSeconds / 60)} min da sua meta de ${timerDuracaoMin} min.`;
+    document.getElementById('modal-fim-sessao').classList.remove('hidden');
   }
   function verificarFimSessao() {
     if (!timerAlarmeAtivo || timerAlarmeDisparado) return;
@@ -1710,16 +1934,21 @@
     timerAlarmeDisparado = true;
     pausarCronometro();
     tocarAlarme();
-    document.getElementById('fim-sessao-texto').innerText =
-      `Você estudou ${Math.floor(timerSeconds / 60)} min da sua meta de ${timerDuracaoMin} min.`;
-    document.getElementById('modal-fim-sessao').classList.remove('hidden');
+    notificarFimSessao(`Você completou ${timerDuracaoMin} min de estudo. Volte para salvar a sessão.`);
+    mostrarModalFimSessao();
   }
   function fimSessaoAdiar(min) {
     timerDuracaoMin += min;
     timerAlarmeDisparado = false;
     document.getElementById('modal-fim-sessao').classList.add('hidden');
+    timerInicioMs = Date.now();
     startTick();
+    salvarEstadoTimer();
   }
+  // Ao voltar para a aba, recalcula na hora (e dispara o alarme se o horário já passou)
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && timerInterval) tickCronometro();
+  });
   function fimSessaoSalvar() {
     document.getElementById('modal-fim-sessao').classList.add('hidden');
     salvarCronometro();
@@ -1735,6 +1964,9 @@
     popularTopicosTimer();
     if (s.topicoId) document.getElementById('timer-topico').value = s.topicoId;
     setOrigemTimer(`Sessão do cronograma · alarme em ${lerDuracao()} min`);
+    timerDuracaoMin = lerDuracao();
+    timerAlarmeAtivo = true;
+    timerAlarmeDisparado = false;
     iniciarCronometro();
   }
   function revisarAgora(id) {
@@ -1742,12 +1974,14 @@
     if (!r || cronometroOcupado()) return;
     timerSessao = null;
     timerRevisaoId = r.id;
+    timerAlarmeAtivo = false;
     toggleFloatingTimer(true);
     document.getElementById('timer-disc').value = r.discId;
     popularTopicosTimer();
     document.getElementById('timer-topico').value = r.nodeId;
     document.getElementById('timer-tipo').value = r.tipo;
     setOrigemTimer(`Revisão · ${r.tipo} · sem alarme`);
+    salvarEstadoTimer();
   }
   function salvarCronometro() {
     pausarCronometro();
@@ -1757,7 +1991,8 @@
     const { node } = getNodeRef(dId, nodeId);
     if (!node) { alert('Escolha o tópico antes de salvar. O tempo continua no cronômetro.'); return; }
 
-    const minutos = Math.max(1, Math.round(timerSeconds / 60));
+    const segundos = timerSeconds;
+    const minutos = Math.max(1, Math.round(segundos / 60));
     const tipo = document.getElementById('timer-tipo').value;
     const hoje = hojeISO();
     node.tempo = (node.tempo || 0) + minutos;
@@ -1765,17 +2000,11 @@
     historicoDiario[hoje] = (historicoDiario[hoje] || 0) + minutos;
     registrosEstudo.push({
       id: novoId(), data: hoje, discId: dId, topicoId: nodeId,
-      minutos, tipo, origem: timerSessao ? 'cronograma' : (timerRevisaoId ? 'revisao' : 'cronometro')
+      minutos, segundos, tipo, origem: timerSessao ? 'cronograma' : (timerRevisaoId ? 'revisao' : 'cronometro')
     });
 
     const sessao = timerSessao, revId = timerRevisaoId;
-    timerSeconds = 0;
-    atualizarDisplayCronometro();
-    timerAlarmeAtivo = false;
-    timerAlarmeDisparado = false;
-    timerSessao = null;
-    timerRevisaoId = null;
-    setOrigemTimer('Cronômetro livre (sem alarme)');
+    descartarCronometro();   // zera o cronômetro e limpa central_cronometro_jessica_v1
 
     if (sessao) {
       const dia = cronograma.dias[sessao.diaIdx];
@@ -1784,22 +2013,42 @@
         alternarSessao(sessao.diaIdx, sessao.sid);
       }
     }
-    if (revId && confirm('Marcar esta revisão como concluída?')) concluirRev(revId, 7);
     salvarTudo();
     alert(`Estudo de ${minutos} min registrado em "${node.nome}".`);
+    if (revId) perguntarIntervaloRev(revId);
+  }
+  // Revisão estudada no cronômetro: pergunta o intervalo da próxima (+7, +15, +30)
+  let revIntervaloId = null;
+  function perguntarIntervaloRev(id) {
+    const r = minhasRevisoes.find(x => String(x.id) === String(id));
+    if (!r || r.status === 'concluida' || r.status === 'ignorada') return;
+    revIntervaloId = r.id;
+    document.getElementById('modal-rev-intervalo').classList.remove('hidden');
+  }
+  function responderIntervaloRev(dias) {
+    document.getElementById('modal-rev-intervalo').classList.add('hidden');
+    const id = revIntervaloId;
+    revIntervaloId = null;
+    if (id != null && dias > 0) concluirRev(id, dias);
   }
   document.getElementById('timer-duracao').addEventListener('change', e => {
     const v = parseInt(e.target.value, 10);
     if (v > 0) { preferencias.duracaoPadrao = v; salvarTudo(); }
   });
+  ['timer-disc', 'timer-topico', 'timer-tipo'].forEach(id =>
+    document.getElementById(id).addEventListener('change', salvarEstadoTimer));
 
   // Registro manual
   function popularSelects() {
+    // preserva disciplina/tópico escolhidos no cronômetro
+    const discTimer = document.getElementById('timer-disc').value;
+    const topTimer = document.getElementById('timer-topico').value;
     document.getElementById('modal-disc').innerHTML = optionsDisciplinas(meusDados[0] ? meusDados[0].id : '', '');
-    document.getElementById('timer-disc').innerHTML = optionsDisciplinas('', '— disciplina —');
+    document.getElementById('timer-disc').innerHTML = optionsDisciplinas(discTimer, '— disciplina —');
     document.getElementById('plano-disc').innerHTML = optionsDisciplinas('', '— sem disciplina —');
     popularTopicosModal();
     popularTopicosTimer();
+    if (topTimer) document.getElementById('timer-topico').value = topTimer;
     popularTopicosPlano();
   }
   function popularTopicosModal() {
@@ -1828,7 +2077,7 @@
     if (min > 0 || tot > 0 || marcar) node.ultimaData = hoje;
     if (min > 0) {
       historicoDiario[hoje] = (historicoDiario[hoje] || 0) + min;
-      registrosEstudo.push({ id: novoId(), data: hoje, discId: dId, topicoId: nodeId, minutos: min, tipo, origem: 'manual' });
+      registrosEstudo.push({ id: novoId(), data: hoje, discId: dId, topicoId: nodeId, minutos: min, segundos: min * 60, tipo, origem: 'manual' });
     }
     if (marcar) marcarNoRecursivo(node, true, hoje);
     closeModalEstudo();
@@ -2458,7 +2707,7 @@
   // =====================================================================
   function abrirModalBackup() { document.getElementById('modal-backup').classList.remove('hidden'); }
   function fecharModalBackup() { document.getElementById('modal-backup').classList.add('hidden'); }
-  async function exportarBackup() {
+  async function exportarBackup(sufixo = '') {
     const imagens = {};
     for (const e of cadernoErros) {
       for (const id of e.imgIds || []) {
@@ -2467,31 +2716,42 @@
       }
     }
     const payload = { app: 'Central_Estudos_Jessica_PMPE', dataExportacao: new Date().toISOString(), ...estadoAtual(), imagens };
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup_central_estudos_${hojeISO()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    baixarArquivo(JSON.stringify(payload), `backup_central_estudos_${hojeISO()}${sufixo}.json`);
   }
   async function importarBackup(event) {
     const file = event.target.files[0];
     if (!file) return;
+    event.target.value = '';
+    let parsed;
     try {
-      const parsed = JSON.parse(await file.text());
-      if (!parsed.dados || !Array.isArray(parsed.dados)) { alert('Arquivo de backup inválido!'); return; }
+      parsed = JSON.parse(await file.text());
+    } catch (err) {
+      alert('Erro ao ler o arquivo de backup.');
+      return;
+    }
+    if (!parsed.dados || !Array.isArray(parsed.dados)) { alert('Arquivo de backup inválido!'); return; }
+    const quando = parsed.dataExportacao ? new Date(parsed.dataExportacao).toLocaleString('pt-BR') : 'data desconhecida';
+    if (!confirm(`Restaurar o backup de ${quando}?\n\nIsso SUBSTITUI todos os dados atuais deste navegador.\nAntes, será baixada automaticamente uma cópia do estado atual.`)) return;
+    // Cópia automática do estado atual antes de substituir
+    try {
+      if (gravacaoBloqueada) baixarDadosBrutos();
+      else await exportarBackup('_antes_de_restaurar');
+    } catch (err) {
+      alert('Não foi possível baixar a cópia do estado atual. A restauração foi cancelada.');
+      return;
+    }
+    try {
       aplicarEstado(parsed);
       for (const [id, src] of Object.entries(parsed.imagens || {})) await idbPut(id, src);
+      gravacaoBloqueada = false;
+      dadosBrutosIlegiveis = null;
+      document.getElementById('aviso-dados-ilegiveis').classList.add('hidden');
       salvarTudo();
       fecharModalBackup();
       alert('Backup restaurado com sucesso!');
     } catch (err) {
-      alert('Erro ao ler o arquivo de backup.');
+      alert('Erro ao restaurar o backup.');
     }
-    event.target.value = '';
   }
 
   // =====================================================================
@@ -2504,10 +2764,16 @@
     }
     atualizarVersiculo();
     atualizarCountdown();
+    let bruto = null;
     try {
-      aplicarEstado(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {});
+      bruto = localStorage.getItem(STORAGE_KEY);
+      aplicarEstado(bruto ? JSON.parse(bruto) : {});
     } catch (e) {
+      // NÃO sobrescreve: bloqueia gravação e oferece restaurar backup
+      gravacaoBloqueada = true;
+      dadosBrutosIlegiveis = bruto;
       aplicarEstado({});
+      document.getElementById('aviso-dados-ilegiveis').classList.remove('hidden');
     }
     meusDados.forEach(d => expandedNodes.add('disc_' + d.id));
     document.getElementById('timer-duracao').value = preferencias.duracaoPadrao;
@@ -2517,6 +2783,8 @@
     restaurarBilhete();
     atualizarTudoUI();
     navigate('dashboard');
+    restaurarEstadoTimer();
+    atualizarAvisoNotificacao();
   }
 
   iniciarApp();
