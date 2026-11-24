@@ -463,6 +463,11 @@
           <button onclick="pausarCronometro()" class="py-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-xs transition"><i class="fa-solid fa-pause mr-1"></i> Pausar</button>
           <button onclick="salvarCronometro()" class="py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition"><i class="fa-solid fa-floppy-disk mr-1"></i> Salvar</button>
         </div>
+        <div class="flex gap-2">
+          <button id="timer-btn-testar-som" onclick="testarSom()" class="flex-1 py-1.5 rounded-lg bg-card border border-theme text-sec hover:text-main font-bold text-[11px] transition"><i class="fa-solid fa-volume-high mr-1"></i> Testar som</button>
+          <button id="timer-btn-zerar" onclick="zerarCronometro()" class="hidden flex-1 py-1.5 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-[11px] transition"><i class="fa-solid fa-rotate-left mr-1"></i> Zerar</button>
+        </div>
+        <p id="timer-teste-som-msg" class="hidden text-[11px] text-sec"></p>
         <div id="timer-aviso-notif" class="hidden text-[11px] text-sec bg-card border border-theme rounded-lg p-2.5 space-y-2">
           <p id="timer-aviso-notif-texto">Ative os avisos do navegador para ser avisada quando o tempo da sessão terminar, mesmo com a aba minimizada.</p>
           <button id="timer-aviso-notif-btn" onclick="pedirPermissaoNotificacao()" class="w-full py-1.5 rounded-md bg-blue-500/15 border border-blue-500/40 text-blue-400 font-bold"><i class="fa-solid fa-bell mr-1"></i> Ativar avisos</button>
@@ -1761,6 +1766,9 @@
     btn.classList.toggle('bg-brand', !rodando);
     btn.classList.toggle('bg-red-500', rodando);
     btn.classList.toggle('hover:bg-red-600', rodando);
+    // Zerar: só com o cronômetro parado e tempo acumulado
+    const zerar = document.getElementById('timer-btn-zerar');
+    if (zerar) zerar.classList.toggle('hidden', rodando || timerAcumuladoMs <= 0);
   }
   function atualizarAvisoNotificacao() {
     const box = document.getElementById('timer-aviso-notif');
@@ -1836,25 +1844,55 @@
     atualizarBotoesTimer();
     salvarEstadoTimer();
   }
+  // Zerar: descarta a contagem parada, sem gravar registro, após confirmação
+  function zerarCronometro() {
+    if (timerInterval || timerAcumuladoMs <= 0) return;
+    const s = segundosDecorridos();
+    if (!confirm(`Zerar o cronômetro?\n\nO tempo de ${Math.floor(s / 60)} min ${s % 60} s será descartado e nenhum registro será gravado.`)) return;
+    descartarCronometro();
+  }
   function lerDuracao() {
     const v = parseInt(document.getElementById('timer-duracao').value, 10);
     return v > 0 ? v : preferencias.duracaoPadrao;
   }
-  // AudioContext criado/liberado no primeiro clique (exigência dos navegadores)
+  // AudioContext criado e liberado dentro de um clique (Iniciar, Testar som).
+  // Se não estiver "running" (suspended/interrupted), retoma e toca um som silencioso
+  // dentro do mesmo clique, que é o que destrava o áudio no celular.
   function garantirAudio() {
     try {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        // som silencioso para destravar o áudio em navegadores móveis
+      if (!audioCtx || audioCtx.state === 'closed') audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state !== 'running') {
+        audioCtx.resume();
         const buf = audioCtx.createBuffer(1, 1, 22050);
         const src = audioCtx.createBufferSource();
         src.buffer = buf; src.connect(audioCtx.destination); src.start(0);
       }
-      if (audioCtx.state === 'suspended') audioCtx.resume();
     } catch (e) { audioCtx = null; }
   }
-  ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+  // Reforço: qualquer clique/tecla libera o áudio (ex.: após recarregar com o cronômetro rodando).
+  // Só eventos que o navegador aceita como gesto (touchstart/pointerdown no celular não contam).
+  ['click', 'keydown'].forEach(ev =>
     document.addEventListener(ev, garantirAudio, { passive: true, capture: true }));
+  // Testar som: bipe curto para confirmar que o áudio funciona antes da sessão
+  function testarSom() {
+    garantirAudio();
+    const msg = document.getElementById('timer-teste-som-msg');
+    msg.classList.remove('hidden');
+    if (!audioCtx) { msg.innerText = 'Este navegador não permite tocar som. O alarme aparecerá só na tela.'; return; }
+    const t = audioCtx.currentTime + 0.05;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.value = 880;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    osc.start(t); osc.stop(t + 0.35);
+    msg.innerText = 'Bipe tocado. Não ouviu? Aumente o volume e, no iPhone, desligue o modo silencioso.';
+    setTimeout(() => {
+      if (!audioCtx || audioCtx.state !== 'running') msg.innerText = 'O navegador bloqueou o som. Toque em "Testar som" de novo.';
+    }, 500);
+  }
   function tocarAlarme() {
     if (!audioCtx) garantirAudio();
     if (!audioCtx) return;
