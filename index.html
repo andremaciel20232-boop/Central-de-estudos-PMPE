@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plataforma de Estudos - CFO CBMPE</title>
+  <title>Central de Estudos - Soldado PMPE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -36,10 +36,6 @@
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: var(--bg-main); }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
-    @keyframes pulse-glow { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-    .animate-glow { animation: pulse-glow 3s infinite; }
 
     @keyframes alerta-pulse {
       0%,100% { box-shadow: 0 0 0 0 rgba(249,115,22,.55); }
@@ -61,12 +57,11 @@
     .post-it.dragging { opacity: .45; }
     .post-it.drop-alvo { outline: 3px dashed #10b981; outline-offset: 4px; }
 
-    .sessao-concluida { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.5); }
-    .trava-alerta { border-color: #f43f5e; box-shadow: 0 0 0 1px rgba(244,63,94,.35); }
-    .trava-padrao { border-color: rgba(245,158,11,.45); }
-
+    .sessao-concluida { background: rgba(16,185,129,.12) !important; border-color: rgba(16,185,129,.5) !important; }
     .bilhete-fixo { transition: all .25s ease; }
     .bilhete-mini { width: 44px; height: 44px; }
+    .capa-caderno { transition: transform .3s ease, box-shadow .3s ease; }
+    .capa-caderno:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 30px rgba(0,0,0,.35); }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -75,19 +70,16 @@
   <aside class="w-64 bg-panel flex flex-col border-r border-theme shrink-0 z-20">
     <div class="p-5 border-b border-theme flex flex-col items-center gap-2.5 text-center">
       <div class="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-emerald-500/40 bg-card p-1.5 shadow-inner">
-        <img src="logo.png" alt="CBMPE" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/1e232d/10b981?text=CBMPE'">
+        <img src="logo.png" alt="PMPE" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/1e232d/10b981?text=PMPE'">
       </div>
       <div>
-        <h1 class="text-base font-bold tracking-tight">Estudei CBMPE</h1>
-        <p class="text-xs text-sec">2º Tenente (Instituto AOCP)</p>
+        <h1 class="text-base font-bold tracking-tight">Central de Estudos</h1>
+        <p class="text-xs text-sec">Soldado · PMPE (Instituto AOCP)</p>
       </div>
     </div>
     <nav class="flex-1 p-3.5 space-y-1.5 overflow-y-auto">
       <button onclick="navigate('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-brand bg-emerald-500/10 font-semibold text-sm">
         <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
-      </button>
-      <button onclick="navigate('estrategia')" id="nav-estrategia" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-brain w-5 text-center text-purple-400"></i> <span>Centro de Comando</span>
       </button>
       <button onclick="navigate('edital')" id="nav-edital" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
         <i class="fa-solid fa-sitemap w-5 text-center text-blue-400"></i> <span>Edital Verticalizado</span>
@@ -105,7 +97,7 @@
         <i class="fa-solid fa-chart-column w-5 text-center text-blue-400"></i> <span>Histórico</span>
       </button>
     </nav>
-    <div class="p-3.5 border-t border-theme space-y-2">
+    <div class="p-3.5 border-t border-theme">
       <button onclick="abrirModalBackup()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-card hover-bg border border-theme text-xs font-semibold text-sec transition">
         <i class="fa-solid fa-shield-halved text-brand"></i> Backup & Segurança
       </button>
@@ -114,21 +106,20 @@
 
   <!-- ================= MAIN ================= -->
   <main class="flex-1 overflow-y-auto relative" id="main-content">
-
     <header class="sticky top-0 bg-main/90 backdrop-blur-md z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
       <div>
-        <h2 class="text-xl md:text-2xl font-bold">Olá, Amanda Steffany Quirino</h2>
+        <h2 class="text-xl md:text-2xl font-bold">Olá, Jéssica Dayane</h2>
         <p class="text-sec text-xs md:text-sm">Continue, seu melhor dia para retornar é agora!</p>
       </div>
       <div class="flex items-center gap-2.5">
-        <button onclick="toggleTheme()" id="btn-theme" title="Alternar Tema Claro/Escuro" class="w-10 h-10 rounded-lg bg-panel border border-theme hover-bg flex items-center justify-center text-amber-400 transition shadow-sm">
+        <button onclick="toggleTheme()" id="btn-theme" title="Alternar tema" class="w-10 h-10 rounded-lg bg-panel border border-theme hover-bg flex items-center justify-center text-amber-400 transition shadow-sm">
           <i class="fa-solid fa-sun text-lg" id="icon-theme"></i>
         </button>
         <button onclick="abrirModalBackup()" title="Backup de Segurança" class="h-10 px-3.5 rounded-lg bg-panel border border-theme hover-bg flex items-center gap-2 text-xs font-semibold text-sec transition shadow-sm">
           <i class="fa-solid fa-cloud-arrow-down text-blue-400"></i> <span class="hidden sm:inline">Backup</span>
         </button>
         <button onclick="openModalEstudo()" class="h-10 bg-brand hover:opacity-90 text-white font-bold px-5 rounded-lg transition shadow-md flex items-center gap-2 text-sm">
-          <i class="fa-solid fa-plus"></i> Adicionar Estudo
+          <i class="fa-solid fa-plus"></i> Registrar Estudo
         </button>
       </div>
     </header>
@@ -137,7 +128,6 @@
 
       <!-- ================= DASHBOARD ================= -->
       <div id="view-dashboard" class="block max-w-6xl mx-auto space-y-6">
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
             <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Tempo Total de Estudo</p>
@@ -159,30 +149,23 @@
           </div>
         </div>
 
-        <!-- Missão do Dia + Mural de Lembretes -->
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <section class="lg:col-span-3 bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
-            <h3 id="plano-titulo" class="font-bold text-main text-lg">
-              <i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia
-            </h3>
+            <h3 id="plano-titulo" class="font-bold text-main text-lg"><i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia</h3>
             <div id="plano-lista" class="space-y-2"></div>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-3 border-t border-theme">
-              <input id="plano-texto" type="text" placeholder="Ex: Revisar Art. 5º da CF"
-                     class="sm:col-span-2 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
+              <input id="plano-texto" type="text" placeholder="Ex: Revisar Art. 5º da CF" class="sm:col-span-2 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
               <select id="plano-disc" onchange="popularTopicosPlano()" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
               <select id="plano-topico" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
             </div>
-            <button onclick="adicionarBlocoPlano()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2 rounded-lg transition text-sm">
-              + Adicionar bloco extra ao dia
-            </button>
+            <button onclick="adicionarBlocoPlano()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2 rounded-lg transition text-sm">+ Adicionar bloco extra ao dia</button>
           </section>
 
           <section class="lg:col-span-2 bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
             <h3 class="font-bold text-main text-lg"><i class="fa-solid fa-thumbtack text-amber-400 mr-2"></i> Mural de Lembretes</h3>
             <div id="lem-alerta" class="hidden space-y-3"></div>
             <div class="space-y-2">
-              <input id="lem-texto" type="text" placeholder="Ex: Pagar inscrição / Simulado AOCP"
-                     class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
+              <input id="lem-texto" type="text" placeholder="Ex: Pagar inscrição / Prova 21/02" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
               <div class="flex gap-2">
                 <input id="lem-data" type="date" class="flex-1 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
                 <button onclick="adicionarLembrete()" class="px-4 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition">+ Lembrete</button>
@@ -193,43 +176,38 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 space-y-6">
-            <div class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-sec text-xs font-bold uppercase tracking-wider"><i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> Minha Força & Inspiração</h3>
-                <button onclick="trocarVersiculoManual()" class="text-xs text-brand hover:underline font-medium"><i class="fa-solid fa-rotate mr-1"></i> Novo versículo</button>
-              </div>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-                <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto1.jpg" alt="Inspiração 1" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.src='https://placehold.co/400x500/1e232d/94a3b8?text=Foto+1'"></div>
-                <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto2.jpg" alt="Inspiração 2" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.src='https://placehold.co/400x500/1e232d/94a3b8?text=Foto+2'"></div>
-                <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto3.jpg" alt="Inspiração 3" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.src='https://placehold.co/400x500/1e232d/94a3b8?text=Foto+3'"></div>
-                <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto4.jpg" alt="Inspiração 4" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.src='https://placehold.co/400x500/1e232d/94a3b8?text=Foto+4'"></div>
-              </div>
-              <div class="text-center p-5 bg-card rounded-xl border border-theme">
-                <p class="text-main font-medium italic text-base md:text-lg leading-relaxed" id="versiculo-diario">"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."</p>
-                <p class="text-brand text-sm font-bold mt-2" id="versiculo-ref">— Salmos 119:105</p>
-              </div>
+          <div class="lg:col-span-2 bg-panel p-6 rounded-xl border border-theme shadow-sm">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-sec text-xs font-bold uppercase tracking-wider"><i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> Minha Força & Inspiração</h3>
+              <button onclick="trocarVersiculoManual()" class="text-xs text-brand hover:underline font-medium"><i class="fa-solid fa-rotate mr-1"></i> Nova frase</button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto1.jpg" alt="Inspiração 1" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
+              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto2.jpg" alt="Inspiração 2" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
+              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto3.jpg" alt="Inspiração 3" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
+              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto4.jpg" alt="Inspiração 4" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
+            </div>
+            <div class="text-center p-5 bg-card rounded-xl border border-theme">
+              <p class="text-main font-medium italic text-base md:text-lg leading-relaxed" id="versiculo-diario"></p>
+              <p class="text-brand text-sm font-bold mt-2" id="versiculo-ref"></p>
             </div>
           </div>
-
           <div class="space-y-6">
             <div class="bg-panel p-6 rounded-xl border border-theme text-center flex flex-col justify-center items-center shadow-sm">
               <p class="text-sec text-xs font-bold uppercase mb-1 tracking-wider">Faltam</p>
               <p class="text-5xl font-extrabold text-blue-500 my-1" id="countdown-dias">-- DIAS</p>
-              <p class="text-xs text-sec font-bold uppercase tracking-widest mb-4">Para a Prova</p>
-              <div class="w-full h-px bg-theme border-t border-theme mb-3"></div>
+              <p class="text-xs text-sec font-bold uppercase tracking-widest mb-4">Para a Prova Objetiva</p>
+              <div class="w-full border-t border-theme mb-3"></div>
               <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg px-4 py-2 w-full">
-                <p class="text-sm font-bold text-blue-400">CFO / CBMPE</p>
-                <p class="text-xs font-semibold text-main mt-0.5">dom., 28 de fev. de 2027</p>
+                <p class="text-sm font-bold text-blue-400">Soldado · PMPE</p>
+                <p class="text-xs font-semibold text-main mt-0.5">dom., 21 de fev. de 2027</p>
               </div>
             </div>
             <div class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
               <p class="text-sec text-xs font-bold uppercase mb-3 tracking-wider">Constância nos Estudos</p>
-              <div class="text-sm text-main mb-4 bg-card p-3.5 rounded-lg border border-theme leading-relaxed" id="streak-msg">
-                Continue, seu melhor dia para retornar é agora!
-              </div>
+              <div class="text-sm text-main mb-4 bg-card p-3.5 rounded-lg border border-theme leading-relaxed" id="streak-msg"></div>
               <div class="flex justify-between items-center gap-1 overflow-x-auto pb-1" id="streak-tracker"></div>
-              <p class="text-[11px] text-mut mt-2 text-center">Histórico dos últimos 14 dias (mín. 20 min/dia)</p>
+              <p class="text-[11px] text-mut mt-2 text-center">Últimos 14 dias (mín. 20 min/dia)</p>
             </div>
           </div>
         </div>
@@ -241,98 +219,81 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
             <div>
               <h2 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-chart-line text-brand"></i> Progresso no Edital</h2>
-              <p class="text-sm md:text-base font-semibold text-main mt-1" id="edital-resumo-geral">0 de 0 tópicos concluídos em 12 disciplinas — 0%</p>
+              <p class="text-sm md:text-base font-semibold text-main mt-1" id="edital-resumo-geral">0 de 0 tópicos concluídos — 0%</p>
             </div>
-            <div class="flex flex-col sm:items-end gap-1">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-brand border border-emerald-500/30" id="edital-ritmo-semanas">
-                <i class="fa-solid fa-bolt"></i> 0 tópicos nas últimas 4 semanas
-              </span>
-            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-brand border border-emerald-500/30" id="edital-ritmo-semanas"></span>
           </div>
           <div class="w-full bg-card rounded-full h-3 border border-theme overflow-hidden">
             <div id="edital-barra-geral" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
           </div>
           <div id="edital-diag-resumo" class="flex flex-wrap gap-2 mt-3"></div>
         </div>
-
         <div class="sticky top-[73px] z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center justify-between gap-3">
           <div class="relative flex-1 min-w-[220px]">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-mut text-sm"></i>
-            <input type="text" id="busca-edital" oninput="filtrarEdital()" placeholder="Filtrar tópico ou subtópico no edital..." class="w-full bg-panel border border-theme rounded-lg pl-10 pr-4 py-2 text-sm text-main focus:border-emerald-500 outline-none">
+            <input type="text" id="busca-edital" oninput="renderizarEdital()" placeholder="Filtrar tópico ou subtópico..." class="w-full bg-panel border border-theme rounded-lg pl-10 pr-4 py-2 text-sm text-main focus:border-emerald-500 outline-none">
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="expandirTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm">
-              <i class="fa-solid fa-angles-down text-brand"></i> Expandir todos
-            </button>
-            <button onclick="recolherTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm">
-              <i class="fa-solid fa-angles-up text-blue-400"></i> Recolher todos
-            </button>
+            <button onclick="expandirTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm"><i class="fa-solid fa-angles-down text-brand"></i> Expandir todos</button>
+            <button onclick="recolherTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm"><i class="fa-solid fa-angles-up text-blue-400"></i> Recolher todos</button>
           </div>
         </div>
         <div id="edital-container" class="space-y-3 pb-16"></div>
       </div>
 
-      <!-- ================= CENTRO DE COMANDO ================= -->
-      <div id="view-estrategia" class="hidden max-w-5xl mx-auto">
-        <header class="mb-6">
-          <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-brain text-purple-400 mr-2"></i> Centro de Comando & Estratégia</h2>
-          <p class="text-sec text-sm">Conecte suas metas diárias ao edital verticalizado e tenha domínio absoluto até 28/02/2027.</p>
+      <!-- ================= CRONOGRAMA ================= -->
+      <div id="view-cronograma" class="hidden max-w-5xl mx-auto space-y-6">
+        <header>
+          <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2"></i> Meu Cronograma</h2>
+          <p class="text-sec text-sm">Monte seus dias do jeito que preferir: quantas sessões, em que disciplina, por quantos minutos. A rodada repete os dias em sequência.</p>
         </header>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-panel p-6 rounded-xl border border-theme space-y-4 shadow-sm">
-            <h3 class="font-bold text-brand uppercase text-xs tracking-wider"><i class="fa-solid fa-sliders mr-1.5"></i> Parâmetros de Guerra</h3>
-            <div>
-              <label class="block text-xs font-bold text-sec mb-1">Data Alvo p/ fechar o edital:</label>
-              <input type="date" id="est-data" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div><label class="block text-xs font-bold text-sec mb-1">Tópicos / Dia</label><input type="number" id="est-topicos" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-              <div><label class="block text-xs font-bold text-sec mb-1">Questões / Dia</label><input type="number" id="est-questoes" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-              <div><label class="block text-xs font-bold text-sec mb-1">Vídeos / Dia</label><input type="number" id="est-videos" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-              <div><label class="block text-xs font-bold text-sec mb-1">PDFs / Dia</label><input type="number" id="est-pdfs" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-              <div><label class="block text-xs font-bold text-sec mb-1">Revisões / Dia</label><input type="number" id="est-revisoes" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-              <div><label class="block text-xs font-bold text-sec mb-1">Simulados / Mês</label><input type="number" id="est-simulados" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main text-center outline-none"></div>
-            </div>
-            <button onclick="salvarEstrategia()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg transition text-sm">Atualizar Estratégia</button>
-          </div>
 
-          <div class="md:col-span-2 space-y-6">
-            <div class="bg-panel p-6 rounded-xl border border-theme relative overflow-hidden shadow-sm border-t-4 border-t-purple-500">
-              <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-600/15 blur-3xl rounded-full animate-glow pointer-events-none"></div>
-              <h3 class="font-bold text-main text-lg mb-3"><i class="fa-solid fa-microchip text-purple-400 mr-2"></i> Diagnóstico Preditivo</h3>
-              <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="bg-card p-3.5 rounded-lg border border-theme">
-                  <p class="text-xs text-sec font-bold uppercase mb-1">Itens Pendentes</p>
-                  <p class="text-2xl font-bold text-main" id="diag-pendentes">0</p>
-                </div>
-                <div class="bg-card p-3.5 rounded-lg border border-theme">
-                  <p class="text-xs text-sec font-bold uppercase mb-1">Ritmo Necessário</p>
-                  <p class="text-2xl font-bold text-brand" id="diag-ritmo">0 <span class="text-xs font-normal text-sec">/dia</span></p>
-                </div>
-              </div>
-              <div id="diag-alerta" class="p-3.5 bg-card rounded-lg border border-theme text-sm font-medium leading-relaxed"></div>
-            </div>
-            <div class="bg-panel p-6 rounded-xl border border-theme shadow-sm border-t-4 border-t-blue-500">
-              <h3 class="font-bold text-main text-lg mb-4"><i class="fa-solid fa-crosshairs text-blue-400 mr-2"></i> Missão Tática de Hoje</h3>
-              <div class="space-y-2.5" id="missao-lista"></div>
+        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-card p-4 rounded-lg border border-theme">
+            <p class="text-xs text-sec font-bold uppercase mb-1">Rodada atual</p>
+            <p class="text-3xl font-bold text-brand" id="cron-rodada">1</p>
+          </div>
+          <div class="bg-card p-4 rounded-lg border border-theme">
+            <p class="text-xs text-sec font-bold uppercase mb-1">Dia atual</p>
+            <p class="text-2xl font-bold text-main truncate" id="cron-dia">—</p>
+          </div>
+          <div class="bg-card p-4 rounded-lg border border-theme">
+            <p class="text-xs text-sec font-bold uppercase mb-1">Progresso da rodada</p>
+            <p class="text-3xl font-bold text-blue-400" id="cron-progresso">0%</p>
+            <div class="w-full bg-card rounded-full h-2 border border-theme overflow-hidden mt-2">
+              <div id="cron-barra" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
             </div>
           </div>
-        </div>
+        </section>
+
+        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
+          <div class="flex flex-wrap justify-between items-center gap-3">
+            <h3 class="font-bold text-main text-lg">Dias do ciclo</h3>
+            <div class="flex gap-2">
+              <button onclick="pularDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-forward-step mr-1"></i> Pular dia atual</button>
+              <button onclick="adicionarDia()" class="px-3 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> Novo dia</button>
+            </div>
+          </div>
+          <div id="cron-dias" class="space-y-4"></div>
+        </section>
+
+        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
+          <h3 class="font-bold text-main text-lg mb-3"><i class="fa-solid fa-clock-rotate-left text-blue-400 mr-2"></i> Rodadas concluídas</h3>
+          <div id="cron-historico" class="space-y-2 text-sm"></div>
+        </section>
       </div>
 
-      <!-- ================= MURAL DE REVISÕES (3C) ================= -->
+      <!-- ================= MURAL DE REVISÕES ================= -->
       <div id="view-revisoes" class="hidden max-w-6xl mx-auto">
         <div class="flex flex-wrap justify-between items-end gap-4 mb-6">
           <header>
             <h2 class="text-2xl font-bold mb-1">Mural de Revisões Espaçadas</h2>
-            <p class="text-sec text-sm">Revisões em 5, 7, 9, 15 ou 30 dias para blindar a memória até a prova.</p>
+            <p class="text-sec text-sm">Revise o conteúdo em intervalos para memorizar até a prova.</p>
           </header>
-          <button onclick="abrirNovaRevisao()" class="bg-brand hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
-            <i class="fa-solid fa-calendar-plus mr-2"></i> Nova revisão
-          </button>
+          <button onclick="abrirNovaRevisao()" class="bg-brand hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition text-sm"><i class="fa-solid fa-calendar-plus mr-2"></i> Nova revisão</button>
         </div>
         <div id="rev-filtros" class="flex flex-wrap gap-2 mb-5"></div>
-        <div id="rev-lista-3c" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        <div id="rev-lista" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
       </div>
 
       <!-- ================= CADERNO DE ERROS ================= -->
@@ -340,9 +301,9 @@
         <div id="erros-vitrine">
           <header class="mb-6">
             <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-book-bookmark text-rose-400 mr-2"></i> Caderno de Erros</h2>
-            <p class="text-sec text-sm">Escolha uma disciplina para revisar os seus erros.</p>
+            <p class="text-sec text-sm">Escolha uma disciplina para revisar seus erros.</p>
           </header>
-          <div id="erros-capas" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+          <div id="erros-capas" class="grid grid-cols-2 sm:grid-cols-3 gap-5"></div>
         </div>
         <div id="erros-disc" class="hidden">
           <div class="sticky top-[73px] z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center gap-3 mb-4">
@@ -356,50 +317,11 @@
         </div>
       </div>
 
-      <!-- ================= CRONOGRAMA ================= -->
-      <div id="view-cronograma" class="hidden max-w-5xl mx-auto space-y-6">
-        <header>
-          <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2"></i> Cronograma de Ciclos</h2>
-          <p class="text-sec text-sm">Rodízio contínuo A → B → C → D. Cada dia são 3 sessões: Bloco III, Bloco II e Bloco I. Uma rodada completa = 4 dias (15h).</p>
-        </header>
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Rodada atual</p>
-            <p class="text-3xl font-bold text-brand" id="cron-rodada">1</p>
-          </div>
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Bloco de hoje</p>
-            <p class="text-3xl font-bold text-main" id="cron-bloco">A</p>
-          </div>
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Progresso da rodada</p>
-            <p class="text-3xl font-bold text-blue-400" id="cron-progresso">0%</p>
-            <div class="w-full bg-card rounded-full h-2 border border-theme overflow-hidden mt-2">
-              <div id="cron-barra" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
-            </div>
-          </div>
-        </section>
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-3">
-          <div class="flex flex-wrap justify-between items-center gap-3 mb-1">
-            <h3 class="font-bold text-main text-lg"><i class="fa-solid fa-list-check text-emerald-400 mr-2"></i> Sessões do dia</h3>
-            <div class="flex gap-2">
-              <button onclick="cronoAvancarDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-forward-step mr-1"></i> Pular dia</button>
-              <button onclick="cronoVoltarDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-backward-step mr-1"></i> Voltar dia</button>
-            </div>
-          </div>
-          <div id="cron-sessoes" class="space-y-2"></div>
-        </section>
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-          <h3 class="font-bold text-main text-lg mb-3"><i class="fa-solid fa-clock-rotate-left text-blue-400 mr-2"></i> Rodadas concluídas</h3>
-          <div id="cron-historico" class="space-y-2 text-sm"></div>
-        </section>
-      </div>
-
       <!-- ================= HISTÓRICO ================= -->
       <div id="view-historico" class="hidden max-w-6xl mx-auto space-y-6">
         <header>
           <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-chart-column text-blue-400 mr-2"></i> Histórico Analítico</h2>
-          <p class="text-sec text-sm">Veja onde seu tempo foi investido e compare com a meta do ciclo.</p>
+          <p class="text-sec text-sm">Veja onde seu tempo foi investido e compare com o que você programou no cronograma.</p>
         </header>
         <section class="bg-panel p-5 rounded-xl border border-theme shadow-sm space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -449,22 +371,19 @@
           </div>
         </section>
         <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-sec mb-4">Distribuição do ciclo</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-sec mb-4">Tempo realizado × programado</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div id="hist-donut" class="flex justify-center"></div>
             <div id="hist-legenda" class="space-y-2 text-sm"></div>
           </div>
+          <p class="text-[11px] text-mut mt-3">A meta usa as sessões do seu cronograma. Sem cronograma montado, a meta fica zerada.</p>
         </section>
         <section class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
                 <tr class="text-left text-xs text-sec uppercase border-b border-theme">
-                  <th class="py-2 pr-3">Data</th>
-                  <th class="py-2 pr-3">Disciplina</th>
-                  <th class="py-2 pr-3">Tópico</th>
-                  <th class="py-2 pr-3">Tempo</th>
-                  <th class="py-2">Modalidade</th>
+                  <th class="py-2 pr-3">Data</th><th class="py-2 pr-3">Disciplina</th><th class="py-2 pr-3">Tópico</th><th class="py-2 pr-3">Tempo</th><th class="py-2">Modalidade</th>
                 </tr>
               </thead>
               <tbody id="hist-tabela"></tbody>
@@ -477,7 +396,7 @@
     </div>
   </main>
 
-  <!-- ================= BILHETE FIXO / NORTE ================= -->
+  <!-- ================= BILHETE FIXO ================= -->
   <div id="bilhete-wrapper" class="fixed bottom-6 left-6 z-30">
     <div id="bilhete-card" class="bilhete-fixo w-72 bg-panel border border-theme rounded-2xl shadow-2xl overflow-hidden">
       <div class="px-4 py-2.5 bg-card border-b border-theme flex justify-between items-center">
@@ -487,7 +406,7 @@
       <div class="p-4 space-y-3 text-sm">
         <div class="flex justify-between items-baseline">
           <span class="text-xs text-sec font-bold uppercase">Rodada <span id="bil-rodada" class="text-brand text-base">1</span></span>
-          <span class="text-xs text-sec font-bold uppercase">Bloco <span id="bil-bloco" class="text-main text-base">A</span></span>
+          <span class="text-xs text-sec font-bold uppercase truncate ml-2" id="bil-dia">—</span>
         </div>
         <div class="w-full bg-card rounded-full h-2 border border-theme overflow-hidden">
           <div id="bil-barra" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
@@ -496,15 +415,6 @@
           <p class="text-[11px] text-sec font-bold uppercase mb-0.5">Próxima sessão</p>
           <p id="bil-proxima" class="font-semibold text-main text-sm">—</p>
         </div>
-        <div id="bil-trava" class="hidden p-3 rounded-lg border text-xs leading-relaxed"></div>
-        <div class="p-3 rounded-lg border border-amber-500/40 bg-amber-500/10 flex items-start gap-2">
-          <i class="fa-solid fa-pen-nib text-amber-400 mt-0.5"></i>
-          <div class="flex-1 min-w-0">
-            <p class="text-[11px] font-bold uppercase text-amber-300">Redação da semana</p>
-            <p id="bil-redacao-txt" class="text-xs text-main">—</p>
-            <button onclick="marcarRedacaoSemana()" id="bil-redacao-btn" class="mt-1.5 text-[11px] font-bold text-amber-300 hover:underline">Marcar como feita</button>
-          </div>
-        </div>
       </div>
     </div>
     <button id="bilhete-pin" onclick="toggleBilhete(true)" class="hidden bilhete-mini rounded-full bg-amber-500 text-slate-900 shadow-xl items-center justify-center text-lg hover:scale-105 transition" title="Mostrar Norte do Ciclo">
@@ -512,9 +422,9 @@
     </button>
   </div>
 
-  <!-- ================= CRONÔMETRO FLUTUANTE ================= -->
+  <!-- ================= CRONÔMETRO ================= -->
   <div id="floating-timer-wrapper" class="fixed bottom-6 right-6 z-40">
-    <button id="timer-fab" onclick="toggleFloatingTimer(true)" class="w-14 h-14 rounded-full bg-brand hover:opacity-95 text-white shadow-xl flex items-center justify-center transition-transform hover:scale-105 relative" title="Abrir Cronômetro de Estudos">
+    <button id="timer-fab" onclick="toggleFloatingTimer(true)" class="w-14 h-14 rounded-full bg-brand hover:opacity-95 text-white shadow-xl flex items-center justify-center transition-transform hover:scale-105 relative" title="Abrir cronômetro">
       <i class="fa-solid fa-stopwatch text-2xl"></i>
       <span id="timer-fab-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 animate-ping"></span>
     </button>
@@ -533,15 +443,14 @@
           <select id="timer-disc" onchange="popularTopicosTimer()" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-sec mb-1">Tópico / Subtópico (obrigatório)</label>
+          <label class="block text-[11px] font-bold text-sec mb-1">Tópico / Subtópico (obrigatório para salvar)</label>
           <select id="timer-topico" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[11px] font-bold text-sec mb-1">Tipo de estudo</label>
+            <label class="block text-[11px] font-bold text-sec mb-1">Modalidade</label>
             <select id="timer-tipo" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">
-              <option>Teoria</option><option>Leitura</option><option>Revisão</option>
-              <option>Simulado</option><option>Questões</option><option>Flashcards</option>
+              <option>Teoria</option><option>Leitura</option><option>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option>
             </select>
           </div>
           <div>
@@ -550,21 +459,21 @@
           </div>
         </div>
         <div class="grid grid-cols-3 gap-2 pt-1">
-          <button id="btn-timer-start" onclick="iniciarCronometro()" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition"><i class="fa-solid fa-play mr-1"></i> Iniciar</button>
-          <button id="btn-timer-pause" onclick="pausarCronometro()" class="py-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-xs transition"><i class="fa-solid fa-pause mr-1"></i> Pausar</button>
+          <button onclick="iniciarCronometro()" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition"><i class="fa-solid fa-play mr-1"></i> Iniciar</button>
+          <button onclick="pausarCronometro()" class="py-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-xs transition"><i class="fa-solid fa-pause mr-1"></i> Pausar</button>
           <button onclick="salvarCronometro()" class="py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition"><i class="fa-solid fa-floppy-disk mr-1"></i> Salvar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL: FIM DE SESSÃO (ALARME) ================= -->
+  <!-- ================= MODAL: FIM DE SESSÃO ================= -->
   <div id="modal-fim-sessao" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-sm rounded-2xl border-2 border-orange-500 shadow-2xl p-6 text-center space-y-4 alerta-pulse">
       <i class="fa-solid fa-bell text-orange-400 text-4xl"></i>
       <h3 class="font-bold text-lg">Tempo previsto concluído</h3>
       <p id="fim-sessao-texto" class="text-sm text-sec"></p>
-      <button onclick="fimSessaoSalvar()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg text-sm">Salvar e concluir sessão</button>
+      <button onclick="fimSessaoSalvar()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg text-sm">Salvar e concluir</button>
       <div class="grid grid-cols-2 gap-2">
         <button onclick="fimSessaoAdiar(5)" class="py-2 rounded-lg bg-card border border-theme font-bold text-xs hover-bg">+5 min</button>
         <button onclick="fimSessaoAdiar(10)" class="py-2 rounded-lg bg-card border border-theme font-bold text-xs hover-bg">+10 min</button>
@@ -572,7 +481,7 @@
     </div>
   </div>
 
-  <!-- ================= MODAL: REGISTRAR ESTUDO MANUAL ================= -->
+  <!-- ================= MODAL: REGISTRAR ESTUDO ================= -->
   <div id="modal-estudo" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-lg rounded-2xl border border-theme shadow-2xl overflow-hidden">
       <div class="p-5 border-b border-theme flex justify-between items-center bg-card">
@@ -582,7 +491,7 @@
       <div class="p-6 space-y-4">
         <div>
           <label class="block text-xs font-bold text-sec mb-1">Disciplina</label>
-          <select id="modal-disc" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none" onchange="popularTopicosModal()"></select>
+          <select id="modal-disc" onchange="popularTopicosModal()" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
         </div>
         <div>
           <label class="block text-xs font-bold text-sec mb-1">Tópico / Subtópico</label>
@@ -592,8 +501,7 @@
           <div>
             <label class="block text-xs font-bold text-sec mb-1">Modalidade</label>
             <select id="modal-tipo" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
-              <option>Teoria</option><option>Leitura</option><option>Revisão</option>
-              <option>Simulado</option><option>Questões</option><option>Flashcards</option>
+              <option>Teoria</option><option>Leitura</option><option>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option>
             </select>
           </div>
           <div>
@@ -613,7 +521,7 @@
         </div>
         <label class="flex items-center gap-2 text-xs text-sec cursor-pointer pt-1">
           <input type="checkbox" id="modal-marcar-concluido" class="w-4 h-4 accent-emerald-500">
-          <span>Marcar este tópico/subtópico como concluído no edital</span>
+          <span>Marcar este tópico como concluído no edital</span>
         </label>
       </div>
       <div class="p-5 border-t border-theme flex justify-end gap-3 bg-card">
@@ -634,18 +542,18 @@
         <button onclick="fecharMateriais()" class="text-sec hover:text-main"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
       <div class="p-6 space-y-4">
-        <p class="text-xs text-sec">Guarde aqui os links dos materiais externos acerca deste tópico.</p>
+        <p class="text-xs text-sec">Guarde aqui os links dos materiais externos sobre este tópico.</p>
         <div id="mat-lista" class="space-y-2 max-h-56 overflow-y-auto"></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-3 border-t border-theme">
-          <input id="mat-nome" type="text" placeholder="Nome do Material" class="bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
+          <input id="mat-nome" type="text" placeholder="Nome do material" class="bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
           <input id="mat-url" type="text" value="https://" placeholder="https://" class="bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
         </div>
-        <button onclick="adicionarMaterial()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg transition text-sm">+ Adicionar Material</button>
+        <button onclick="adicionarMaterial()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg transition text-sm">+ Adicionar material</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= MODAL: REVISÃO (NOVA / REAGENDAR) ================= -->
+  <!-- ================= MODAL: REVISÃO ================= -->
   <div id="modal-rev" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-md rounded-2xl border border-theme shadow-2xl overflow-hidden">
       <div class="p-5 border-b border-theme flex justify-between items-center bg-card">
@@ -663,10 +571,9 @@
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-sec mb-1">Tipo</label>
+            <label class="block text-xs font-bold text-sec mb-1">Modalidade</label>
             <select id="rev-tipo" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
-              <option>Teoria</option><option>Leitura</option><option selected>Revisão</option>
-              <option>Simulado</option><option>Questões</option><option>Flashcards</option>
+              <option>Teoria</option><option>Leitura</option><option selected>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option>
             </select>
           </div>
           <div>
@@ -747,23 +654,21 @@
   <div id="modal-backup" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-md rounded-2xl border border-theme shadow-2xl overflow-hidden">
       <div class="p-5 border-b border-theme flex justify-between items-center bg-card">
-        <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand"></i> Segurança & Backup de Dados</h3>
+        <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand"></i> Segurança & Backup</h3>
         <button onclick="fecharModalBackup()" class="text-sec hover:text-main"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
       <div class="p-6 space-y-5">
-        <p class="text-xs text-sec leading-relaxed">Seus estudos ficam salvos automaticamente neste navegador. Faça backups periódicos para não perder seu avanço ao trocar ou restaurar o aparelho.</p>
+        <p class="text-xs text-sec leading-relaxed">Seus dados ficam salvos automaticamente neste navegador. Faça backups periódicos para não perder seu progresso ao trocar de aparelho.</p>
         <div class="bg-card p-4 rounded-xl border border-theme space-y-2">
-          <h4 class="text-xs font-bold uppercase text-main">1. Exportar Cópia de Segurança</h4>
-          <p class="text-[11px] text-sec">Baixa um arquivo <code>.json</code> com progresso, horas, erros, prints, cronograma e revisões.</p>
-          <button onclick="exportarBackup()" class="w-full py-2.5 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-download"></i> Baixar Arquivo de Backup Agora
-          </button>
+          <h4 class="text-xs font-bold uppercase text-main">1. Exportar cópia de segurança</h4>
+          <p class="text-[11px] text-sec">Baixa um arquivo <code>.json</code> com edital, cronograma, revisões, erros, prints e histórico.</p>
+          <button onclick="exportarBackup()" class="w-full py-2.5 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i> Baixar backup agora</button>
         </div>
         <div class="bg-card p-4 rounded-xl border border-theme space-y-2">
-          <h4 class="text-xs font-bold uppercase text-main">2. Restaurar Backup Existente</h4>
-          <p class="text-[11px] text-sec">Selecione um arquivo <code>.json</code> salvo anteriormente para recuperar seus dados.</p>
+          <h4 class="text-xs font-bold uppercase text-main">2. Restaurar backup</h4>
+          <p class="text-[11px] text-sec">Selecione um arquivo <code>.json</code> salvo anteriormente.</p>
           <label class="w-full py-2.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/40 text-blue-400 font-bold text-xs transition flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-upload"></i> Selecionar Arquivo e Restaurar
+            <i class="fa-solid fa-upload"></i> Selecionar arquivo e restaurar
             <input type="file" accept=".json" onchange="importarBackup(event)" class="hidden">
           </label>
         </div>
@@ -773,7 +678,7 @@
 
   <script>
   // =====================================================================
-  // 1. VERSÍCULOS, CONTAGEM REGRESSIVA E TEMA
+  // 1. FRASES E TEMA
   // =====================================================================
   const versiculos = [
     { texto: '"Pois o Senhor dá sabedoria; da sua boca vêm o conhecimento e o entendimento."', ref: '— Provérbios 2:6' },
@@ -781,7 +686,13 @@
     { texto: '"Você nunca sabe que resultados virão da sua ação. Mas se você não fizer nada, não existirão."', ref: '— Mahatma Gandhi' },
     { texto: '"E tudo o que fizerem, seja em palavra ou em ação, façam-no em nome do Senhor Jesus, dando graças a Deus Pai por meio dele."', ref: '— Colossenses 3:17' },
     { texto: '"A possibilidade de realizarmos um sonho é o que torna a vida interessante."', ref: '— Paulo Coelho' },
-    { texto: '"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."', ref: '— Salmos 119:105' }
+    { texto: '"A tua palavra é lâmpada para os meus pés e luz para o meu caminho."', ref: '— Salmos 119:105' },
+    { texto: '"Uma mulher que não se desafia está fadada a ficar no mesmo de sempre."', ref: '— Autoria desconhecida' },
+    { texto: '"Sem tempo pra pensar na oposição."', ref: '— Autoria desconhecida' },
+    { texto: '"Minha guerra faz alguns perder o sono."', ref: '— Autoria desconhecida' },
+    { texto: '"Tudo que é meu me encontra."', ref: '— Autoria desconhecida' },
+    { texto: '"Não preciso de elogio, é só molhar no espelho que isso não sai."', ref: '— Autoria desconhecida' },
+    { texto: '"Minhas vitórias eu não explano, tô vivendo e não divulgo."', ref: '— Autoria desconhecida' }
   ];
   let versiculoIdx = new Date().getDate() % versiculos.length;
   function atualizarVersiculo() {
@@ -793,22 +704,15 @@
     atualizarVersiculo();
   }
   function atualizarCountdown() {
-    const alvo = new Date('2027-02-28T00:00:00');
+    const alvo = new Date('2027-02-21T00:00:00');
     const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     const diff = Math.ceil((alvo - hoje) / 86400000);
     document.getElementById('countdown-dias').innerText = diff > 0 ? `${diff} DIAS` : 'CHEGOU!';
   }
   function toggleTheme() {
     const isLight = document.body.classList.toggle('light-mode');
-    localStorage.setItem('cbmpe_theme', isLight ? 'light' : 'dark');
-    atualizarIconeTema(isLight);
-  }
-  function atualizarIconeTema(isLight) {
-    const icon = document.getElementById('icon-theme');
-    const btn = document.getElementById('btn-theme');
-    icon.className = isLight ? 'fa-solid fa-moon text-lg' : 'fa-solid fa-sun text-lg';
-    btn.classList.toggle('text-indigo-600', isLight);
-    btn.classList.toggle('text-amber-400', !isLight);
+    localStorage.setItem('central_tema', isLight ? 'light' : 'dark');
+    document.getElementById('icon-theme').className = isLight ? 'fa-solid fa-moon text-lg' : 'fa-solid fa-sun text-lg';
   }
 
   // =====================================================================
@@ -831,7 +735,7 @@
     const h = Math.floor(min / 60), m = min % 60;
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
   }
-  function novoId() { return Date.now() + Math.floor(Math.random() * 1000); }
+  function novoId() { return Date.now() + Math.floor(Math.random() * 100000); }
   function percorrerNos(nodes, cb) {
     nodes.forEach(n => { cb(n); if (n.children && n.children.length) percorrerNos(n.children, cb); });
   }
@@ -868,399 +772,116 @@
   }
   function optionsTopicos(discId, selecionado = '', placeholder = '') {
     const disc = meusDados.find(d => d.id === discId);
-    const head = placeholder !== null ? `<option value="">${placeholder}</option>` : '';
+    const head = placeholder === null ? '' : `<option value="">${placeholder}</option>`;
     if (!disc) return head;
     return head + listarTodosNosDisciplina(disc).map(t => {
       const indent = t.level === 1 ? '' : (t.level === 2 ? '— ' : '—— ');
       return `<option value="${t.id}" ${t.id === selecionado ? 'selected' : ''}>${indent}${esc(t.nome)}</option>`;
     }).join('');
   }
+  function optionsDisciplinas(selecionado = '', placeholder = '— disciplina —') {
+    return `<option value="">${placeholder}</option>` + meusDados.map(d =>
+      `<option value="${d.id}" ${d.id === selecionado ? 'selected' : ''}>${esc(d.nome)}</option>`).join('');
+  }
 
   // =====================================================================
-  // 3. BASE DO EDITAL (regras oficiais: Portaria SAD/SDS nº 300 - CBMPE / AOCP)
-  // Formato de cada linha: "<nível> <texto>"
+  // 3. EDITAL PMPE (Soldado, código 201) — Anexo II do Edital de Abertura
+  // Formato: "<nível> <texto>"
   // =====================================================================
   const EDITAL_DADOS = [
-    { id: 'biologia', nome: 'Biologia', linhas: [
-      '1 1. Moléculas, células e tecidos:',
-      '2 1.1. Estrutura e fisiologia celular: membrana, citoplasma e núcleo.',
-      '2 1.2. Divisão celular.',
-      '2 1.3. Aspectos bioquímicos das estruturas celulares.',
-      '2 1.4. Aspectos gerais do metabolismo celular.',
-      '2 1.5. Metabolismo energético: fotossíntese e respiração.',
-      '2 1.6. Codificação da informação genética.',
-      '2 1.7. Síntese proteica.',
-      '2 1.8. Diferenciação celular.',
-      '2 1.9. Principais tecidos animais e vegetais.',
-      '2 1.10. Origem e evolução das células.',
-      '2 1.11. Noções sobre células-tronco, clonagem e tecnologia do DNA recombinante.',
-      '2 1.12. Terapia gênica.',
-      '2 1.13. Aplicações de biotecnologia na produção de alimentos, fármacos e componentes biológicos.',
-      '2 1.14. Aplicações de tecnologias relacionadas ao DNA, investigações científicas, determinação da paternidade, investigação criminal e identificação de indivíduos.',
-      '2 1.15. Aspectos éticos relacionados ao desenvolvimento biotecnológico.',
-      '2 1.16. Biotecnologia e sustentabilidade.',
-      '1 2. Identidade dos seres vivos:',
-      '2 2.1. Evolução e padrões anatômicos e fisiológicos observados nos seres vivos.',
-      '2 2.2. Diversidade biológica e classificação dos seres vivos.',
-      '2 2.3. Funções vitais dos seres vivos e sua relação com a adaptação desses organismos a diferentes ambientes.',
-      '2 2.4. Embriologia, anatomia e fisiologia humana.',
-      '1 3. Ecologia e ciências ambientais:',
-      '2 3.1. Ecossistemas.',
-      '2 3.2. Fatores bióticos e abióticos.',
-      '2 3.3. Habitat e nicho ecológico.',
-      '2 3.4. A comunidade biológica: teia alimentar, sucessão e comunidade clímax.',
-      '2 3.5. Dinâmica de populações.',
-      '2 3.6. Interações entre os seres vivos.',
-      '2 3.7. Ciclos biogeoquímicos.',
-      '2 3.8. Fluxo de energia no ecossistema.',
-      '2 3.9. Biogeografia.',
-      '2 3.10. Biomas brasileiros.',
-      '2 3.11. Exploração e uso de recursos naturais.',
-      '2 3.12. Problemas ambientais: mudanças climáticas, efeito estufa, desmatamento, erosão, poluição da água, do solo, do ar e por microplásticos.',
-      '2 3.13. Conservação e recuperação de ecossistemas.',
-      '2 3.14. Conservação da biodiversidade.',
-      '2 3.15. Serviços ecossistêmicos e sua relação com a conservação da biodiversidade e o bem-estar humano.',
-      '2 3.16. Tecnologias ambientais.',
-      '2 3.17. Noções de saneamento básico.',
-      '2 3.18. Noções de legislação ambiental: água, florestas, unidades de conservação; biodiversidade.',
-      '1 4. Qualidade de vida das populações humanas:',
-      '2 4.1. Aspectos biológicos da pobreza e do desenvolvimento humano.',
-      '2 4.2. Indicadores sociais, ambientais e econômicos.',
-      '2 4.3. Índice de desenvolvimento humano.',
-      '2 4.4. Principais doenças que afetam a população brasileira: caracterização, prevenção e profilaxia.',
-      '2 4.5. Saúde Única: relações entre saúde humana, saúde animal e equilíbrio ambiental.',
-      '2 4.6. Noções de primeiros socorros.',
-      '2 4.7. Infecções Sexualmente Transmissíveis (IST).',
-      '2 4.8. Aspectos sociais da biologia: uso indevido de drogas; obesidade.',
-      '2 4.9. Saúde mental e bem-estar social.',
-      '2 4.10. Aspectos biológicos do desenvolvimento sustentável'
+    { id: 'portugues', nome: 'Língua Portuguesa', linhas: [
+      `1 1. Compreensão e interpretação de textos.`,
+      `1 2. Tipologias e gêneros textuais.`,
+      `1 3. Figuras de linguagem.`,
+      `1 4. Relações semânticas entre orações, períodos ou parágrafos (oposição/contraste, conclusão, concessão, causalidade, adição, alternância etc.).`,
+      `1 5. Ortografia oficial.`,
+      `1 6. Acentuação gráfica.`,
+      `1 7. Emprego das classes de palavras.`,
+      `1 8. Emprego do sinal indicativo de crase.`,
+      `1 9. Sintaxe da oração (termos essenciais, integrantes e acessórios) e do período (simples, composto por coordenação e por subordinação).`,
+      `1 10. Funções do "que" e do "se".`,
+      `1 11. Mecanismos de coesão textual.`,
+      `1 12. Emprego dos sinais de pontuação e suas funções no texto.`,
+      `1 13. Concordância nominal e verbal.`,
+      `1 14. Regência nominal e verbal.`,
+      `1 15. Colocação pronominal.`,
+      `1 16. Processos de formação de palavras.`,
+      `1 17. Significação das palavras.`,
+      `1 18. Variação linguística.`
     ]},
-    { id: 'administrativo', nome: 'Direito Administrativo', linhas: [
-      '1 1. Estado, governo e administração pública.',
-      '1 2. Direito Administrativo: conceito, fontes e princípios.',
-      '1 3. Organização administrativa.',
-      '1 4. Agentes públicos (espécies, cargo, regime único).',
-      '1 5. Poderes administrativos.',
-      '1 6. Ato administrativo.',
-      '1 7. Serviços públicos.',
-      '1 8. Controle e responsabilização da administração.'
+    { id: 'historia_pe', nome: 'História de Pernambuco', linhas: [
+      `1 1. Ocupação e colonização: contatos iniciais do europeu com o nativo, Capitanias Hereditárias e Duarte Coelho.`,
+      `1 2. A importância do açúcar para a economia local.`,
+      `1 3. Formação de Olinda e Recife.`,
+      `1 4. A presença holandesa e o governo de Maurício de Nassau.`,
+      `1 5. Movimentos de resistência e emancipacionistas:`,
+      `2 5.1. Formação de Quilombos.`,
+      `2 5.2. Insurreição Pernambucana (1654).`,
+      `2 5.3. Guerra dos Mascates (1710).`,
+      `2 5.4. Revolução Pernambucana (1817).`,
+      `2 5.5. Confederação do Equador (1824).`,
+      `2 5.6. Guerra dos Cabanos (1835).`,
+      `2 5.7. Revolução Praieira (1848).`,
+      `1 6. Pernambuco durante o período republicano.`,
+      `1 7. Manifestações da cultura popular pernambucana: frevo, maracatu, culinária e festas populares.`,
+      `1 8. Aspectos afro-brasileiros em Pernambuco.`
     ]},
-    { id: 'constitucional', nome: 'Direito Constitucional', linhas: [
-      '1 1. Constituição: conceito; classificação; histórico e elementos.',
-      '1 2. Estrutura da Constituição.',
-      '1 3. Poder constituinte: conceito e titularidade; poder constituinte originário, derivado, difuso e supranacional; mutação, recepção, repristinação e desconstitucionalização.',
-      '1 4. Eficácia e aplicabilidade das normas constitucionais.',
-      '1 5. Controle de constitucionalidade.',
-      '2 5.1. Conceito; sistemas de controle de constitucionalidade.',
-      '2 5.2. Momento de controle de constitucionalidade.',
-      '2 5.3. Controle difuso e concentrado de constitucionalidade.',
-      '2 5.4. Ação direta de inconstitucionalidade.',
-      '2 5.5. Ação direta de inconstitucionalidade por omissão.',
-      '2 5.6. Representação Interventiva.',
-      '2 5.7. Ação declaratória de constitucionalidade.',
-      '2 5.8. Arguição de descumprimento de preceito fundamental.',
-      '1 6. Direitos e garantias fundamentais: direitos e deveres individuais e coletivos; direito à vida, à liberdade, à igualdade.',
-      '1 7. Organização do Estado: forma de governo, sistema de governo e forma de Estado; federação brasileira; organização.',
-      '1 8. Organização dos Poderes: Poder Legislativo; Poder Executivo; Poder Judiciário.',
-      '1 9. Funções essenciais à justiça.',
-      '1 10. Defesa do Estado e das instituições democráticas.',
-      '1 11. Ordem social.',
-      '1 12. Constituição do Estado de Pernambuco.',
-      '1 13. Súmulas, jurisprudência dominante dos Tribunais Superiores e legislação relacionada com os temas.',
-      '1 14. Lei Federal nº 8.069/1990 - Estatuto da Criança e do Adolescente (Acrescido pelo art. 1° da Lei n° 18.926, de 8 de outubro de 2025).',
-      '1 15. Lei Federal nº 12.852/2013 - Estatuto da Juventude (Acrescido pelo art. 1° da Lei n° 18.926, de 8 de outubro de 2025).',
-      '1 16. Lei Federal nº 11.340/2006 - Lei Maria da Penha (Acrescido pelo art. 1° da Lei n° 18.926, de 8 de outubro de 2025).'
-    ]},
-    { id: 'penal_militar', nome: 'Direito Penal Militar', linhas: [
-      '1 1. Da aplicação da Lei penal militar.',
-      '1 2. Do crime.',
-      '1 3. Da imputabilidade penal.',
-      '1 4. Do concurso de agentes.',
-      '1 5. Das penas.',
-      '1 6. Das medidas de segurança.',
-      '1 7. Da ação penal.',
-      '1 8. Da extinção da punibilidade.',
-      '1 9. Dos crimes militares em tempo de paz.',
-      '1 10. Dos crimes militares em tempo de guerra.',
-      '1 11. Súmulas, jurisprudência dominante dos Tribunais Superiores.'
-    ]},
-    { id: 'estatistica', nome: 'Estatística', linhas: [
-      '1 1. Conceitos: População, censo, amostra aleatória, Normas para apresentação de dados.',
-      '1 2. Probabilidade: definição Clássica, Geométrica e Axiomática.',
-      '1 3. Variável Aleatória Discreta e Variável Aleatória Contínua, Distribuições de Probabilidade Discretas e Contínuas, Função Densidade de Probabilidade, Função Distribuição de Probabilidade e Função de Probabilidade.',
-      '1 4. Descrição de Dados Numérica e Gráfica: Medidas de Centralidade, Medidas de posição, Medidas de dispersão, Histograma e Gráfico de Caixa e Bigodes (Boxplot).',
-      '1 5. Testes de Hipóteses: Teste “t”, Teste F e Análise da Variância.',
-      '1 6. Análise de Regressão Linear: Ajuste da Reta e de outras Funções Lineares.'
-    ]},
-    { id: 'fisica', nome: 'Física', linhas: [
-      '1 1. Conhecimentos básicos e fundamentais:',
-      '2 1.1. Noções de ordem de grandeza.',
-      '2 1.2. Notação Científica.',
-      '2 1.3. Sistema Internacional de Unidades.',
-      '2 1.4. Observações e mensurações: representação de grandezas físicas como grandezas mensuráveis.',
-      '2 1.5. Ferramentas básicas: gráficos e vetores.',
-      '2 1.6. Conceituação de grandezas vetoriais e escalares.',
-      '2 1.7. Operações básicas com vetores.',
-      '1 2. O movimento, o equilíbrio e a descoberta de leis físicas:',
-      '2 2.1. Grandezas fundamentais da mecânica: tempo, espaço, velocidade e aceleração.',
-      '2 2.2. Relação histórica entre força e movimento.',
-      '2 2.3. Descrições do movimento e sua interpretação: quantificação do movimento e sua descrição matemática e gráfica.',
-      '2 2.4. Casos especiais de movimentos e suas regularidades observáveis.',
-      '2 2.5. Conceito de inércia.',
-      '2 2.6. Noção de sistemas de referência inerciais e não inerciais.',
-      '2 2.7. Noção dinâmica de massa e quantidade de movimento (momento linear).',
-      '2 2.8. Força e variação da quantidade de movimento.',
-      '2 2.9. Leis de Newton.',
-      '2 2.10. Centro de massa e a ideia de ponto material.',
-      '2 2.11. Conceito de forças externas e internas.',
-      '2 2.12. Lei da conservação da quantidade de movimento (momento linear) e teorema do impulso.',
-      '2 2.13. Momento de uma força (torque).',
-      '2 2.14. Condições de equilíbrio estático de ponto material e de corpos rígidos.',
-      '2 2.15. Força de atrito, força peso, força normal de contato e tração.',
-      '2 2.16. Diagramas de forças.',
-      '2 2.17. Identificação das forças que atuam nos movimentos circulares.',
-      '2 2.18. Noção de força centrípeta e sua quantificação.',
-      '2 2.19. A hidrostática: aspectos históricos e variáveis relevantes.',
-      '2 2.20. Empuxo.',
-      '2 2.21. Princípios de Pascal, Arquimedes e Stevin: condições de flutuação, relação entre diferença de nível e pressão hidrostática.',
-      '1 3. Energia, trabalho e potência:',
-      '2 3.1. Conceituação de trabalho, energia e potência.',
-      '2 3.2. Conceito de energia potencial e de energia cinética.',
-      '2 3.3. Conservação de energia mecânica e dissipação de energia.',
-      '2 3.4. Trabalho da força gravitacional e energia potencial gravitacional.',
-      '2 3.5. Forças conservativas e dissipativas.',
-      '1 4. A mecânica e o funcionamento do universo:',
-      '2 4.1. Força peso.',
-      '2 4.2. Aceleração gravitacional.',
-      '2 4.3. Lei da Gravitação Universal.',
-      '2 4.4. Leis de Kepler.',
-      '2 4.5. Movimentos de corpos celestes.',
-      '2 4.6. Influência na Terra: marés e variações climáticas.',
-      '2 4.7. Concepções históricas sobre a origem do universo e sua evolução.',
-      '1 5. Fenômenos elétricos e magnéticos:',
-      '2 5.1. Carga elétrica e corrente elétrica.',
-      '2 5.2. Lei de Coulomb.',
-      '2 5.3. Campo elétrico e potencial elétrico.',
-      '2 5.4. Linhas de campo.',
-      '2 5.5. Superfícies equipotenciais.',
-      '2 5.6. Poder das pontas.',
-      '2 5.7. Blindagem.',
-      '2 5.8. Capacitores.',
-      '2 5.9. Efeito Joule.',
-      '2 5.10. Lei de Ohm.',
-      '2 5.11. Resistência elétrica e resistividade.',
-      '2 5.12. Relações entre grandezas elétricas: tensão, corrente, potência e energia.',
-      '2 5.13. Circuitos elétricos simples.',
-      '2 5.14. Correntes contínua e alternada.',
-      '2 5.15. Medidores elétricos.',
-      '2 5.16. Representação gráfica de circuitos.',
-      '2 5.17. Símbolos convencionais.',
-      '2 5.18. Potência e consumo de energia em dispositivos elétricos.',
-      '2 5.19. Campo magnético.',
-      '2 5.20. Ímãs permanentes.',
-      '2 5.21. Linhas de campo magnético.',
-      '2 5.22. Campo magnético terrestre.',
-      '1 6. Oscilações, ondas, óptica e radiação:',
-      '2 6.1. Feixes e frentes de ondas.',
-      '2 6.2. Reflexão e refração.',
-      '2 6.3. Óptica geométrica: lentes e espelhos.',
-      '2 6.4. Formação de imagens.',
-      '2 6.5. Instrumentos ópticos simples.',
-      '2 6.6. Fenômenos ondulatórios.',
-      '2 6.7. Pulsos e ondas.',
-      '2 6.8. Período, frequência, ciclo.',
-      '2 6.9. Propagação: relação entre velocidade, frequência e comprimento de onda.',
-      '2 6.10. Ondas em diferentes meios de propagação.',
-      '2 6.11. Índice de refração e Leis de Refração.',
-      '1 7. O calor e os fenômenos térmicos:',
-      '2 7.1. Conceitos de calor e de temperatura.',
-      '2 7.2. Escalas termométricas.',
-      '2 7.3. Transferência de calor e equilíbrio térmico.',
-      '2 7.4. Capacidade calorífica e calor específico.',
-      '2 7.5. Condução do calor.',
-      '2 7.6. Dilatação térmica.',
-      '2 7.7. Mudanças de estado físico e calor latente de transformação.',
-      '2 7.8. Comportamento de Gases ideais.',
-      '2 7.9. Máquinas térmicas.',
-      '2 7.10. Ciclo de Carnot.',
-      '2 7.11. Leis da Termodinâmica.',
-      '2 7.12. Aplicações e fenômenos térmicos de uso cotidiano.',
-      '2 7.13. Compreensão de fenômenos climáticos relacionados ao ciclo da água.'
+    { id: 'raciocinio', nome: 'Raciocínio Lógico', linhas: [
+      `1 1. Compreensão de estruturas lógicas: proposições, conectivos lógicos, quantificadores e falácias.`,
+      `1 2. Lógica de argumentação: analogias, inferências, deduções, equivalência e implicação lógica, argumentos válidos e conclusões.`,
+      `1 3. Diagramas lógicos.`,
+      `1 4. Princípios da contagem: princípio multiplicativo, permutações, arranjos, combinações e probabilidade.`
     ]},
     { id: 'informatica', nome: 'Informática', linhas: [
-      '1 1. Conceito de internet e intranet.',
-      '1 2. Conceitos básicos e modos de utilização de tecnologias, ferramentas, aplicativos e procedimentos associados à internet/intranet, incluindo navegadores, serviços de internet e computação em nuvem.',
-      '1 3. Conceitos de proteção e segurança da informação, incluindo ameaças, vulnerabilidades, malwares, phishing, criptografia, autenticação e boas práticas de segurança.',
-      '1 4. Conceitos de organização e gerenciamento de arquivos, pastas e programas, incluindo criação, nomeação, renomeação, cópia, movimentação e exclusão.',
-      '2 5.1. Organização de computadores: processador, memórias, dispositivos de armazenamento, dispositivos de entrada e saída e periféricos.',
-      '2 5.2. Conceitos básicos de instalação, configuração e utilização de periféricos.',
-      '1 6. Ambientes operacionais: utilização básica do sistema operacional Windows 11 (em português), incluindo gerenciamento de arquivos, pastas, programas, configurações e recursos do sistema, Painel de Controle e comandos do Prompt de Comando.',
-      '1 7. Utilização de ferramentas de texto, planilha e apresentação do pacote Microsoft Office 2019 em português (Word, Excel e PowerPoint) e do pacote LibreOffice 7 em português (Writer, Calc e Impress), incluindo edição e formatação de documentos, fórmulas e funções, gráficos, tabelas, apresentações e exportação de arquivos.'
+      `1 1. Conceito de internet e intranet.`,
+      `1 2. Conceitos básicos e modos de utilização de tecnologias, ferramentas, aplicativos e procedimentos associados à internet/intranet, incluindo navegadores, serviços de internet e computação em nuvem.`,
+      `1 3. Proteção e segurança da informação: ameaças, vulnerabilidades, malwares, phishing, criptografia, autenticação e boas práticas.`,
+      `1 4. Armazenamento de dados e cópia de segurança (backup): dispositivos, tipos de backup e restauração.`,
+      `1 5. Organização de arquivos, pastas e programas; organização de computadores; periféricos.`,
+      `1 6. Windows 11: gerenciamento de arquivos, pastas, programas, configurações, Painel de Controle e Prompt de Comando.`,
+      `1 7. Microsoft Office 2019 (Word, Excel, PowerPoint) e LibreOffice 7 (Writer, Calc, Impress): edição, fórmulas, gráficos, apresentações e exportação.`
     ]},
-    { id: 'legislacao', nome: 'Legislações Pertinentes (CBMPE)', linhas: [
-      '1 1. Lei Estadual 11.817, de 24 de julho de 2000 (Código Disciplinar dos Militares do Estado de Pernambuco):',
-      '2 1.1. Do regime disciplinar.',
-      '2 1.2. Das transgressões disciplinares militares.',
-      '2 1.3. Das penas disciplinares e das medidas administrativas.',
-      '2 1.4. Dos recursos disciplinares e das comissões recursais.',
-      '2 1.5. Do cancelamento de penas e das recompensas.',
-      '2 1.6. Das transgressões disciplinares em espécie.',
-      '1 2. Decreto Estadual 50.014, de 22 de dezembro de 2020 (Regulamenta a Lei Estadual 11.817, de 24 de julho de 2000).',
-      '1 3. Lei Estadual 6.783, de 16 de outubro de 1974 (Estatuto dos Militares do Estado de Pernambuco):',
-      '2 3.1. Da hierarquia e da disciplina.',
-      '2 3.2. Do cargo e da função policiais-militares.',
-      '2 3.3. Das obrigações e dos deveres policiais-militares.',
-      '2 3.4. Dos direitos, das prerrogativas e do sistema de proteção social.',
-      '2 3.5. Das situações especiais.',
-      '2 3.6. Do desligamento ou exclusão do serviço ativo.',
-      '2 3.7. Do tempo de serviço.',
-      '1 4. Lei Estadual 15.187, de 12 de dezembro de 2013 (Dispõe sobre a Organização Básica do Corpo de Bombeiros Militar do Estado de Pernambuco):',
-      '2 4.1. Generalidades.',
-      '2 4.2. Organização básica do CBMPE.',
-      '2 4.3. Das atribuições funcionais e orgânicas.',
-      '2 4.4. Do pessoal.',
-      '1 5. Lei Federal 14.751 de 12 de dezembro de 2023 (Lei Orgânica Nacional das Polícias Militares e dos Corpos de Bombeiros Militares dos Estados, do Distrito Federal e dos Territórios).'
+    { id: 'constitucional', nome: 'Direito Constitucional', linhas: [
+      `1 1. Dos princípios fundamentais.`,
+      `1 2. Direitos e garantias fundamentais: direitos e deveres individuais e coletivos; direito à vida, à liberdade, à igualdade, à segurança e à propriedade; direitos sociais; nacionalidade e direitos políticos; remédios constitucionais.`,
+      `1 3. Organização do Estado: organização político-administrativa; repartição de competências; União, Estados e Municípios; Administração Pública; servidores públicos; militares dos Estados, do DF e dos Territórios.`,
+      `1 4. Organização dos Poderes: Poder Legislativo, Poder Executivo e Poder Judiciário; funções essenciais à Justiça.`,
+      `1 5. Defesa do Estado e das instituições democráticas.`,
+      `1 6. Súmulas e jurisprudência dominante dos Tribunais Superiores.`
     ]},
-    { id: 'espanhol', nome: 'Língua Estrangeira – Espanhol', linhas: [
-      '1 1. Domínio da língua estrangeira através de leitura e compreensão de textos de fontes variadas: Determinantes do nome: artigos: definidos e contrações, indefinidos; possessivos; demonstrativos; numerais; indefinidos; relativos; interrogativos; exclamativos.',
-      '1 2. Substantivos: gênero, número e grau.',
-      '1 3. Adjetivos: gênero, número, grau.',
-      '1 4. Pronomes: pessoais (sujeitos e complementos), possessivos, demonstrativos, relativos, indefinidos, interrogativos e exclamativos.',
-      '1 5. Verbos: auxiliares, regulares, irregulares (de irregularidade comum e irregularidade própria), impessoais e pronominais e perífrases verbais.',
-      '1 6. Advérbios e Locuções Adverbiais.',
-      '1 7. Preposições.',
-      '1 8. Conjunções: coordenativas, subordinativas.',
-      '1 9. Acentuação.',
-      '1 10. Sinônimos e antônimos.',
-      '1 11. Divergências entre o português e o espanhol: heterográficos, heteroprosódicos (heterofônicos ou heterotônicos), heterogenéricos, heterossemânticos.'
-    ]},
-    { id: 'portugues', nome: 'Língua Portuguesa', linhas: [
-      '1 1. Compreensão e interpretação de textos.',
-      '1 2. Tipologias e gêneros textuais.',
-      '1 3. Figuras de linguagem.',
-      '1 4. Relações semânticas estabelecidas entre orações, períodos ou parágrafos (oposição/contraste, conclusão, concessão, causalidade, adição, alternância etc.).',
-      '1 5. Ortografia oficial.',
-      '1 6. Acentuação gráfica.',
-      '1 7. Emprego das classes de palavras.',
-      '1 8. Emprego do sinal indicativo de crase.',
-      '1 9. Sintaxe da oração (termos essenciais, termos integrantes e termos acessórios da oração e suas funções no texto) e do período (período simples e período composto por coordenação e por subordinação).',
-      '1 10. Funções do "que" e do "se".',
-      '1 11. Mecanismos de coesão textual.',
-      '1 12. Emprego dos sinais de pontuação e suas funções no texto.',
-      '1 13. Concordância nominal e verbal.',
-      '1 14. Regência nominal e verbal.',
-      '1 15. Colocação pronominal.',
-      '1 16. Processos de formação de palavras.',
-      '1 17. Significação das palavras.',
-      '1 18. Variação linguística.'
-    ]},
-    { id: 'matematica', nome: 'Matemática', linhas: [
-      '1 1. Conhecimentos numéricos – operações em conjuntos numéricos (naturais, inteiros, racionais e reais), desigualdades, divisibilidade, fatoração, razões e proporções, porcentagem e juros, relações de dependência entre grandezas, sequências e progressões, princípios de contagem.',
-      '1 2. Conhecimentos geométricos – características das figuras geométricas planas e espaciais; grandezas, unidades de medida e escalas; comprimentos, áreas e volumes; ângulos; posições de retas; simetrias de figuras planas ou espaciais; congruência e semelhança de triângulos; teorema de Tales; relações métricas nos triângulos; circunferências; trigonometria do ângulo agudo.',
-      '1 3. Conhecimentos de estatística e probabilidade – representação e análise de dados; medidas de tendência central (médias, moda e mediana); desvios e variância; noções de probabilidade.',
-      '1 4. Conhecimentos algébricos – gráficos e funções; funções algébricas do 1.º e dos 2.º graus, polinomiais, racionais, exponenciais e logarítmicas; equações e inequações; relações no ciclo trigonométrico e funções trigonométricas.',
-      '1 5. Conhecimentos algébricos/geométricos – plano cartesiano; retas; circunferências; paralelismo e perpendicularidade, sistemas de equações.'
-    ]},
-    { id: 'quimica', nome: 'Química', linhas: [
-      '1 1. ESTRUTURA DA MATÉRIA:',
-      '2 1.1. Aspectos Macroscópicos: Substâncias simples e compostas; Mistura; Critérios de pureza; Métodos de separação dos Componentes de Misturas Homogêneas e Heterogêneas.',
-      '2 1.2. Átomos e Moléculas: Elemento Químico; Estrutura Atômica; Isótonos, Isótopos, Isóbaros; Número atômico, número de massa; Massa atômica; N.o de Avogadro.',
-      '2 1.3. Classificação Periódica dos Elementos: Propriedade dos elementos: gases nobres, metais, não-metais e semimetais; Configuração Eletrônica dos Elementos (exceção dos lantanídeos e dos actinídeos); Propriedades PERIÓDICAS.',
-      '2 1.4. Ligação Química: Elétrons de valência; Ligação Iônica; Ligação Covalente; Ligação Metálica; FORÇAS INTERMOLECULARES.',
-      '2 1.5. Fórmulas Químicas e Estruturas de Lewis; Nomenclatura das substâncias. N.º de oxidação de um elemento, conhecida sua fórmula molecular.',
-      '2 1.6. Óxidos, Ácidos, Bases e Sais: Conceitos e propriedades de óxidos, ácidos, bases e sais; Fórmulas moleculares e estruturais; Conceitos de Arrhenius, Brönsted-Lowry e Lewis para ácidos e bases.',
-      '2 1.7. Estados da Matéria: Sólido, líquido e gasoso; Volume molar; Gás ideal – Princípio de Avogadro; Mudanças de estado.',
-      '2 1.8. Soluções:',
-      '3 1.8.1. Conceito de solvente, soluto, fase, coeficiente de solubilidade.',
-      '3 1.8.2. Solventes polares e apolares.',
-      '3 1.8.3. Soluções iônicas e moleculares.',
-      '3 1.8.4. Solução molar, fração molar.',
-      '3 1.8.5. Unidades para exprimir a concentração das soluções.',
-      '3 1.8.6. Preparo de soluções.',
-      '3 1.8.7. Mistura de soluções.',
-      '3 1.8.8. Cálculos envolvendo concentração, diluição e mistura de soluções - Diluição de soluções',
-      '2 1.9. Estrutura Nuclear:',
-      '3 1.9.1. Propriedades das emissões radioativas.',
-      '3 1.9.2. Efeitos provocados pelas emissões radioativas: efeitos térmicos, efeitos de ionização e efeitos químicos.',
-      '3 1.9.3. Variação do N.o de massa e N.o atômico com a emissão de partículas Alfa e Beta (leis de radioatividade).',
-      '3 1.9.4. Radioatividade Natural e Artificial.',
-      '3 1.9.5. Conceito de meia-vida, Riscos associados às radiações ionizantes e princípios de proteção radiológica.',
-      '3 1.9.6. Fissão Nuclear.',
-      '3 1.9.7. Fusão Nuclear.',
-      '1 2. TRANSFORMAÇÃO DA MATÉRIA:',
-      '2 2.1. Reações Químicas:',
-      '3 2.1.1. Classificação das reações químicas: análise, síntese, dupla troca, simples troca, redox.',
-      '3 2.1.2. Relação massa/volume numa reação química.',
-      '3 2.1.3. Aplicação do conceito de rendimento de uma reação química.',
-      '3 2.1.4. Balanceamento de equações Químicas.',
-      '3 2.1.5. Estequiometria e cálculos estequiométricos.',
-      '2 2.2. Efeitos Energéticos nas Reações Químicas:',
-      '3 2.2.1. Aplicação do conceito de calor de reação, calor de formação, calor de decomposição e calor de combustão em problemas simples.',
-      '3 2.2.2. Variação da entalpia - Aplicação do conceito de variação da entalpia e das reações químicas em problemas.',
-      '3 2.2.3. Reações endotérmicas e exotérmicas.',
-      '3 2.2.4. Conceito e aplicação da energia de ligação.',
-      '2 2.3. Conceitos de Cinética Química: Conceito de energia de ativação; Diagrama de energia de ativação; Velocidade de reação; Fatores que alteram a velocidade da reação; Catalisadores.',
-      '2 2.4. Equilíbrio Químico:',
-      '3 2.4.1. Aspecto dinâmico do equilíbrio químico.',
-      '3 2.4.2. Constante de equilíbrio em sistemas homogêneos e heterogêneos.',
-      '3 2.4.3. Expressão do equilíbrio químico em função das concentrações molares.',
-      '3 2.4.4. Expressão do equilíbrio químico em função das pressões parciais.',
-      '3 2.4.5. Aplicação do Princípio de Le Chatelier.',
-      '2 2.5. Solubilidade:',
-      '3 2.5.1. Solubilidade de uma substância em um determinado solvente: Equilíbrio iônico.',
-      '3 2.5.2. Solubilidade em água - produto de solubilidade.',
-      '3 2.5.3. Constante do produto de solubilidade.',
-      '3 2.5.4. Efeito de ion comum.',
-      '3 2.5.5. Produto iônico de água.',
-      '3 2.5.6. Hidrólise.',
-      '3 2.5.7. pH e pOH.',
-      '3 2.5.8. Solução tampão',
-      '2 2.6. Reações de Oxi-Redução (redox):',
-      '3 2.6.1. Agente redutor, agente oxidante.',
-      '3 2.6.2. Mecanismo de uma célula eletroquímica galvânica.',
-      '3 2.6.3. Potencial de uma célula eletroquímica galvânica.',
-      '3 2.6.4. Balanceamento de reações de redox.',
-      '3 2.6.5. Conceito de eletrólise em fusão e em solução aquosa.',
-      '3 2.6.6. Mecanismos de uma célula eletrolítica (caracterização dos eletrodos).',
-      '3 2.6.7. Corrosão e processos de oxidação.',
-      '3 2.6.8. Leis de eletrólise.',
-      '1 3. QUÍMICA ORGÂNICA:',
-      '2 3.1. Características gerais:',
-      '3 3.1.1. Características do átomo de carbono na formação de cadeias e ligações covalentes.',
-      '3 3.1.2. Funções orgânicas: hidrocarbonetos, álcoois, fenóis, aldeídos, éteres, ésteres, cetonas, ácidos carboxílicos e seus derivados, compostos nitrogenados, compostos halogenados, compostos organometílicos e compostos sulfurados.',
-      '3 3.1.3. Estrutura e reatividade química.',
-      '2 3.2. Representação das Moléculas Orgânicas: Nomenclatura usual e IUPAC; Fórmulas gerais das diferentes funções orgânicas; Isomeria plana; Isomeria espacial.',
-      '2 3.3. Ligação Química em Compostos Orgânicos.',
-      '2 3.4. Acidez e Basicidade em Compostos Orgânicos: Ordem crescente e decrescente do seu caráter ácido.',
-      '2 3.5. Estudo das Reações Orgânicas - Tipos de Reações; Solvente orgânicos.',
-      '1 4. QUÍMICA APLICADA:',
-      '2 4.1. Petróleo e combustíveis.',
-      '2 4.2. Polímeros (Macromolecular):',
-      '3 4.2.1. Exemplos de polímeros vinílicos (PVC, polietileno).',
-      '3 4.2.2. Exemplos de polímeros acrílicos (lã sintética, etc).',
-      '3 4.2.3. Exemplos de polímeros diênicos (borracha sintética).',
-      '3 4.2.4. Propriedades físico-químicas de materiais poliméricos.',
-      '2 4.3. Siderurgia: Diferença de composição química entre ferro gusa e o aço comum; Principais Reações químicas que ocorrem no processo de obtenção do ferro gusa e na sua transformação para aço comum.',
-      '1 5. ASPECTOS QUÍMICOS DO FOGO E DA COMBUSTÃO.',
-      '1 6. PRODUTOS QUÍMICOS:',
-      '2 6.1. Substâncias inflamáveis, combustíveis, oxidantes, corrosivas, tóxicas e reativas.',
-      '2 6.2. Propriedades.',
-      '2 6.3. Reatividade química e incompatibilidade entre substâncias.',
-      '2 6.4. Propriedades físico-químicas.',
-      '2 6.5. Fichas com dados de segurança (FDS).',
-      '1 7. ÁGUA: propriedades físico-químicas e aspectos do tratamento para consumo humano.'
+    { id: 'direitos_humanos', nome: 'Direitos Humanos e Legislação Extravagante', linhas: [
+      `1 1. Teoria geral dos Direitos Humanos: conceito, terminologia, estrutura normativa, fundamento, classificação e especificidades.`,
+      `1 2. Evolução histórica e gerações de direitos humanos.`,
+      `1 3. Incorporação dos tratados internacionais de Direitos Humanos ao ordenamento brasileiro (CF, art. 5º, §§ 2º e 3º) e hierarquia normativa.`,
+      `1 4. Declaração Universal dos Direitos Humanos (ONU, 1948).`,
+      `1 5. Convenção Americana sobre Direitos Humanos – Pacto de San José da Costa Rica (Decreto nº 678/1992).`,
+      `1 6. Lei nº 8.069/1990 – Estatuto da Criança e do Adolescente: direitos fundamentais, ato infracional, apreensão e apresentação, atuação policial, Conselho Tutelar e crimes pertinentes à atividade policial.`,
+      `1 7. Lei nº 13.869/2019 – Abuso de Autoridade.`,
+      `1 8. Lei nº 9.455/1997 – Tortura.`,
+      `1 9. Lei nº 11.340/2006 – Lei Maria da Penha.`,
+      `1 10. Lei nº 7.716/1989 – Crimes resultantes de preconceito de raça ou cor.`,
+      `1 11. Lei nº 9.605/1998 – Crimes ambientais.`,
+      `1 12. Lei nº 8.072/1990 – Crimes hediondos.`,
+      `1 13. Lei nº 11.343/2006 – Lei de Drogas.`,
+      `1 14. Lei Estadual nº 6.783/1974 – Estatuto dos Policiais Militares do Estado de Pernambuco.`,
+      `1 15. Lei nº 10.741/2003 – Estatuto da Pessoa Idosa: disposições pertinentes à atuação policial e crimes em espécie.`,
+      `1 16. Lei nº 12.852/2013 – Estatuto da Juventude.`
     ]}
   ];
 
-  // Constrói a árvore numa passada, com ids sequenciais por disciplina (mesma ordem do progresso já salvo)
   function construirTopicos(linhas) {
     let seq = 0;
     const raiz = [], pilha = [];
     linhas.forEach(linha => {
       const m = linha.match(/^(\d) (.*)$/);
       const level = Number(m[1]);
-      const node = { id: 't_' + (seq++), nome: m[2], level, concluido: false, dataConclusao: null,
-                     ultimaData: null, tempo: 0, acertos: 0, totais: 0, children: [] };
+      const node = {
+        id: 't_' + (seq++), nome: m[2], level,
+        concluido: false, dataConclusao: null, ultimaData: null,
+        tempo: 0, acertos: 0, totais: 0,
+        diagnostico: '', aocp: '', peso: '', materiais: [],
+        children: []
+      };
       while (pilha.length && pilha[pilha.length - 1].level >= level) pilha.pop();
       if (pilha.length) pilha[pilha.length - 1].children.push(node); else raiz.push(node);
       pilha.push(node);
@@ -1270,22 +891,8 @@
   const editalBase = EDITAL_DADOS.map(d => ({ id: d.id, nome: d.nome, topicos: construirTopicos(d.linhas) }));
 
   // =====================================================================
-  // 4. CONSTANTES DE ETAPA 1 (BLOCOS, DIAGNÓSTICOS, AOCP, TRAVA)
+  // 4. CONSTANTES VISUAIS
   // =====================================================================
-  const DISC_META = {
-    portugues:      { bloco: 'I',   questoes: 5 },
-    espanhol:       { bloco: 'I',   questoes: 5 },
-    informatica:    { bloco: 'I',   questoes: 5 },
-    estatistica:    { bloco: 'I',   questoes: 5 },
-    matematica:     { bloco: 'II',  questoes: 5 },
-    fisica:         { bloco: 'II',  questoes: 5 },
-    quimica:        { bloco: 'II',  questoes: 5 },
-    biologia:       { bloco: 'II',  questoes: 5 },
-    legislacao:     { bloco: 'III', questoes: 10 },
-    constitucional: { bloco: 'III', questoes: 8 },
-    administrativo: { bloco: 'III', questoes: 7 },
-    penal_militar:  { bloco: 'III', questoes: 5 }
-  };
   const DIAGNOSTICOS = {
     dominio:      { rotulo: 'Domínio',          cor: '#10b981' },
     revisar:      { rotulo: 'Revisar Mais',     cor: '#f59e0b' },
@@ -1296,253 +903,90 @@
     prioridade: { texto: '⭐ PRIORIDADE AOCP', bg: '#b45309' },
     relevante:  { texto: '🚩 RELEVANTE AOCP',  bg: '#d97706' }
   };
-  // Trava forte: disciplinas de 5 questões (maior risco de zerar). Demais: alerta padrão.
-  function travaForte(discId) { const m = DISC_META[discId]; return !!m && m.questoes === 5; }
+  const PESOS = {
+    alto:  { rotulo: 'Peso alto',  cor: '#e11d48' },
+    medio: { rotulo: 'Peso médio', cor: '#f59e0b' },
+    baixo: { rotulo: 'Peso baixo', cor: '#3b82f6' }
+  };
+  const CAPAS = {
+    portugues:       { grad: ['#7c3aed', '#db2777'], icone: 'fa-feather-pointed' },
+    historia_pe:     { grad: ['#b45309', '#78350f'], icone: 'fa-landmark' },
+    raciocinio:      { grad: ['#0ea5e9', '#2563eb'], icone: 'fa-puzzle-piece' },
+    informatica:     { grad: ['#10b981', '#0d9488'], icone: 'fa-laptop-code' },
+    constitucional:  { grad: ['#e11d48', '#9f1239'], icone: 'fa-scale-balanced' },
+    direitos_humanos:{ grad: ['#6366f1', '#1e3a8a'], icone: 'fa-hand-holding-heart' }
+  };
+  const PALETA_POSTIT = ['#fde68a', '#fbcfe8', '#bfdbfe', '#bbf7d0', '#fed7aa', '#ddd6fe'];
+  const HIST_PALETA = ['#f9a8d4','#a7f3d0','#bfdbfe','#fde68a','#ddd6fe','#fed7aa'];
+  const MOTIVOS = ['Não sabia o conceito', 'Interpretação', 'Distração', 'Pegadinha da banca', 'Cálculo / conta', 'Memória (esqueci)'];
 
   function badgeAOCPHTML(node) {
     if (!node || !node.aocp || !AOCP_TAGS[node.aocp]) return '';
     const t = AOCP_TAGS[node.aocp];
     return `<span class="${node.aocp === 'prioridade' ? 'badge-aocp-animado' : ''} inline-flex items-center align-middle ml-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold tracking-wide whitespace-nowrap border border-white/25" style="background:${t.bg};color:#fffbeb">${t.texto}</span>`;
   }
-  function infoDisciplinaBadge(discId) {
-    const m = DISC_META[discId];
-    if (!m) return '';
-    const trava = travaForte(discId)
-      ? '<span class="ml-1 px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/40 text-[10px] font-extrabold uppercase">Trava Anti-Zero</span>'
-      : '<span class="ml-1 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase">Anti-Zero</span>';
-    return `<span class="ml-1 px-1.5 py-0.5 rounded bg-card border border-theme text-sec text-[10px] font-bold">Bloco ${m.bloco} · ${m.questoes} q</span>${trava}`;
-  }
-  function definirCampoNo(discId, nodeId, campo, valor) {
-    const { node } = getNodeRef(discId, nodeId);
-    if (!node) return;
-    node[campo] = valor;
-    salvarTudo();
-  }
-  function atualizarResumoDiagnostico() {
-    const cont = document.getElementById('edital-diag-resumo');
-    if (!cont) return;
-    const contagem = { dominio: 0, revisar: 0, nao_estudado: 0, menor: 0 };
-    let aocp = 0;
-    meusDados.forEach(d => percorrerNos(d.topicos, n => {
-      contagem[n.diagnostico] = (contagem[n.diagnostico] || 0) + 1;
-      if (n.aocp) aocp++;
-    }));
-    const pills = Object.entries(DIAGNOSTICOS).map(([k, v]) =>
-      `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border" style="color:${v.cor};border-color:${v.cor}66;background:${v.cor}1f"><i class="fa-solid fa-circle text-[8px]"></i> ${v.rotulo}: ${contagem[k] || 0}</span>`
-    ).join('');
-    cont.innerHTML = pills + `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-700/20 text-amber-400 border border-amber-600/40">Tags AOCP: ${aocp}</span>`;
+  function pesoBadgeHTML(node) {
+    if (!node || !node.peso || !PESOS[node.peso]) return '';
+    const p = PESOS[node.peso];
+    return `<span class="inline-flex items-center align-middle mr-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase text-white whitespace-nowrap" style="background:${p.cor}">${p.rotulo}</span>`;
   }
 
   // =====================================================================
-  // 5. CRONOGRAMA: CONSTANTES E MOTOR (rodada = 4 blocos, cada bloco = 1 dia)
+  // 5. ESTADO E PERSISTÊNCIA
   // =====================================================================
-  const CRON_BLOCOS = ['A', 'B', 'C', 'D'];
-  const CRON_MAPA = {
-    A: [ { ordem: 1, disc: 'legislacao',     min: 105 }, { ordem: 2, disc: 'quimica',    min: 75 }, { ordem: 3, disc: 'portugues',  min: 45 } ],
-    B: [ { ordem: 1, disc: 'constitucional', min: 105 }, { ordem: 2, disc: 'fisica',     min: 75 }, { ordem: 3, disc: 'informatica', min: 45 } ],
-    C: [ { ordem: 1, disc: 'administrativo', min: 105 }, { ordem: 2, disc: 'biologia',   min: 75 }, { ordem: 3, disc: 'estatistica', min: 45 } ],
-    D: [ { ordem: 1, disc: 'penal_militar',  min: 105 }, { ordem: 2, disc: 'matematica', min: 75 }, { ordem: 3, disc: 'espanhol',    min: 45 } ]
-  };
-  const MIN_DIA_CICLO = 225;   // 105 + 75 + 45
-  let cronograma = { rodada: 1, bloco: 'A', concluidas: {}, historico: [] };
-
-  function chaveSessao(rodada, bloco, ordem) { return `${rodada}-${bloco}-${ordem}`; }
-  function sessoesDoBloco(bloco) {
-    return CRON_MAPA[bloco].map(s => ({
-      ...s, concluida: !!cronograma.concluidas[chaveSessao(cronograma.rodada, bloco, s.ordem)]
-    }));
-  }
-  function progressoRodada() {
-    let feitas = 0;
-    CRON_BLOCOS.forEach(b => { for (let o = 1; o <= 3; o++) if (cronograma.concluidas[chaveSessao(cronograma.rodada, b, o)]) feitas++; });
-    return { feitas, total: 12, pct: Math.round((feitas / 12) * 100) };
-  }
-  function proximoBloco(b) { return CRON_BLOCOS[(CRON_BLOCOS.indexOf(b) + 1) % 4]; }
-  function blocoAnterior(b) { return CRON_BLOCOS[(CRON_BLOCOS.indexOf(b) + 3) % 4]; }
-  function topicoDaSessao(rodada, bloco, ordem) { return topicosSessao[chaveSessao(rodada, bloco, ordem)] || ''; }
-  function definirTopicoSessao(ordem, topicoId) {
-    const k = chaveSessao(cronograma.rodada, cronograma.bloco, ordem);
-    if (topicoId) topicosSessao[k] = topicoId; else delete topicosSessao[k];
-    salvarTudo();
-  }
-  function alternarSessaoCron(ordem) {
-    const k = chaveSessao(cronograma.rodada, cronograma.bloco, ordem);
-    cronograma.concluidas[k] = !cronograma.concluidas[k];
-    const diaCompleto = [1, 2, 3].every(o => cronograma.concluidas[chaveSessao(cronograma.rodada, cronograma.bloco, o)]);
-    if (cronograma.concluidas[k] && diaCompleto) avancarBloco();
-    salvarTudo();
-  }
-  function avancarBloco() {
-    const eraUltimo = cronograma.bloco === 'D';
-    cronograma.bloco = proximoBloco(cronograma.bloco);
-    if (eraUltimo) {
-      cronograma.historico.push({ rodada: cronograma.rodada, concluidaEm: hojeISO() });
-      cronograma.rodada += 1;
-    }
-  }
-  function cronoAvancarDia() {
-    if (!confirm('Pular o dia atual e seguir para o próximo bloco?')) return;
-    avancarBloco();
-    salvarTudo();
-  }
-  function cronoVoltarDia() {
-    if (cronograma.bloco === 'A' && cronograma.rodada === 1) return;
-    if (!confirm('Voltar para o dia anterior? As sessões dele serão desmarcadas.')) return;
-    const anterior = blocoAnterior(cronograma.bloco);
-    if (cronograma.bloco === 'A') {
-      cronograma.rodada -= 1;
-      cronograma.historico = cronograma.historico.filter(h => h.rodada !== cronograma.rodada);
-    }
-    [1, 2, 3].forEach(o => delete cronograma.concluidas[chaveSessao(cronograma.rodada, anterior, o)]);
-    cronograma.bloco = anterior;
-    salvarTudo();
-  }
-  function renderizarCronograma() {
-    const prog = progressoRodada();
-    document.getElementById('cron-rodada').innerText = cronograma.rodada;
-    document.getElementById('cron-bloco').innerText = cronograma.bloco;
-    document.getElementById('cron-progresso').innerText = `${prog.pct}%`;
-    document.getElementById('cron-barra').style.width = `${prog.pct}%`;
-
-    document.getElementById('cron-sessoes').innerHTML = sessoesDoBloco(cronograma.bloco).map(s => {
-      const d = meusDados.find(x => x.id === s.disc);
-      const topicoSel = topicoDaSessao(cronograma.rodada, cronograma.bloco, s.ordem);
-      const { node } = getNodeRef(s.disc, topicoSel);
-      const classeTrava = travaForte(s.disc) ? 'trava-alerta' : 'trava-padrao';
-      const badge = travaForte(s.disc)
-        ? '<span class="ml-1 px-1.5 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/40 text-[10px] font-extrabold uppercase">Trava Anti-Zero</span>'
-        : '<span class="ml-1 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase">Anti-Zero</span>';
-      return `
-        <div class="p-3.5 rounded-lg border border-theme bg-card transition ${s.concluida ? 'sessao-concluida' : ''} ${classeTrava}">
-          <div class="flex items-center gap-3">
-            <input type="checkbox" ${s.concluida ? 'checked' : ''} onchange="alternarSessaoCron(${s.ordem})" class="w-4 h-4 accent-emerald-500 shrink-0">
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold ${s.concluida ? 'line-through text-mut' : 'text-main'} truncate">${esc(d ? d.nome : s.disc)} ${badge}</p>
-              <p class="text-[11px] text-sec">Sessão ${s.ordem} · Bloco ${DISC_META[s.disc].bloco} · ${s.min} min</p>
-            </div>
-          </div>
-          <div class="mt-2.5 pl-7 flex flex-col sm:flex-row sm:items-center gap-2">
-            <select onchange="definirTopicoSessao(${s.ordem}, this.value)" class="flex-1 min-w-0 bg-panel border border-theme rounded-lg p-2 text-xs text-main outline-none">
-              ${optionsTopicos(s.disc, topicoSel, '— disciplina inteira —')}
-            </select>
-            ${node ? `<div class="shrink-0">${badgeAOCPHTML(node)}</div>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-    document.getElementById('cron-historico').innerHTML = cronograma.historico.length
-      ? cronograma.historico.slice().reverse().map(h =>
-          `<div class="flex justify-between p-2.5 rounded-lg bg-card border border-theme"><span class="font-semibold">Rodada ${h.rodada}</span><span class="text-sec">concluída em ${formatarDataBR(h.concluidaEm)}</span></div>`
-        ).join('')
-      : '<p class="text-xs text-mut italic">Nenhuma rodada concluída ainda.</p>';
-  }
-
-  // Sessão da vez (fonte única para Bilhete, Missão e Cronômetro)
-  function sessaoDaVezInfo() {
-    const s = sessoesDoBloco(cronograma.bloco).find(x => !x.concluida);
-    if (!s) return null;
-    const d = meusDados.find(x => x.id === s.disc);
-    return { ...s, nome: d ? d.nome : s.disc };
-  }
-  function blocosCronogramaHoje() {
-    return sessoesDoBloco(cronograma.bloco).map(s => {
-      const d = meusDados.find(x => x.id === s.disc);
-      return { ordem: s.ordem, texto: `Sessão ${s.ordem} · ${d ? d.nome : s.disc}`, min: s.min, concluido: s.concluida };
-    });
-  }
-
-  // =====================================================================
-  // 6. ESTADO: NORMALIZAÇÃO, PERSISTÊNCIA E MIGRAÇÃO
-  // =====================================================================
-  const STORAGE_KEY = 'estudei_cbmpe_amanda_v9';
-  const STORAGE_KEY_ANTIGO = 'estudei_cbmpe_amanda_v8';
+  const STORAGE_KEY = 'central_estudos_jessica_v1';
   let meusDados = [];
   let minhasRevisoes = [];
+  let registrosEstudo = [];
   let historicoDiario = {};
-  let minhaEstrategia = { dataAlvo: '2027-02-28', topicos: 3, questoes: 50, videos: 2, pdfs: 1, revisoes: 3, simulados: 1 };
-  let expandedNodes = new Set();
   let lembretes = [];
   let planoDia = {};
   let cadernoErros = [];
-  let topicosSessao = {};
-  let registrosEstudo = [];
-  let redacaoSemanas = {};
+  let cronograma = { dias: [], diaAtual: 0, rodada: 1, historico: [] };
   let preferencias = { duracaoPadrao: 50 };
+  let expandedNodes = new Set();
 
-  function normalizarNo(node) {
-    if (!node.diagnostico) node.diagnostico = 'nao_estudado';
-    if (node.aocp === undefined) node.aocp = '';
-    node.materiais = node.materiais || [];
-    (node.children || []).forEach(normalizarNo);
-  }
-  function normalizarDados(dados) { dados.forEach(d => d.topicos.forEach(normalizarNo)); return dados; }
   function normalizarRevisao(r) {
     return {
       id: r.id != null ? r.id : novoId(),
-      discId: r.discId,
-      nodeId: r.nodeId,
-      dataAgendada: r.dataAgendada,
-      status: r.status === 'pendente' ? 'programada' : (r.status || 'programada'),
-      tipo: r.tipo || 'Revisão',
-      intervaloConclusao: r.intervaloConclusao || 7,
+      discId: r.discId, nodeId: r.nodeId, dataAgendada: r.dataAgendada,
+      status: r.status || 'programada', tipo: r.tipo || 'Revisão',
       concluidaEm: r.concluidaEm || null
     };
   }
   function aplicarEstado(p) {
     p = p || {};
-    meusDados = normalizarDados(Array.isArray(p.dados) ? p.dados : JSON.parse(JSON.stringify(editalBase)));
+    meusDados = Array.isArray(p.dados) ? p.dados : JSON.parse(JSON.stringify(editalBase));
+    meusDados.forEach(d => percorrerNos(d.topicos, n => {
+      n.diagnostico = n.diagnostico || '';
+      n.aocp = n.aocp || '';
+      n.peso = n.peso || '';
+      n.materiais = n.materiais || [];
+    }));
     minhasRevisoes = (p.revisoes || []).map(normalizarRevisao);
+    registrosEstudo = p.registrosEstudo || [];
     historicoDiario = p.historicoDiario || {};
-    minhaEstrategia = p.estrategia || minhaEstrategia;
     lembretes = p.lembretes || [];
     planoDia = p.planoDia || {};
     cadernoErros = p.cadernoErros || [];
-    cronograma = p.cronograma || { rodada: 1, bloco: 'A', concluidas: {}, historico: [] };
-    topicosSessao = p.topicosSessao || {};
-    registrosEstudo = p.registrosEstudo || [];
-    redacaoSemanas = p.redacaoSemanas || {};
+    cronograma = p.cronograma || { dias: [], diaAtual: 0, rodada: 1, historico: [] };
     preferencias = Object.assign({ duracaoPadrao: 50 }, p.preferencias || {});
   }
   function estadoAtual() {
     return {
-      dados: meusDados, revisoes: minhasRevisoes, historicoDiario, estrategia: minhaEstrategia,
-      lembretes, planoDia, cadernoErros, cronograma, topicosSessao, registrosEstudo, redacaoSemanas, preferencias
+      dados: meusDados, revisoes: minhasRevisoes, registrosEstudo, historicoDiario,
+      lembretes, planoDia, cadernoErros, cronograma, preferencias
     };
   }
   function salvarTudo() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoAtual()));
     atualizarTudoUI();
   }
-  function mostrarTelaMigracao() {
-    const ov = document.createElement('div');
-    ov.id = 'overlay-migracao';
-    ov.className = 'fixed inset-0 z-[100] bg-main/95 backdrop-blur flex items-center justify-center p-4';
-    ov.innerHTML = `
-      <div class="bg-panel border border-theme rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
-        <h3 class="font-bold text-lg"><i class="fa-solid fa-database text-brand mr-2"></i> Atualização da plataforma</h3>
-        <p class="text-sm text-sec leading-relaxed">Antes de atualizar, o app vai baixar um <b>backup de segurança</b> com todos os seus dados e prints. Nenhum progresso será apagado.</p>
-        <button id="btn-migrar" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2.5 rounded-lg transition text-sm">Baixar backup e atualizar</button>
-      </div>`;
-    document.body.appendChild(ov);
-    document.getElementById('btn-migrar').onclick = async () => {
-      const btn = document.getElementById('btn-migrar');
-      btn.disabled = true; btn.innerText = 'Gerando backup...';
-      try {
-        await exportarBackup();
-        salvarTudo();
-        ov.remove();
-        alert('Atualização concluída. Seu progresso foi preservado e o backup foi baixado.');
-      } catch (err) {
-        btn.disabled = false; btn.innerText = 'Baixar backup e atualizar';
-        alert('Não foi possível gerar o backup. Os dados antigos continuam salvos; tente novamente.');
-      }
-    };
-  }
 
   // =====================================================================
-  // 7. NAVEGAÇÃO E ATUALIZAÇÃO GERAL
+  // 6. NAVEGAÇÃO E ATUALIZAÇÃO
   // =====================================================================
-  const TELAS = ['dashboard', 'estrategia', 'edital', 'cronograma', 'revisoes', 'erros', 'historico'];
+  const TELAS = ['dashboard', 'edital', 'cronograma', 'revisoes', 'erros', 'historico'];
   function navigate(tela) {
     TELAS.forEach(t => {
       document.getElementById(`view-${t}`).classList.add('hidden');
@@ -1556,28 +1000,27 @@
     ativo.classList.add('text-brand', 'bg-emerald-500/10', 'font-semibold');
     if (tela === 'erros') voltarVitrineErros();
     if (tela === 'cronograma') renderizarCronograma();
+    if (tela === 'revisoes') renderizarRevisoes();
     if (tela === 'historico') { popularFiltrosHist(); renderizarHistorico(); }
-    if (tela === 'revisoes') renderizarRevisoes3C();
+    if (tela === 'edital') renderizarEdital();
   }
+  function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
     atualizarDashboard();
     renderizarStreak();
     renderizarEdital();
-    carregarInputsEstrategia();
-    calcularDiagnostico();
     renderizarLembretes();
     renderizarPlanoDia();
     renderizarBilhete();
     renderizarVitrineErros();
-    if (!document.getElementById('erros-disc').classList.contains('hidden')) renderizarMuralErros();
-    atualizarResumoDiagnostico();
-    if (!document.getElementById('view-cronograma').classList.contains('hidden')) renderizarCronograma();
-    if (!document.getElementById('view-historico').classList.contains('hidden')) renderizarHistorico();
-    if (!document.getElementById('view-revisoes').classList.contains('hidden')) renderizarRevisoes3C();
+    if (visivel('erros-disc')) renderizarMuralErros();
+    if (visivel('view-cronograma')) renderizarCronograma();
+    if (visivel('view-revisoes')) renderizarRevisoes();
+    if (visivel('view-historico')) renderizarHistorico();
   }
 
   // =====================================================================
-  // 8. DASHBOARD: STATS, CONSTÂNCIA, LEMBRETES E MISSÃO DO DIA
+  // 7. DASHBOARD
   // =====================================================================
   function atualizarDashboard() {
     let total = 0, conc = 0, min = 0, ac = 0, totQuest = 0;
@@ -1585,15 +1028,12 @@
       total++; if (t.concluido) conc++;
       min += (t.tempo || 0); ac += (t.acertos || 0); totQuest += (t.totais || 0);
     }));
-    const pctEdital = total ? Math.round((conc / total) * 100) : 0;
-    const pctDesemp = totQuest ? Math.round((ac / totQuest) * 100) : 0;
     document.getElementById('stat-tempo').innerText = `${Math.floor(min / 60)}h ${min % 60}m`;
-    document.getElementById('stat-desempenho').innerText = `${pctDesemp}%`;
+    document.getElementById('stat-desempenho').innerText = `${totQuest ? Math.round((ac / totQuest) * 100) : 0}%`;
     document.getElementById('stat-questoes').innerText = `${ac} acertos / ${totQuest} feitas`;
-    document.getElementById('stat-progresso').innerText = `${pctEdital}%`;
+    document.getElementById('stat-progresso').innerText = `${total ? Math.round((conc / total) * 100) : 0}%`;
     document.getElementById('stat-topicos').innerText = `${conc} de ${total} tópicos`;
   }
-
   function renderizarStreak() {
     const tracker = document.getElementById('streak-tracker');
     tracker.innerHTML = '';
@@ -1613,12 +1053,9 @@
     let atual = 0;
     while (cursor && (historicoDiario[isoLocal(cursor)] || 0) >= 20) { atual++; cursor.setDate(cursor.getDate() - 1); }
     if (atual > recorde) recorde = atual;
-
-    const msgEl = document.getElementById('streak-msg');
-    msgEl.innerHTML = atual > 0
-      ? `<i class="fa-solid fa-fire text-orange-500 mr-1.5"></i> Parabéns! Você está há <strong class="text-brand">${atual} dias</strong> sem falhar, seu recorde é de <strong class="text-brand">${recorde} dias</strong>`
-      : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Continue, seu melhor dia para retornar é agora!${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Seu recorde anterior: ${recorde} dias)</span>` : ''}`;
-
+    document.getElementById('streak-msg').innerHTML = atual > 0
+      ? `<i class="fa-solid fa-fire text-orange-500 mr-1.5"></i> Você está há <strong class="text-brand">${atual} dias</strong> sem falhar. Recorde: <strong class="text-brand">${recorde} dias</strong>`
+      : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Continue, seu melhor dia para retornar é agora!${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Recorde anterior: ${recorde} dias)</span>` : ''}`;
     for (let i = 13; i >= 0; i--) {
       const d = new Date(hoje); d.setDate(d.getDate() - i);
       const s = isoLocal(d);
@@ -1674,7 +1111,7 @@
             </div>
           </div>
           <div class="flex flex-wrap gap-2 mt-3">
-            <button onclick="lembreteObrigado(${l.id})" class="px-3 py-1.5 rounded-lg bg-brand text-white text-xs font-bold">Obrigado por lembrar</button>
+            <button onclick="lembreteObrigado(${l.id})" class="px-3 py-1.5 rounded-lg bg-brand text-white text-xs font-bold">Obrigada por lembrar</button>
             <button onclick="lembreteAdiar(${l.id})" class="px-3 py-1.5 rounded-lg bg-card border border-theme text-main text-xs font-bold">Lembrar mais tarde</button>
           </div>
         </div>`).join('');
@@ -1694,17 +1131,16 @@
       : '<p class="text-xs text-mut italic">Nenhum lembrete futuro.</p>';
   }
 
-  // Missão do Dia: sessões do cronograma + blocos extras do dia
+  // Missão do Dia: sessões do dia atual do cronograma + blocos extras
   function planoDoDia() { return planoDia[hojeISO()] || []; }
   function popularTopicosPlano() {
-    const dId = document.getElementById('plano-disc').value;
-    document.getElementById('plano-topico').innerHTML = optionsTopicos(dId, '', '— tópico (opcional) —');
+    document.getElementById('plano-topico').innerHTML = optionsTopicos(document.getElementById('plano-disc').value, '', '— tópico (opcional) —');
   }
   function adicionarBlocoPlano() {
     const texto = document.getElementById('plano-texto').value.trim();
     const discId = document.getElementById('plano-disc').value || null;
     const topicoId = document.getElementById('plano-topico').value || null;
-    if (!texto) { alert('Descreva o bloco do dia.'); return; }
+    if (!texto) { alert('Descreva o bloco extra.'); return; }
     const key = hojeISO();
     planoDia[key] = planoDia[key] || [];
     planoDia[key].push({ id: novoId(), texto, discId, topicoId, feito: false });
@@ -1722,28 +1158,33 @@
     salvarTudo();
   }
   function renderizarPlanoDia() {
-    const manuais = planoDoDia();
-    const cron = blocosCronogramaHoje();
-    const total = cron.length + manuais.length;
-    const feitos = cron.filter(b => b.concluido).length + manuais.filter(b => b.feito).length;
+    const dia = diaAtualObj();
+    const sessoes = dia ? dia.sessoes : [];
+    const extras = planoDoDia();
+    const total = sessoes.length + extras.length;
+    const feitos = sessoes.filter(s => s.feita).length + extras.filter(b => b.feito).length;
     const pct = total ? Math.round((feitos / total) * 100) : 0;
     let dataTxt = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
     dataTxt = dataTxt.charAt(0).toUpperCase() + dataTxt.slice(1);
-    document.getElementById('plano-titulo').innerHTML = `<i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia (${dataTxt} · ${pct}% concluído)`;
+    document.getElementById('plano-titulo').innerHTML =
+      `<i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia (${dataTxt} · ${pct}% concluído)`;
 
-    const blocoCron = cron.map(b => `
-      <div class="flex items-center gap-3 p-3 rounded-lg border transition ${b.concluido ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
-        <i class="fa-solid fa-diagram-project text-emerald-400 w-4 text-center"></i>
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-semibold truncate ${b.concluido ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
-          <p class="text-[11px] text-sec">Cronograma · Bloco ${cronograma.bloco} · ${b.min} min</p>
-        </div>
-        ${b.concluido
-          ? '<span class="text-xs font-bold text-brand">Feita</span>'
-          : `<button onclick="iniciarSessaoCron(${b.ordem})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>`}
-      </div>`).join('');
+    const blocoCron = sessoes.map((s, k) => {
+      const d = meusDados.find(x => x.id === s.disc);
+      const { node } = getNodeRef(s.disc, s.topicoId);
+      return `
+        <div class="flex items-center gap-3 p-3 rounded-lg border transition ${s.feita ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
+          <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="w-4 h-4 accent-emerald-500 shrink-0">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold truncate ${s.feita ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
+            <p class="text-[11px] text-sec truncate">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
+          </div>
+          ${s.feita ? '<span class="text-xs font-bold text-brand">Feita</span>'
+            : `<button onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>`}
+        </div>`;
+    }).join('');
 
-    const blocoManual = manuais.map(b => {
+    const blocoExtra = extras.map(b => {
       const { disc, node } = getNodeRef(b.discId, b.topicoId);
       return `
         <div class="flex items-center gap-3 p-3 rounded-lg border transition ${b.feito ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
@@ -1751,34 +1192,35 @@
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${b.feito ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
             ${disc ? `<p class="text-[11px] text-sec truncate">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
-            ${node ? `<div class="mt-1">${badgeAOCPHTML(node)}</div>` : ''}
+            ${node ? `<div class="mt-1">${pesoBadgeHTML(node)}${badgeAOCPHTML(node)}</div>` : ''}
           </div>
           <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
           <button onclick="removerBlocoPlano(${b.id})" class="w-8 h-8 rounded-md text-red-400 hover-bg shrink-0" title="Remover"><i class="fa-solid fa-xmark"></i></button>
         </div>`;
     }).join('');
 
-    const vazio = !total ? '<p class="text-xs text-mut italic">Nenhum bloco para hoje.</p>' : '';
+    const vazio = !total
+      ? '<p class="text-xs text-mut italic">Nenhuma sessão para hoje. Monte seu cronograma na aba Cronograma.</p>' : '';
     document.getElementById('plano-lista').innerHTML = vazio + blocoCron +
-      (manuais.length ? `<p class="text-[11px] font-bold uppercase text-sec pt-2">Extras de hoje</p>${blocoManual}` : '');
+      (extras.length ? `<p class="text-[11px] font-bold uppercase text-sec pt-2">Extras de hoje</p>${blocoExtra}` : '');
   }
   function iniciarBlocoNoCronometro(id) {
     const b = planoDoDia().find(x => x.id === id);
     if (!b || cronometroOcupado()) return;
-    setOrigemTimer('Bloco extra do dia · sem alarme');
-    timerSessaoCron = null;
+    timerSessao = null;
+    timerRevisaoId = null;
     timerAlarmeAtivo = false;
-    revSessaoEmCurso = null;
     toggleFloatingTimer(true);
     if (b.discId) {
       document.getElementById('timer-disc').value = b.discId;
       popularTopicosTimer();
       if (b.topicoId) document.getElementById('timer-topico').value = b.topicoId;
     }
+    setOrigemTimer('Bloco extra · sem alarme');
   }
 
   // =====================================================================
-  // 9. EDITAL VERTICALIZADO
+  // 8. EDITAL VERTICALIZADO
   // =====================================================================
   function toggleExpandNode(key) {
     if (expandedNodes.has(key)) expandedNodes.delete(key); else expandedNodes.add(key);
@@ -1804,14 +1246,153 @@
     marcarNoRecursivo(node, checked, hojeISO());
     salvarTudo();
   }
-  function filtrarEdital() { renderizarEdital(); }
+  function definirCampoNo(discId, nodeId, campo, valor) {
+    const { node } = getNodeRef(discId, nodeId);
+    if (!node) return;
+    node[campo] = valor;
+    salvarTudo();
+  }
   function nodeMatchesFilter(node, termo) {
     if (!termo) return true;
     if (node.nome.toLowerCase().includes(termo)) return true;
     return (node.children || []).some(c => nodeMatchesFilter(c, termo));
   }
+  function renderNodeHTML(discId, node, termo) {
+    if (!nodeMatchesFilter(node, termo)) return '';
+    const hasChildren = (node.children || []).length > 0;
+    const nodeKey = discId + '_' + node.id;
+    const isExpanded = termo ? true : expandedNodes.has(nodeKey);
+    let tempo = node.tempo || 0, ultima = node.ultimaData || null;
+    if (hasChildren) percorrerNos(node.children, c => {
+      tempo += c.tempo || 0;
+      if (c.ultimaData && (!ultima || c.ultimaData > ultima)) ultima = c.ultimaData;
+    });
+    const indent = node.level === 1 ? '' : (node.level === 2 ? 'ml-5 border-l-2 border-theme pl-3' : 'ml-9 border-l-2 border-emerald-500/30 pl-3');
+    const diag = DIAGNOSTICOS[node.diagnostico];
 
-  // Materiais (links)
+    const selectDiag = `
+      <select onchange="definirCampoNo('${discId}', '${node.id}', 'diagnostico', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" style="color:${diag ? diag.cor : 'inherit'}" title="Diagnóstico de nível">
+        <option value="" ${!node.diagnostico ? 'selected' : ''}>— diagnóstico —</option>
+        ${Object.entries(DIAGNOSTICOS).map(([k, v]) => `<option value="${k}" ${k === node.diagnostico ? 'selected' : ''}>${v.rotulo}</option>`).join('')}
+      </select>`;
+    const selectPeso = `
+      <select onchange="definirCampoNo('${discId}', '${node.id}', 'peso', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" title="Peso estimado">
+        <option value="" ${!node.peso ? 'selected' : ''}>— peso —</option>
+        ${Object.entries(PESOS).map(([k, v]) => `<option value="${k}" ${k === node.peso ? 'selected' : ''}>${v.rotulo}</option>`).join('')}
+      </select>`;
+    const selectAocp = `
+      <select onchange="definirCampoNo('${discId}', '${node.id}', 'aocp', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" title="Tag AOCP">
+        <option value="" ${!node.aocp ? 'selected' : ''}>— tag AOCP —</option>
+        <option value="prioridade" ${node.aocp === 'prioridade' ? 'selected' : ''}>⭐ Prioridade AOCP</option>
+        <option value="relevante" ${node.aocp === 'relevante' ? 'selected' : ''}>🚩 Relevante AOCP</option>
+      </select>`;
+
+    let html = `
+      <div class="${indent} my-1.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-card border border-theme hover-bg transition">
+          <div class="flex items-start gap-2.5 flex-1 min-w-0">
+            ${hasChildren ? `
+              <button onclick="toggleExpandNode('${nodeKey}')" class="mt-0.5 w-6 h-6 rounded hover:bg-emerald-500/15 text-sec hover:text-brand flex items-center justify-center shrink-0 transition" title="Expandir/Ocultar">
+                <i class="fa-solid fa-caret-right chevron-icon ${isExpanded ? 'chevron-open text-brand' : ''}"></i>
+              </button>` : `<span class="w-6 shrink-0"></span>`}
+            <input type="checkbox" class="mt-1 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0" ${node.concluido ? 'checked' : ''} onchange="alternarStatusTopico('${discId}', '${node.id}', this.checked)">
+            <div class="flex-1 min-w-0">
+              <span onclick="${hasChildren ? `toggleExpandNode('${nodeKey}')` : ''}" class="${hasChildren ? 'cursor-pointer font-semibold' : 'font-normal'} ${node.concluido ? 'line-through text-mut' : 'text-main'} text-sm leading-snug block">
+                ${pesoBadgeHTML(node)}${esc(node.nome)}${badgeAOCPHTML(node)}
+              </span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-1.5">${selectDiag}${selectPeso}${selectAocp}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 pl-8 sm:pl-0 shrink-0 text-xs">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium"><i class="fa-regular fa-clock text-brand"></i> ${formatarMinutos(tempo)}</span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium"><i class="fa-regular fa-calendar text-blue-400"></i> ${ultima ? formatarDataBR(ultima) : 'Nunca estudado'}</span>
+            <button onclick="abrirMateriais('${discId}', '${node.id}')" class="h-7 px-2 rounded-md bg-card hover-bg border border-theme text-sec hover:text-brand text-[11px] font-semibold flex items-center gap-1 transition" title="Materiais externos">
+              <i class="fa-solid fa-paperclip"></i> Materiais${(node.materiais || []).length ? ` (${node.materiais.length})` : ''}
+            </button>
+            <button onclick="abrirRegistroRapido('${discId}', '${node.id}')" class="w-7 h-7 rounded-md bg-emerald-500/10 hover:bg-emerald-500/25 text-brand flex items-center justify-center transition" title="Registrar estudo">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>`;
+    if (hasChildren && isExpanded) {
+      html += `<div class="tree-children mt-1">` + node.children.map(c => renderNodeHTML(discId, c, termo)).join('') + `</div>`;
+    }
+    return html + `</div>`;
+  }
+  function renderizarEdital() {
+    if (!meusDados.length) return;
+    const termo = (document.getElementById('busca-edital')?.value || '').trim().toLowerCase();
+    let totalGeral = 0, concGeral = 0, conc4Semanas = 0;
+    const limite = new Date(); limite.setDate(limite.getDate() - 28);
+    const limiteISO = isoLocal(limite);
+    const contDiag = { dominio: 0, revisar: 0, nao_estudado: 0, menor: 0 };
+    const contPeso = { alto: 0, medio: 0, baixo: 0 };
+    let aocp = 0;
+    const blocos = [];
+
+    meusDados.forEach(disc => {
+      let discTotal = 0, discConc = 0, discTempo = 0;
+      percorrerNos(disc.topicos, n => {
+        discTotal++; totalGeral++;
+        discTempo += n.tempo || 0;
+        if (n.diagnostico) contDiag[n.diagnostico] = (contDiag[n.diagnostico] || 0) + 1;
+        if (n.peso) contPeso[n.peso]++;
+        if (n.aocp) aocp++;
+        if (n.concluido) {
+          discConc++; concGeral++;
+          if (n.dataConclusao && n.dataConclusao >= limiteISO) conc4Semanas++;
+        }
+      });
+      if (termo && !disc.nome.toLowerCase().includes(termo) && !disc.topicos.some(t => nodeMatchesFilter(t, termo))) return;
+
+      const discKey = 'disc_' + disc.id;
+      const isDiscExpanded = termo ? true : expandedNodes.has(discKey);
+      const pctDisc = discTotal ? Math.round((discConc / discTotal) * 100) : 0;
+      let html = `
+        <div class="bg-panel rounded-xl border border-theme overflow-hidden shadow-sm">
+          <div onclick="toggleExpandNode('${discKey}')" class="p-4 cursor-pointer flex flex-wrap items-center justify-between gap-3 hover-bg transition select-none">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-brand flex items-center justify-center">
+                <i class="fa-solid fa-caret-right chevron-icon ${isDiscExpanded ? 'chevron-open' : ''}"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-main">${esc(disc.nome)}</h3>
+                <p class="text-xs text-sec">${discConc} de ${discTotal} itens concluídos • Tempo: ${formatarMinutos(discTempo)}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-28 bg-card rounded-full h-2 border border-theme hidden sm:block overflow-hidden">
+                <div class="bg-brand h-full rounded-full" style="width:${pctDisc}%"></div>
+              </div>
+              <span class="text-sm font-extrabold text-brand w-12 text-right">${pctDisc}%</span>
+            </div>
+          </div>`;
+      if (isDiscExpanded) {
+        html += `<div class="p-4 pt-1 border-t border-theme bg-main/30">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo)).join('') + `</div>`;
+      }
+      blocos.push(html + `</div>`);
+    });
+    document.getElementById('edital-container').innerHTML = blocos.join('');
+
+    const pctTotal = totalGeral ? Math.round((concGeral / totalGeral) * 100) : 0;
+    document.getElementById('edital-resumo-geral').innerText = `${concGeral} de ${totalGeral} tópicos concluídos em ${meusDados.length} disciplinas — ${pctTotal}%`;
+    document.getElementById('edital-ritmo-semanas').innerHTML = `<i class="fa-solid fa-bolt"></i> ${conc4Semanas} tópicos nas últimas 4 semanas`;
+    document.getElementById('edital-barra-geral').style.width = `${pctTotal}%`;
+
+    const pillsPeso = Object.entries(PESOS).map(([k, v]) =>
+      `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold text-white" style="background:${v.cor}">${v.rotulo}: ${contPeso[k]}</span>`).join('');
+    const pillsDiag = Object.entries(DIAGNOSTICOS).map(([k, v]) =>
+      `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border" style="color:${v.cor};border-color:${v.cor}66;background:${v.cor}1f">${v.rotulo}: ${contDiag[k] || 0}</span>`).join('');
+    document.getElementById('edital-diag-resumo').innerHTML = pillsPeso + pillsDiag +
+      `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-700/20 text-amber-400 border border-amber-600/40">Tags AOCP: ${aocp}</span>`;
+  }
+  function abrirRegistroRapido(discId, nodeId) {
+    openModalEstudo();
+    document.getElementById('modal-disc').value = discId;
+    popularTopicosModal();
+    document.getElementById('modal-topico').value = nodeId;
+  }
+  let materiaisCtx = null;
   function abrirMateriais(discId, nodeId) {
     const { disc, node } = getNodeRef(discId, nodeId);
     if (!node) return;
@@ -1823,26 +1404,20 @@
     renderizarListaMateriais();
     document.getElementById('modal-materiais').classList.remove('hidden');
   }
-  let materiaisCtx = null;
   function fecharMateriais() {
     document.getElementById('modal-materiais').classList.add('hidden');
     materiaisCtx = null;
   }
   function renderizarListaMateriais() {
     const { node } = getNodeRef(materiaisCtx.discId, materiaisCtx.nodeId);
-    const lista = document.getElementById('mat-lista');
     const mats = node.materiais || [];
-    if (!mats.length) {
-      lista.innerHTML = '<p class="text-xs text-mut italic">Nenhum material guardado ainda.</p>';
-      return;
-    }
-    lista.innerHTML = mats.map((m, i) => `
+    document.getElementById('mat-lista').innerHTML = mats.length ? mats.map((m, i) => `
       <div class="flex items-center gap-2 p-2.5 bg-card rounded-lg border border-theme">
         <a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer" class="flex-1 min-w-0 text-sm text-main hover:text-brand truncate">
           <i class="fa-solid fa-arrow-up-right-from-square text-xs mr-1.5 text-brand"></i>${esc(m.nome)}
         </a>
         <button onclick="removerMaterial(${i})" class="w-7 h-7 rounded bg-red-500/15 hover:bg-red-500/25 text-red-400 text-xs" title="Remover"><i class="fa-solid fa-trash"></i></button>
-      </div>`).join('');
+      </div>`).join('') : '<p class="text-xs text-mut italic">Nenhum material guardado ainda.</p>';
   }
   function adicionarMaterial() {
     const nome = document.getElementById('mat-nome').value.trim();
@@ -1865,193 +1440,204 @@
     renderizarListaMateriais();
   }
 
-  function renderNodeHTML(discId, node, termo) {
-    if (!nodeMatchesFilter(node, termo)) return '';
-    const hasChildren = node.children && node.children.length > 0;
-    const nodeKey = discId + '_' + node.id;
-    const isExpanded = termo ? true : expandedNodes.has(nodeKey);
-    let tempoExibir = node.tempo || 0;
-    let ultimaDataExibir = node.ultimaData || null;
-    if (hasChildren) {
-      percorrerNos(node.children, c => {
-        tempoExibir += (c.tempo || 0);
-        if (c.ultimaData && (!ultimaDataExibir || c.ultimaData > ultimaDataExibir)) ultimaDataExibir = c.ultimaData;
-      });
-    }
-    const indentClass = node.level === 1 ? '' : (node.level === 2 ? 'ml-5 border-l-2 border-theme pl-3' : 'ml-9 border-l-2 border-emerald-500/30 pl-3');
-    const diag = DIAGNOSTICOS[node.diagnostico] || DIAGNOSTICOS.nao_estudado;
-
-    const selectDiag = `
-      <select onchange="definirCampoNo('${discId}', '${node.id}', 'diagnostico', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" style="color:${diag.cor}" title="Diagnóstico de nível">
-        ${Object.entries(DIAGNOSTICOS).map(([k, v]) => `<option value="${k}" ${k === node.diagnostico ? 'selected' : ''}>${v.rotulo}</option>`).join('')}
-      </select>`;
-    const selectAocp = `
-      <select onchange="definirCampoNo('${discId}', '${node.id}', 'aocp', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" title="Tag de prioridade AOCP">
-        <option value="" ${!node.aocp ? 'selected' : ''}>Sem tag AOCP</option>
-        <option value="prioridade" ${node.aocp === 'prioridade' ? 'selected' : ''}>⭐ Prioridade AOCP</option>
-        <option value="relevante" ${node.aocp === 'relevante' ? 'selected' : ''}>🚩 Relevante AOCP</option>
-      </select>`;
-
-    let html = `
-      <div class="${indentClass} my-1.5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-card border border-theme hover-bg transition group">
-          <div class="flex items-start gap-2.5 flex-1 min-w-0">
-            ${hasChildren ? `
-              <button onclick="toggleExpandNode('${nodeKey}')" class="mt-0.5 w-6 h-6 rounded hover:bg-emerald-500/15 text-sec hover:text-brand flex items-center justify-center shrink-0 transition" title="Expandir/Ocultar subtópicos">
-                <i class="fa-solid fa-caret-right chevron-icon ${isExpanded ? 'chevron-open text-brand' : ''}"></i>
-              </button>` : `<span class="w-6 shrink-0"></span>`}
-            <input type="checkbox" class="mt-1 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0" ${node.concluido ? 'checked' : ''} onchange="alternarStatusTopico('${discId}', '${node.id}', this.checked)">
-            <div class="flex-1 min-w-0">
-              <span onclick="${hasChildren ? `toggleExpandNode('${nodeKey}')` : ''}" class="${hasChildren ? 'cursor-pointer font-semibold' : 'font-normal'} ${node.concluido ? 'line-through text-mut' : 'text-main'} text-sm leading-snug block">
-                ${esc(node.nome)}${badgeAOCPHTML(node)}
-              </span>
-              <div class="flex flex-wrap items-center gap-1.5 mt-1.5">${selectDiag}${selectAocp}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 pl-8 sm:pl-0 shrink-0 text-xs">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium" title="Tempo total registrado neste tópico">
-              <i class="fa-regular fa-clock text-brand"></i> ${formatarMinutos(tempoExibir)}
-            </span>
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium" title="Última data de estudo registrada">
-              <i class="fa-regular fa-calendar text-blue-400"></i> ${ultimaDataExibir ? formatarDataBR(ultimaDataExibir) : 'Nunca estudado'}
-            </span>
-            <button onclick="abrirMateriais('${discId}', '${node.id}')" class="h-7 px-2 rounded-md bg-card hover-bg border border-theme text-sec hover:text-brand text-[11px] font-semibold flex items-center gap-1 transition" title="Materiais externos (links)">
-              <i class="fa-solid fa-paperclip"></i> Materiais${(node.materiais || []).length ? ` (${node.materiais.length})` : ''}
-            </button>
-            <button onclick="abrirRegistroRapido('${discId}', '${node.id}')" class="w-7 h-7 rounded-md bg-emerald-500/10 hover:bg-emerald-500/25 text-brand flex items-center justify-center transition" title="Registrar estudo neste tópico">
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>`;
-    if (hasChildren && isExpanded) {
-      html += `<div class="tree-children mt-1">` + node.children.map(c => renderNodeHTML(discId, c, termo)).join('') + `</div>`;
-    }
-    return html + `</div>`;
-  }
-
-  function renderizarEdital() {
-    const container = document.getElementById('edital-container');
-    const termo = (document.getElementById('busca-edital')?.value || '').trim().toLowerCase();
-    let totalGeral = 0, concGeral = 0, conc4Semanas = 0;
-    const limite = new Date(); limite.setDate(limite.getDate() - 28);
-    const limiteISO = isoLocal(limite);
-    const blocos = [];
-
-    meusDados.forEach(disc => {
-      let discTotal = 0, discConc = 0, discTempo = 0;
-      percorrerNos(disc.topicos, n => {
-        discTotal++; totalGeral++;
-        discTempo += (n.tempo || 0);
-        if (n.concluido) {
-          discConc++; concGeral++;
-          if (n.dataConclusao && n.dataConclusao >= limiteISO) conc4Semanas++;
-        }
-      });
-      if (termo && !disc.nome.toLowerCase().includes(termo) && !disc.topicos.some(t => nodeMatchesFilter(t, termo))) return;
-
-      const discKey = 'disc_' + disc.id;
-      const isDiscExpanded = termo ? true : expandedNodes.has(discKey);
-      const pctDisc = discTotal ? Math.round((discConc / discTotal) * 100) : 0;
-      let html = `
-        <div class="bg-panel rounded-xl border border-theme overflow-hidden shadow-sm">
-          <div onclick="toggleExpandNode('${discKey}')" class="p-4 cursor-pointer flex flex-wrap items-center justify-between gap-3 hover-bg transition select-none">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-brand flex items-center justify-center">
-                <i class="fa-solid fa-caret-right chevron-icon ${isDiscExpanded ? 'chevron-open' : ''}"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-base text-main">${esc(disc.nome)} ${infoDisciplinaBadge(disc.id)}</h3>
-                <p class="text-xs text-sec">${discConc} de ${discTotal} itens concluídos • Tempo: ${formatarMinutos(discTempo)}</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-28 bg-card rounded-full h-2 border border-theme hidden sm:block overflow-hidden">
-                <div class="bg-brand h-full rounded-full" style="width:${pctDisc}%"></div>
-              </div>
-              <span class="text-sm font-extrabold text-brand w-12 text-right">${pctDisc}%</span>
-            </div>
-          </div>`;
-      if (isDiscExpanded) {
-        html += `<div class="p-4 pt-1 border-t border-theme bg-main/30">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo)).join('') + `</div>`;
-      }
-      blocos.push(html + `</div>`);
-    });
-    container.innerHTML = blocos.join('');
-
-    const pctTotal = totalGeral ? Math.round((concGeral / totalGeral) * 100) : 0;
-    document.getElementById('edital-resumo-geral').innerText = `${concGeral} de ${totalGeral} tópicos concluídos em ${meusDados.length} disciplinas — ${pctTotal}%`;
-    document.getElementById('edital-ritmo-semanas').innerHTML = `<i class="fa-solid fa-bolt"></i> ${conc4Semanas} tópicos nas últimas 4 semanas`;
-    document.getElementById('edital-barra-geral').style.width = `${pctTotal}%`;
-  }
-
-  function abrirRegistroRapido(discId, nodeId) {
-    openModalEstudo();
-    document.getElementById('modal-disc').value = discId;
-    popularTopicosModal();
-    document.getElementById('modal-topico').value = nodeId;
-  }
-
   // =====================================================================
-  // 10. ESTRATÉGIA (CENTRO DE COMANDO)
+  // 9. CRONOGRAMA FLEXÍVEL
+  // dia = { id, nome, sessoes:[{ id, disc, min, topicoId, feita }] }
   // =====================================================================
-  function carregarInputsEstrategia() {
-    document.getElementById('est-data').value = minhaEstrategia.dataAlvo;
-    document.getElementById('est-topicos').value = minhaEstrategia.topicos;
-    document.getElementById('est-questoes').value = minhaEstrategia.questoes;
-    document.getElementById('est-videos').value = minhaEstrategia.videos;
-    document.getElementById('est-pdfs').value = minhaEstrategia.pdfs;
-    document.getElementById('est-revisoes').value = minhaEstrategia.revisoes;
-    document.getElementById('est-simulados').value = minhaEstrategia.simulados;
+  function diaAtualObj() { return cronograma.dias[cronograma.diaAtual] || null; }
+  function progressoRodada() {
+    let total = 0, feitas = 0;
+    cronograma.dias.forEach(d => d.sessoes.forEach(s => { total++; if (s.feita) feitas++; }));
+    return { feitas, total, pct: total ? Math.round((feitas / total) * 100) : 0 };
   }
-  function salvarEstrategia() {
-    minhaEstrategia = {
-      dataAlvo: document.getElementById('est-data').value,
-      topicos: parseInt(document.getElementById('est-topicos').value) || 0,
-      questoes: parseInt(document.getElementById('est-questoes').value) || 0,
-      videos: parseInt(document.getElementById('est-videos').value) || 0,
-      pdfs: parseInt(document.getElementById('est-pdfs').value) || 0,
-      revisoes: parseInt(document.getElementById('est-revisoes').value) || 0,
-      simulados: parseInt(document.getElementById('est-simulados').value) || 0
-    };
+  function alternarSessao(diaIdx, sid) {
+    const dia = cronograma.dias[diaIdx];
+    const s = dia && dia.sessoes.find(x => x.id === sid);
+    if (!s) return;
+    s.feita = !s.feita;
+    if (diaIdx === cronograma.diaAtual && dia.sessoes.length && dia.sessoes.every(x => x.feita)) avancarDia();
     salvarTudo();
-    alert('Estratégia atualizada com sucesso!');
   }
-  function calcularDiagnostico() {
-    let total = 0, conc = 0;
-    meusDados.forEach(d => percorrerNos(d.topicos, t => { total++; if (t.concluido) conc++; }));
-    const faltam = total - conc;
-    const alvo = new Date(minhaEstrategia.dataAlvo + 'T00:00:00');
-    let diasRestantes = Math.ceil((alvo - new Date()) / 86400000);
-    if (diasRestantes < 1) diasRestantes = 1;
-    const ritmoNecessario = Math.ceil(faltam / diasRestantes);
-    const ritmoAtual = minhaEstrategia.topicos;
-    document.getElementById('diag-pendentes').innerText = faltam;
-    document.getElementById('diag-ritmo').innerHTML = `${ritmoNecessario} <span class="text-xs font-normal text-sec">/dia</span>`;
-    const alertaEl = document.getElementById('diag-alerta');
-    if (faltam === 0 && total > 0) {
-      alertaEl.innerHTML = `<span class="text-brand"><i class="fa-solid fa-trophy mr-1.5"></i> <strong>Edital 100% concluído!</strong> Foco total em revisões espaçadas e simulados.</span>`;
-    } else if (ritmoAtual >= ritmoNecessario) {
-      alertaEl.innerHTML = `<span class="text-brand"><i class="fa-solid fa-rocket mr-1.5"></i> <strong>Ritmo Excelente!</strong> Sua meta de ${ritmoAtual} itens/dia supera a necessidade (${ritmoNecessario}/dia) para fechar o edital até ${alvo.toLocaleDateString('pt-BR')}.</span>`;
-    } else {
-      alertaEl.innerHTML = `<span class="text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i> <strong>Atenção Tática:</strong> Restam ${faltam} itens em ${diasRestantes} dias (exige ${ritmoNecessario} itens/dia). Aumente sua meta diária ou priorize os tópicos de maior peso.</span>`;
+  function avancarDia() {
+    cronograma.diaAtual++;
+    if (cronograma.diaAtual >= cronograma.dias.length) {
+      cronograma.historico.push({ rodada: cronograma.rodada, concluidaEm: hojeISO() });
+      cronograma.rodada++;
+      cronograma.diaAtual = 0;
+      cronograma.dias.forEach(d => d.sessoes.forEach(s => s.feita = false));
     }
-    document.getElementById('missao-lista').innerHTML = `
-      <label class="flex items-center gap-3 p-3 bg-card rounded-lg border border-theme cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-emerald-500"><span class="text-sm">Concluir <strong class="text-brand">${minhaEstrategia.topicos} tópicos/subtópicos</strong> novos</span></label>
-      <label class="flex items-center gap-3 p-3 bg-card rounded-lg border border-theme cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-blue-500"><span class="text-sm">Resolver <strong class="text-blue-400">${minhaEstrategia.questoes} questões</strong> da banca AOCP</span></label>
-      <label class="flex items-center gap-3 p-3 bg-card rounded-lg border border-theme cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-purple-500"><span class="text-sm">Fazer <strong class="text-purple-400">${minhaEstrategia.revisoes} revisões</strong> programadas</span></label>
-      <label class="flex items-center gap-3 p-3 bg-card rounded-lg border border-theme cursor-pointer"><input type="checkbox" class="w-4 h-4 accent-rose-500"><span class="text-sm">Estudar <strong class="text-rose-400">${minhaEstrategia.videos} vídeo aulas</strong> e <strong class="text-rose-400">${minhaEstrategia.pdfs} PDFs</strong></span></label>`;
+  }
+  function pularDia() {
+    if (!cronograma.dias.length) return;
+    if (!confirm('Pular o dia atual e seguir para o próximo?')) return;
+    avancarDia();
+    salvarTudo();
+  }
+  function adicionarDia() {
+    cronograma.dias.push({ id: novoId(), nome: `Dia ${cronograma.dias.length + 1}`, sessoes: [] });
+    salvarTudo();
+  }
+  function renomearDia(i, valor) {
+    const dia = cronograma.dias[i];
+    if (!dia) return;
+    dia.nome = valor.trim() || `Dia ${i + 1}`;
+    salvarTudo();
+  }
+  function removerDia(i) {
+    if (!confirm('Remover este dia e todas as suas sessões?')) return;
+    cronograma.dias.splice(i, 1);
+    if (cronograma.diaAtual >= cronograma.dias.length) cronograma.diaAtual = Math.max(0, cronograma.dias.length - 1);
+    salvarTudo();
+  }
+  function moverDia(i, dir) {
+    const j = i + dir;
+    if (j < 0 || j >= cronograma.dias.length) return;
+    [cronograma.dias[i], cronograma.dias[j]] = [cronograma.dias[j], cronograma.dias[i]];
+    salvarTudo();
+  }
+  function popularTopicoDia(diaId) {
+    const disc = document.getElementById(`sd-disc-${diaId}`).value;
+    document.getElementById(`sd-top-${diaId}`).innerHTML = optionsTopicos(disc, '', '— disciplina inteira —');
+  }
+  function adicionarSessao(i) {
+    const dia = cronograma.dias[i];
+    if (!dia) return;
+    const disc = document.getElementById(`sd-disc-${dia.id}`).value;
+    const topicoId = document.getElementById(`sd-top-${dia.id}`).value;
+    const min = parseInt(document.getElementById(`sd-min-${dia.id}`).value, 10);
+    if (!disc) { alert('Escolha a disciplina da sessão.'); return; }
+    if (!(min > 0)) { alert('Informe a duração em minutos.'); return; }
+    dia.sessoes.push({ id: novoId(), disc, min, topicoId: topicoId || '', feita: false });
+    salvarTudo();
+  }
+  function removerSessao(i, sid) {
+    const dia = cronograma.dias[i];
+    if (!dia) return;
+    dia.sessoes = dia.sessoes.filter(s => s.id !== sid);
+    salvarTudo();
+  }
+  function moverSessao(i, sid, dir) {
+    const arr = cronograma.dias[i].sessoes;
+    const k = arr.findIndex(s => s.id === sid);
+    const j = k + dir;
+    if (k < 0 || j < 0 || j >= arr.length) return;
+    [arr[k], arr[j]] = [arr[j], arr[k]];
+    salvarTudo();
+  }
+  function editarMinSessao(i, sid, valor) {
+    const s = cronograma.dias[i].sessoes.find(x => x.id === sid);
+    const n = parseInt(valor, 10);
+    if (s && n > 0) { s.min = n; salvarTudo(); }
+  }
+  function editarTopicoSessao(i, sid, valor) {
+    const s = cronograma.dias[i].sessoes.find(x => x.id === sid);
+    if (s) { s.topicoId = valor; salvarTudo(); }
+  }
+
+  function diaHTML(dia, i) {
+    const atual = i === cronograma.diaAtual;
+    const totalMin = dia.sessoes.reduce((acc, s) => acc + s.min, 0);
+    const sessoes = dia.sessoes.map((s, k) => {
+      const d = meusDados.find(x => x.id === s.disc);
+      return `
+        <div class="p-2.5 rounded-lg border border-theme bg-card ${s.feita ? 'sessao-concluida' : ''}">
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500">
+            <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
+            <input type="number" min="5" value="${s.min}" onchange="editarMinSessao(${i}, ${s.id}, this.value)" class="w-20 bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none" title="Minutos">
+            <span class="text-[11px] text-sec">min</span>
+            <button onclick="moverSessao(${i}, ${s.id}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir"><i class="fa-solid fa-arrow-up"></i></button>
+            <button onclick="moverSessao(${i}, ${s.id}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer"><i class="fa-solid fa-arrow-down"></i></button>
+            <button onclick="removerSessao(${i}, ${s.id})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <select onchange="editarTopicoSessao(${i}, ${s.id}, this.value)" class="mt-2 w-full bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none">
+            ${optionsTopicos(s.disc, s.topicoId, '— disciplina inteira —')}
+          </select>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="rounded-xl border ${atual ? 'border-brand' : 'border-theme'} bg-panel p-4 space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${atual ? 'bg-brand text-white' : 'bg-card border border-theme text-sec'}">${atual ? 'Hoje' : 'Dia ' + (i + 1)}</span>
+          <input value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" class="flex-1 min-w-[140px] bg-card border border-theme rounded-lg p-1.5 text-sm font-bold text-main outline-none">
+          <span class="text-xs text-sec">${dia.sessoes.length} sessão(ões) · ${formatarMinutos(totalMin)}</span>
+          <button onclick="moverDia(${i}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir dia"><i class="fa-solid fa-arrow-up"></i></button>
+          <button onclick="moverDia(${i}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer dia"><i class="fa-solid fa-arrow-down"></i></button>
+          <button onclick="removerDia(${i})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover dia"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="space-y-2">${sessoes || '<p class="text-xs text-mut italic">Nenhuma sessão neste dia ainda.</p>'}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-2 border-t border-theme">
+          <select id="sd-disc-${dia.id}" onchange="popularTopicoDia(${dia.id})" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">${optionsDisciplinas()}</select>
+          <select id="sd-top-${dia.id}" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"><option value="">— disciplina inteira —</option></select>
+          <input id="sd-min-${dia.id}" type="number" min="5" value="${preferencias.duracaoPadrao}" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none" title="Minutos">
+          <button onclick="adicionarSessao(${i})" class="bg-brand hover:opacity-90 text-white font-bold rounded-lg p-2 text-xs transition"><i class="fa-solid fa-plus mr-1"></i> Adicionar sessão</button>
+        </div>
+      </div>`;
+  }
+
+  function renderizarCronograma() {
+    const prog = progressoRodada();
+    const dia = diaAtualObj();
+    document.getElementById('cron-rodada').innerText = cronograma.rodada;
+    document.getElementById('cron-dia').innerText = dia ? dia.nome : '—';
+    document.getElementById('cron-progresso').innerText = `${prog.pct}%`;
+    document.getElementById('cron-barra').style.width = `${prog.pct}%`;
+
+    document.getElementById('cron-dias').innerHTML = cronograma.dias.length
+      ? cronograma.dias.map((d, i) => diaHTML(d, i)).join('')
+      : '<p class="text-sm text-mut italic">Seu cronograma está vazio. Clique em "Novo dia" para começar.</p>';
+
+    document.getElementById('cron-historico').innerHTML = cronograma.historico.length
+      ? cronograma.historico.slice().reverse().map(h =>
+          `<div class="flex justify-between p-2.5 rounded-lg bg-card border border-theme"><span class="font-semibold">Rodada ${h.rodada}</span><span class="text-sec">concluída em ${formatarDataBR(h.concluidaEm)}</span></div>`).join('')
+      : '<p class="text-xs text-mut italic">Nenhuma rodada concluída ainda.</p>';
   }
 
   // =====================================================================
-  // 11. CRONÔMETRO: PAINEL, ALARME, SONECA E SALVAMENTO
+  // 10. BILHETE FIXO
+  // =====================================================================
+  function sessaoDaVez() {
+    const dia = diaAtualObj();
+    if (!dia) return null;
+    const s = dia.sessoes.find(x => !x.feita);
+    return s ? { ...s } : null;
+  }
+  function toggleBilhete(mostrar) {
+    document.getElementById('bilhete-card').classList.toggle('hidden', !mostrar);
+    const pin = document.getElementById('bilhete-pin');
+    pin.classList.toggle('hidden', mostrar);
+    pin.classList.toggle('flex', !mostrar);
+    localStorage.setItem('central_bilhete', mostrar ? 'aberto' : 'fechado');
+  }
+  function restaurarBilhete() { toggleBilhete(localStorage.getItem('central_bilhete') !== 'fechado'); }
+  function renderizarBilhete() {
+    const prog = progressoRodada();
+    const dia = diaAtualObj();
+    document.getElementById('bil-rodada').innerText = cronograma.rodada;
+    document.getElementById('bil-dia').innerText = dia ? dia.nome : 'Sem dias';
+    document.getElementById('bil-barra').style.width = `${prog.pct}%`;
+    const prox = sessaoDaVez();
+    if (!dia) {
+      document.getElementById('bil-proxima').innerText = 'Monte seu cronograma';
+    } else if (!prox) {
+      document.getElementById('bil-proxima').innerText = dia.sessoes.length ? 'Dia concluído. Bom descanso!' : 'Este dia não tem sessões';
+    } else {
+      const d = meusDados.find(x => x.id === prox.disc);
+      document.getElementById('bil-proxima').innerText = `${d ? d.nome : '—'} · ${prox.min} min`;
+    }
+  }
+
+  // =====================================================================
+  // 11. CRONÔMETRO
   // =====================================================================
   let timerSeconds = 0;
   let timerInterval = null;
   let timerDuracaoMin = 50;
-  let timerAlarmeAtivo = false;     // só true para sessões do cronograma
+  let timerAlarmeAtivo = false;
   let timerAlarmeDisparado = false;
-  let timerSessaoCron = null;       // { ordem, disc } quando veio do cronograma
-  let revSessaoEmCurso = null;      // id da revisão que está sendo estudada
+  let timerSessao = null;         // { diaIdx, sid } quando veio do cronograma
+  let timerRevisaoId = null;      // id da revisão em estudo
   let audioCtx = null;
 
   function toggleFloatingTimer(expand) {
@@ -2067,12 +1653,14 @@
   function popularTopicosTimer() {
     document.getElementById('timer-topico').innerHTML = optionsTopicos(document.getElementById('timer-disc').value, '', '— escolha o tópico —');
   }
-  function setOrigemTimer(texto) {
-    document.getElementById('timer-origem').innerText = texto;
-  }
+  function setOrigemTimer(texto) { document.getElementById('timer-origem').innerText = texto; }
   function cronometroOcupado() {
     if (timerInterval) { alert('O cronômetro está rodando. Pause ou salve antes de iniciar outra sessão.'); return true; }
     return false;
+  }
+  function lerDuracao() {
+    const v = parseInt(document.getElementById('timer-duracao').value, 10);
+    return v > 0 ? v : preferencias.duracaoPadrao;
   }
   function garantirAudio() {
     try {
@@ -2106,8 +1694,8 @@
   function iniciarCronometro() {
     if (timerInterval) return;
     garantirAudio();
-    const v = parseInt(document.getElementById('timer-duracao').value, 10);
-    timerDuracaoMin = v > 0 ? v : preferencias.duracaoPadrao;
+    timerDuracaoMin = lerDuracao();
+    timerAlarmeAtivo = !!timerSessao;
     timerAlarmeDisparado = false;
     startTick();
   }
@@ -2136,27 +1724,24 @@
     document.getElementById('modal-fim-sessao').classList.add('hidden');
     salvarCronometro();
   }
-  function iniciarSessaoCron(ordem) {
-    const s = sessoesDoBloco(cronograma.bloco).find(x => x.ordem === ordem);
+  function iniciarSessaoCron(diaIdx, sid) {
+    const dia = cronograma.dias[diaIdx];
+    const s = dia && dia.sessoes.find(x => x.id === sid);
     if (!s || cronometroOcupado()) return;
-    timerSessaoCron = { ordem, disc: s.disc };
-    timerAlarmeAtivo = true;
-    timerAlarmeDisparado = false;
-    revSessaoEmCurso = null;
+    timerSessao = { diaIdx, sid };
+    timerRevisaoId = null;
     toggleFloatingTimer(true);
     document.getElementById('timer-disc').value = s.disc;
     popularTopicosTimer();
-    const topicoId = topicoDaSessao(cronograma.rodada, cronograma.bloco, ordem);
-    if (topicoId) document.getElementById('timer-topico').value = topicoId;
-    setOrigemTimer(`Sessão do cronograma · alarme em ${timerDuracaoMin} min`);
+    if (s.topicoId) document.getElementById('timer-topico').value = s.topicoId;
+    setOrigemTimer(`Sessão do cronograma · alarme em ${lerDuracao()} min`);
     iniciarCronometro();
   }
   function revisarAgora(id) {
     const r = minhasRevisoes.find(x => String(x.id) === String(id));
     if (!r || cronometroOcupado()) return;
-    timerSessaoCron = null;
-    timerAlarmeAtivo = false;
-    revSessaoEmCurso = r.id;
+    timerSessao = null;
+    timerRevisaoId = r.id;
     toggleFloatingTimer(true);
     document.getElementById('timer-disc').value = r.discId;
     popularTopicosTimer();
@@ -2166,11 +1751,11 @@
   }
   function salvarCronometro() {
     pausarCronometro();
-    if (timerSeconds < 10) { alert('Estude pelo menos alguns segundos antes de salvar no cronômetro!'); return; }
+    if (timerSeconds < 10) { alert('Estude pelo menos alguns segundos antes de salvar.'); return; }
     const dId = document.getElementById('timer-disc').value;
     const nodeId = document.getElementById('timer-topico').value;
     const { node } = getNodeRef(dId, nodeId);
-    if (!node) { alert('Escolha o tópico antes de salvar. O tempo continua acumulado no cronômetro.'); return; }
+    if (!node) { alert('Escolha o tópico antes de salvar. O tempo continua no cronômetro.'); return; }
 
     const minutos = Math.max(1, Math.round(timerSeconds / 60));
     const tipo = document.getElementById('timer-tipo').value;
@@ -2180,50 +1765,39 @@
     historicoDiario[hoje] = (historicoDiario[hoje] || 0) + minutos;
     registrosEstudo.push({
       id: novoId(), data: hoje, discId: dId, topicoId: nodeId,
-      minutos, tipo, origem: timerSessaoCron ? 'cronograma' : 'cronometro'
+      minutos, tipo, origem: timerSessao ? 'cronograma' : (timerRevisaoId ? 'revisao' : 'cronometro')
     });
 
-    const sessao = timerSessaoCron;
-    const revId = revSessaoEmCurso;
+    const sessao = timerSessao, revId = timerRevisaoId;
     timerSeconds = 0;
     atualizarDisplayCronometro();
     timerAlarmeAtivo = false;
     timerAlarmeDisparado = false;
-    timerSessaoCron = null;
-    revSessaoEmCurso = null;
+    timerSessao = null;
+    timerRevisaoId = null;
     setOrigemTimer('Cronômetro livre (sem alarme)');
 
     if (sessao) {
-      const k = chaveSessao(cronograma.rodada, cronograma.bloco, sessao.ordem);
-      if (!cronograma.concluidas[k] && confirm('Marcar esta sessão do cronograma como concluída?')) {
-        alternarSessaoCron(sessao.ordem);
-        alert(`Estudo de ${minutos} min registrado em "${node.nome}".`);
-        return;
+      const dia = cronograma.dias[sessao.diaIdx];
+      const s = dia && dia.sessoes.find(x => x.id === sessao.sid);
+      if (s && !s.feita && confirm('Marcar esta sessão do cronograma como concluída?')) {
+        alternarSessao(sessao.diaIdx, sessao.sid);
       }
     }
-    if (revId && confirm('Marcar esta revisão como concluída?')) {
-      concluirRev(revId, 7);
-      alert(`Estudo de ${minutos} min registrado em "${node.nome}".`);
-      return;
-    }
+    if (revId && confirm('Marcar esta revisão como concluída?')) concluirRev(revId, 7);
     salvarTudo();
     alert(`Estudo de ${minutos} min registrado em "${node.nome}".`);
   }
-
-  // Alterar o padrão de alarme no painel vira o novo padrão salvo
   document.getElementById('timer-duracao').addEventListener('change', e => {
     const v = parseInt(e.target.value, 10);
     if (v > 0) { preferencias.duracaoPadrao = v; salvarTudo(); }
   });
 
-  // =====================================================================
-  // 12. MODAL DE ESTUDO MANUAL
-  // =====================================================================
+  // Registro manual
   function popularSelects() {
-    const opts = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
-    document.getElementById('modal-disc').innerHTML = opts;
-    document.getElementById('timer-disc').innerHTML = opts;
-    document.getElementById('plano-disc').innerHTML = `<option value="">— sem disciplina —</option>` + opts;
+    document.getElementById('modal-disc').innerHTML = optionsDisciplinas(meusDados[0] ? meusDados[0].id : '', '');
+    document.getElementById('timer-disc').innerHTML = optionsDisciplinas('', '— disciplina —');
+    document.getElementById('plano-disc').innerHTML = optionsDisciplinas('', '— sem disciplina —');
     popularTopicosModal();
     popularTopicosTimer();
     popularTopicosPlano();
@@ -2240,14 +1814,13 @@
     const dId = document.getElementById('modal-disc').value;
     const nodeId = document.getElementById('modal-topico').value;
     const { node } = getNodeRef(dId, nodeId);
-    if (!node) { alert('Escolha o tópico.'); return; }
+    if (!node) { alert('Escolha a disciplina e o tópico.'); return; }
     const min = parseInt(document.getElementById('modal-tempo').value) || 0;
     const ac = parseInt(document.getElementById('modal-acertos').value) || 0;
     const tot = parseInt(document.getElementById('modal-totais').value) || 0;
     const tipo = document.getElementById('modal-tipo').value;
     const marcar = document.getElementById('modal-marcar-concluido').checked;
     if (min <= 0 && ac <= 0 && tot <= 0 && !marcar) { alert('Informe tempo, questões ou marque como concluído.'); return; }
-
     const hoje = hojeISO();
     node.tempo = (node.tempo || 0) + min;
     node.acertos = (node.acertos || 0) + ac;
@@ -2258,7 +1831,6 @@
       registrosEstudo.push({ id: novoId(), data: hoje, discId: dId, topicoId: nodeId, minutos: min, tipo, origem: 'manual' });
     }
     if (marcar) marcarNoRecursivo(node, true, hoje);
-
     closeModalEstudo();
     ['modal-tempo', 'modal-acertos', 'modal-totais'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('modal-marcar-concluido').checked = false;
@@ -2266,23 +1838,18 @@
   }
 
   // =====================================================================
-  // 13. MURAL DE REVISÕES (3C)
+  // 12. MURAL DE REVISÕES
   // =====================================================================
-  const REV_STATUS = {
-    programada: { cor: 'text-blue-400' }, atrasada: { cor: 'text-red-400' },
-    ignorada: { cor: 'text-mut' }, concluida: { cor: 'text-brand' }
-  };
   let revFiltro = 'programadas';
   let revEdicao = null;
-
   function statusEfetivoRev(r) {
     if (r.status === 'concluida' || r.status === 'ignorada') return r.status;
     return r.dataAgendada < hojeISO() ? 'atrasada' : 'programada';
   }
-  function setFiltroRev(f) { revFiltro = f; renderizarRevisoes3C(); }
-  function renderizarRevisoes3C() {
+  function setFiltroRev(f) { revFiltro = f; renderizarRevisoes(); }
+  function renderizarRevisoes() {
     const hoje = hojeISO();
-    const contagem = {
+    const cont = {
       programadas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'programada').length,
       atrasadas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'atrasada').length,
       ignoradas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'ignorada').length,
@@ -2290,25 +1857,22 @@
     };
     const abas = [['programadas', 'Programadas', 'text-blue-400'], ['atrasadas', 'Atrasadas', 'text-red-400'],
                   ['ignoradas', 'Ignoradas', 'text-mut'], ['concluidas', 'Concluídas', 'text-brand']];
-    document.getElementById('rev-filtros').innerHTML = abas.map(([k, t, cor]) =>
-      `<button onclick="setFiltroRev('${k}')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${revFiltro === k ? 'bg-card border-brand text-brand' : 'bg-panel border-theme text-sec hover-bg'}">${t} <span class="${cor}">(${contagem[k]})</span></button>`
+    document.getElementById('rev-filtros').innerHTML = abas.map(([k, t, c]) =>
+      `<button onclick="setFiltroRev('${k}')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${revFiltro === k ? 'bg-card border-brand text-brand' : 'bg-panel border-theme text-sec hover-bg'}">${t} <span class="${c}">(${cont[k]})</span></button>`
     ).join('');
-
-    const statusAlvo = { programadas: 'programada', atrasadas: 'atrasada', ignoradas: 'ignorada', concluidas: 'concluida' }[revFiltro];
-    let lista = minhasRevisoes.filter(r => statusEfetivoRev(r) === statusAlvo)
+    const alvo = { programadas: 'programada', atrasadas: 'atrasada', ignoradas: 'ignorada', concluidas: 'concluida' }[revFiltro];
+    let lista = minhasRevisoes.filter(r => statusEfetivoRev(r) === alvo)
       .sort((a, b) => (a.dataAgendada || '').localeCompare(b.dataAgendada || ''));
     if (revFiltro === 'concluidas') lista.reverse();
-
-    const cont = document.getElementById('rev-lista-3c');
-    if (!lista.length) { cont.innerHTML = `<p class="text-sm text-mut italic py-6 text-center col-span-full">Nada aqui no momento.</p>`; return; }
-
-    cont.innerHTML = lista.map(r => {
+    const el = document.getElementById('rev-lista');
+    if (!lista.length) { el.innerHTML = `<p class="text-sm text-mut italic py-6 text-center col-span-full">Nada aqui no momento.</p>`; return; }
+    el.innerHTML = lista.map(r => {
       const disc = meusDados.find(d => d.id === r.discId);
       const { node } = getNodeRef(r.discId, r.nodeId);
       const num = node ? numeroEdital(node.nome) : '';
       const st = statusEfetivoRev(r);
       const diff = Math.round((new Date(r.dataAgendada + 'T00:00:00') - new Date(hoje + 'T00:00:00')) / 86400000);
-      const txtData = st === 'concluida' ? `Feita em ${formatarDataBR(r.concluidaEm)}`
+      const txt = st === 'concluida' ? `Feita em ${formatarDataBR(r.concluidaEm)}`
         : st === 'ignorada' ? `Ignorada · era para ${formatarDataBR(r.dataAgendada)}`
         : diff < 0 ? `Atrasada ${Math.abs(diff)} dia(s) · ${formatarDataBR(r.dataAgendada)}`
         : diff === 0 ? 'Para hoje'
@@ -2327,7 +1891,7 @@
         <div class="p-4 rounded-xl border border-theme bg-panel border-l-4 ${borda} shadow-sm">
           <div class="flex justify-between items-start gap-2">
             <div class="min-w-0">
-              <p class="text-xs font-bold ${REV_STATUS[st].cor}">${txtData}</p>
+              <p class="text-xs font-bold text-main">${txt}</p>
               <p class="text-[11px] text-sec font-bold uppercase mt-1">${esc(disc ? disc.nome : '—')}</p>
               <p class="text-sm font-medium text-main mt-0.5">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${esc(node ? node.nome : 'Tópico removido')}</p>
             </div>
@@ -2342,15 +1906,13 @@
     if (!r) return;
     r.status = 'concluida';
     r.concluidaEm = hojeISO();
-    r.intervaloConclusao = dias;
     const prox = new Date(); prox.setDate(prox.getDate() + dias);
     minhasRevisoes.push(normalizarRevisao({ discId: r.discId, nodeId: r.nodeId, tipo: r.tipo, dataAgendada: isoLocal(prox), status: 'programada' }));
     salvarTudo();
   }
   function ignorarRev(id) {
     const r = minhasRevisoes.find(x => String(x.id) === String(id));
-    if (!r) return;
-    if (!confirm('Ignorar esta revisão? Ela sai da fila sem contar como atraso.')) return;
+    if (!r || !confirm('Ignorar esta revisão? Ela sai da fila sem contar como atraso.')) return;
     r.status = 'ignorada';
     salvarTudo();
   }
@@ -2359,8 +1921,7 @@
     if (!r) return;
     revEdicao = { id: r.id };
     document.getElementById('rev-modal-titulo').innerText = 'Reagendar revisão';
-    document.getElementById('rev-disc').innerHTML = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
-    document.getElementById('rev-disc').value = r.discId;
+    document.getElementById('rev-disc').innerHTML = optionsDisciplinas(r.discId, '');
     document.getElementById('rev-disc').disabled = true;
     popularTopicosRev(r.nodeId);
     document.getElementById('rev-topico').disabled = true;
@@ -2373,14 +1934,14 @@
     document.getElementById('rev-modal-titulo').innerText = 'Nova revisão';
     document.getElementById('rev-disc').disabled = false;
     document.getElementById('rev-topico').disabled = false;
-    document.getElementById('rev-disc').innerHTML = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
+    document.getElementById('rev-disc').innerHTML = optionsDisciplinas('', '— disciplina —');
     popularTopicosRev();
     document.getElementById('rev-tipo').value = 'Revisão';
     document.getElementById('rev-data').value = hojeISO();
     document.getElementById('modal-rev').classList.remove('hidden');
   }
   function popularTopicosRev(sel = '') {
-    document.getElementById('rev-topico').innerHTML = optionsTopicos(document.getElementById('rev-disc').value, sel, '');
+    document.getElementById('rev-topico').innerHTML = optionsTopicos(document.getElementById('rev-disc').value, sel, '— tópico —');
   }
   function fecharModalRev() {
     document.getElementById('modal-rev').classList.add('hidden');
@@ -2393,7 +1954,7 @@
     if (revEdicao && revEdicao.novo) {
       const discId = document.getElementById('rev-disc').value;
       const nodeId = document.getElementById('rev-topico').value;
-      if (!nodeId) { alert('Escolha o tópico.'); return; }
+      if (!discId || !nodeId) { alert('Escolha a disciplina e o tópico.'); return; }
       minhasRevisoes.push(normalizarRevisao({ discId, nodeId, tipo, dataAgendada: data, status: 'programada' }));
     } else if (revEdicao) {
       const r = minhasRevisoes.find(x => String(x.id) === String(revEdicao.id));
@@ -2404,70 +1965,14 @@
   }
 
   // =====================================================================
-  // 14. BILHETE FIXO (NORTE DO CICLO) E REDAÇÃO SEMANAL
+  // 13. HISTÓRICO ANALÍTICO
   // =====================================================================
-  function semanaISO(date = new Date()) {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dia = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dia);
-    const inicioAno = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    const semana = Math.ceil(((d - inicioAno) / 86400000 + 1) / 7);
-    return `${d.getUTCFullYear()}-W${String(semana).padStart(2, '0')}`;
-  }
-  function marcarRedacaoSemana() {
-    const k = semanaISO();
-    redacaoSemanas[k] = !redacaoSemanas[k];
-    salvarTudo();
-  }
-  function toggleBilhete(mostrar) {
-    document.getElementById('bilhete-card').classList.toggle('hidden', !mostrar);
-    const pin = document.getElementById('bilhete-pin');
-    pin.classList.toggle('hidden', mostrar);
-    pin.classList.toggle('flex', !mostrar);
-    localStorage.setItem('cbmpe_bilhete', mostrar ? 'aberto' : 'fechado');
-  }
-  function restaurarBilhete() { toggleBilhete(localStorage.getItem('cbmpe_bilhete') !== 'fechado'); }
-  function renderizarBilhete() {
-    const prog = progressoRodada();
-    document.getElementById('bil-rodada').innerText = cronograma.rodada;
-    document.getElementById('bil-bloco').innerText = cronograma.bloco;
-    document.getElementById('bil-barra').style.width = `${prog.pct}%`;
-
-    const prox = sessaoDaVezInfo();
-    document.getElementById('bil-proxima').innerText = prox ? `${prox.nome} · ${prox.min} min` : 'Dia concluído. Bom descanso!';
-
-    const travaEl = document.getElementById('bil-trava');
-    if (prox) {
-      const forte = travaForte(prox.disc);
-      travaEl.className = forte
-        ? 'p-3 rounded-lg border border-rose-500/50 bg-rose-500/10 text-xs text-rose-300 leading-relaxed'
-        : 'p-3 rounded-lg border border-amber-500/40 bg-amber-500/10 text-xs text-amber-200 leading-relaxed';
-      travaEl.innerHTML = forte
-        ? `<i class="fa-solid fa-shield-halved mr-1"></i> <b>Trava Anti-Zero:</b> ${esc(prox.nome)} tem apenas 5 questões, maior risco de nota zero. Nota zero em qualquer disciplina elimina o candidato.`
-        : `<i class="fa-solid fa-triangle-exclamation mr-1"></i> <b>Atenção Anti-Zero:</b> ${esc(prox.nome)}. Nota zero em qualquer disciplina elimina o candidato.`;
-    } else {
-      travaEl.className = 'hidden';
-      travaEl.innerHTML = '';
-    }
-
-    const feitaSemana = !!redacaoSemanas[semanaISO()];
-    document.getElementById('bil-redacao-txt').innerText = feitaSemana
-      ? 'Feita nesta semana ✔'
-      : 'Pendente nesta semana: 1 texto dissertativo (15 a 20 linhas).';
-    document.getElementById('bil-redacao-btn').innerText = feitaSemana ? 'Desmarcar' : 'Marcar como feita';
-  }
-
-  // =====================================================================
-  // 15. HISTÓRICO ANALÍTICO (3B)
-  // =====================================================================
-  const HIST_PALETA = ['#f9a8d4','#a7f3d0','#bfdbfe','#fde68a','#ddd6fe','#fed7aa','#99f6e4','#fecaca','#c7d2fe','#d9f99d','#fbcfe8','#e2e8f0'];
   const HIST_ATALHOS = [
     { k: 'hoje', t: 'Hoje', dias: 1 }, { k: '7d', t: '7 dias', dias: 7 }, { k: '30d', t: '30 dias', dias: 30 },
     { k: '60d', t: '60 dias', dias: 60 }, { k: '6m', t: '6 meses', dias: 182 }, { k: '12m', t: '12 meses', dias: 365 },
     { k: 'custom', t: 'Personalizado' }
   ];
   let histPeriodo = '30d';
-
   function diasNoIntervalo(ini, fim) {
     return Math.round((new Date(fim + 'T00:00:00') - new Date(ini + 'T00:00:00')) / 86400000) + 1;
   }
@@ -2482,13 +1987,19 @@
     const ini = new Date(); ini.setDate(ini.getDate() - (at.dias - 1));
     return { ini: isoLocal(ini), fim: hojeISO() };
   }
-  function minutosSessaoDisc(discId) {
-    const s = Object.values(CRON_MAPA).flat().find(x => x.disc === discId);
-    return s ? s.min : 0;
+  // Minutos por dia, por disciplina, calculados a partir do cronograma (média do ciclo)
+  function metaMinutosPorDia() {
+    const n = cronograma.dias.length;
+    const porDisc = {};
+    if (!n) return porDisc;
+    cronograma.dias.forEach(d => d.sessoes.forEach(s => { porDisc[s.disc] = (porDisc[s.disc] || 0) + s.min; }));
+    Object.keys(porDisc).forEach(k => porDisc[k] = porDisc[k] / n);
+    return porDisc;
   }
-  // Cada disciplina aparece 1 vez a cada 4 dias; o ciclo inteiro são 225 min por dia
-  function metaMinutosPeriodo(discId, dias) {
-    return discId ? Math.round((dias / 4) * minutosSessaoDisc(discId)) : dias * MIN_DIA_CICLO;
+  function metaPeriodo(discId, dias) {
+    const mpd = metaMinutosPorDia();
+    if (discId) return Math.round((mpd[discId] || 0) * dias);
+    return Math.round(Object.values(mpd).reduce((a, b) => a + b, 0) * dias);
   }
   function coberturaEdital() {
     let total = 0, conc = 0;
@@ -2522,6 +2033,7 @@
     selTipo.innerHTML = `<option value="">Todas as modalidades</option>` +
       ['Teoria','Leitura','Revisão','Simulado','Questões','Flashcards','Não informado'].map(t => `<option>${t}</option>`).join('');
     selTipo.value = antigoTipo;
+    renderizarAtalhosHist();
   }
   function popularTopicosHist() {
     const dId = document.getElementById('hist-disc').value;
@@ -2575,21 +2087,36 @@
         </div>
       </div>`;
   }
-  function renderizarLegendaHist(porDisc, dias) {
-    document.getElementById('hist-legenda').innerHTML = meusDados.map((d, i) => {
-      const meta = metaMinutosPeriodo(d.id, dias);
-      const real = porDisc[d.id] || 0;
-      return `
-        <div class="flex items-center justify-between gap-3">
-          <span class="flex items-center gap-2 min-w-0">
-            <span class="w-3 h-3 rounded-sm shrink-0" style="background:${HIST_PALETA[i % HIST_PALETA.length]}"></span>
-            <span class="truncate text-main">${esc(d.nome)}</span>
-          </span>
-          <span class="text-xs text-sec whitespace-nowrap">${formatarMinutos(real)} / ${formatarMinutos(meta)}</span>
-        </div>`;
-    }).join('');
-  }
-  function renderizarTabelaHist(regs) {
+  function renderizarHistorico() {
+    renderizarAtalhosHist();
+    const { ini, fim } = intervaloHist();
+    const dias = diasNoIntervalo(ini, fim);
+    const dId = document.getElementById('hist-disc').value;
+    const regs = registrosFiltrados();
+    const total = regs.reduce((s, r) => s + (r.minutos || 0), 0);
+    const meta = metaPeriodo(dId, dias);
+
+    document.getElementById('hist-total').innerText = formatarMinutos(total);
+    document.getElementById('hist-sessoes').innerText = `${regs.length} registro(s) · ${dias} dia(s)`;
+    document.getElementById('hist-cobertura').innerText = `${coberturaEdital()}%`;
+    document.getElementById('hist-ritmo').innerText = formatarMinutos(Math.round(total / dias));
+
+    const porDisc = {};
+    regs.forEach(r => porDisc[r.discId] = (porDisc[r.discId] || 0) + (r.minutos || 0));
+    const mpd = metaMinutosPorDia();
+    const segmentos = meusDados
+      .map((d, i) => ({ nome: d.nome, min: porDisc[d.id] || 0, cor: HIST_PALETA[i % HIST_PALETA.length] }))
+      .filter(s => s.min > 0);
+    renderizarDonutHist(segmentos, meta, total);
+    document.getElementById('hist-legenda').innerHTML = meusDados.map((d, i) => `
+      <div class="flex items-center justify-between gap-3">
+        <span class="flex items-center gap-2 min-w-0">
+          <span class="w-3 h-3 rounded-sm shrink-0" style="background:${HIST_PALETA[i % HIST_PALETA.length]}"></span>
+          <span class="truncate text-main">${esc(d.nome)}</span>
+        </span>
+        <span class="text-xs text-sec whitespace-nowrap">${formatarMinutos(porDisc[d.id] || 0)} / ${formatarMinutos(metaPeriodo(d.id, dias))}</span>
+      </div>`).join('');
+
     const ordenados = regs.slice().sort((a, b) => b.data.localeCompare(a.data) || b.id - a.id);
     const mostrados = ordenados.slice(0, 300);
     document.getElementById('hist-tabela').innerHTML = mostrados.length
@@ -2610,48 +2137,16 @@
     document.getElementById('hist-aviso').innerText = ordenados.length > 300
       ? 'Mostrando os 300 registros mais recentes. Use os filtros para refinar.' : '';
   }
-  function renderizarHistorico() {
-    if (document.getElementById('view-historico').classList.contains('hidden')) return;
-    renderizarAtalhosHist();
-    const { ini, fim } = intervaloHist();
-    const dias = diasNoIntervalo(ini, fim);
-    const dId = document.getElementById('hist-disc').value;
-    const regs = registrosFiltrados();
-    const total = regs.reduce((s, r) => s + (r.minutos || 0), 0);
-    const meta = metaMinutosPeriodo(dId, dias);
-
-    document.getElementById('hist-total').innerText = formatarMinutos(total);
-    document.getElementById('hist-sessoes').innerText = `${regs.length} registro(s) · ${dias} dia(s)`;
-    document.getElementById('hist-cobertura').innerText = `${coberturaEdital()}%`;
-    document.getElementById('hist-ritmo').innerText = formatarMinutos(Math.round(total / dias));
-
-    const porDisc = {};
-    regs.forEach(r => porDisc[r.discId] = (porDisc[r.discId] || 0) + (r.minutos || 0));
-    const segmentos = meusDados
-      .map((d, i) => ({ nome: d.nome, min: porDisc[d.id] || 0, cor: HIST_PALETA[i % HIST_PALETA.length] }))
-      .filter(s => s.min > 0);
-    renderizarDonutHist(segmentos, meta, total);
-    renderizarLegendaHist(porDisc, dias);
-    renderizarTabelaHist(regs);
-  }
 
   // =====================================================================
-  // 16. CADERNO DE ERROS (vitrine, murais, cartões arrastáveis, prints no IndexedDB)
+  // 14. CADERNO DE ERROS (vitrine, murais, cartões arrastáveis, prints no IndexedDB)
   // =====================================================================
-  let cadernoErrosCtx = null;
   const errosCtx = { discId: null, filtro: 'geral' };
   let erroEdicao = null;
   let previewToken = 0;
   let erroArrastando = null;
-  const PALETA_CAPAS = [
-    ['#7c3aed','#db2777'], ['#0ea5e9','#2563eb'], ['#10b981','#0d9488'],
-    ['#f59e0b','#ea580c'], ['#e11d48','#9f1239'], ['#6366f1','#1e3a8a'],
-    ['#14b8a6','#155e75'], ['#a855f7','#4c1d95'], ['#84cc16','#166534']
-  ];
-  const PALETA_POSTIT = ['#fde68a','#fbcfe8','#bfdbfe','#bbf7d0','#fed7aa','#ddd6fe'];
-  const MOTIVOS = ['Não sabia o conceito','Interpretação','Distração','Pegadinha da banca','Cálculo / conta','Memória (esqueci)'];
 
-  const IDB_NAME = 'estudei_cbmpe_imgs';
+  const IDB_NAME = 'central_estudos_jessica_imgs';
   let idbDB = null;
   function abrirIDB() {
     if (idbDB) return Promise.resolve(idbDB);
@@ -2710,20 +2205,24 @@
   }
 
   function renderizarVitrineErros() {
-    document.getElementById('erros-capas').innerHTML = meusDados.map((d, i) => {
+    if (!meusDados.length) return;
+    document.getElementById('erros-capas').innerHTML = meusDados.map(d => {
       const errosDisc = cadernoErros.filter(e => e.discId === d.id);
       const prio = errosDisc.filter(e => e.prioridade).length;
-      const [c1, c2] = PALETA_CAPAS[i % PALETA_CAPAS.length];
+      const capa = CAPAS[d.id] || { grad: ['#334155', '#0f172a'], icone: 'fa-book' };
       return `
-        <button onclick="abrirDisciplinaErros('${d.id}')" class="group text-left rounded-xl overflow-hidden border border-theme shadow-lg transition duration-300 hover:scale-[1.03] hover:shadow-2xl" style="background: linear-gradient(160deg, ${c1}, ${c2}); aspect-ratio: 3/4;">
-          <div class="h-full w-full p-4 flex flex-col justify-between text-white">
+        <button onclick="abrirDisciplinaErros('${d.id}')" class="capa-caderno group text-left rounded-xl overflow-hidden border border-theme shadow-lg" style="background: linear-gradient(160deg, ${capa.grad[0]}, ${capa.grad[1]}); aspect-ratio: 3/4;">
+          <div class="h-full w-full p-5 flex flex-col justify-between text-white">
             <div class="flex justify-between items-start gap-2">
               <span class="text-[10px] font-bold uppercase tracking-widest bg-black/25 px-2 py-0.5 rounded">${errosDisc.length} erro(s)</span>
               ${prio ? `<span class="text-[10px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded"><i class="fa-solid fa-star"></i> ${prio}</span>` : ''}
             </div>
+            <div class="flex-1 flex items-center justify-center">
+              <i class="fa-solid ${capa.icone} text-6xl opacity-30 group-hover:opacity-50 transition"></i>
+            </div>
             <div>
-              <p class="text-[11px] opacity-80 uppercase tracking-wider">Disciplina</p>
-              <h3 class="font-extrabold text-lg leading-tight">${esc(d.nome)}</h3>
+              <h3 class="font-extrabold text-2xl leading-tight">${esc(d.nome)}</h3>
+              <p class="text-xs opacity-85 uppercase tracking-widest mt-1">Caderno de erros</p>
             </div>
           </div>
         </button>`;
@@ -2744,9 +2243,9 @@
   }
   function popularFiltroErros() {
     const disc = meusDados.find(d => d.id === errosCtx.discId);
-    const sel = document.getElementById('erros-filtro');
-    sel.innerHTML = `<option value="geral">Mural Geral</option>` + optionsTopicos(disc.id, '', null).replace(/<option value="">[^<]*<\/option>/, '');
-    sel.value = errosCtx.filtro;
+    document.getElementById('erros-filtro').innerHTML =
+      `<option value="geral">Mural Geral</option>` + optionsTopicos(disc.id, '', null);
+    document.getElementById('erros-filtro').value = errosCtx.filtro;
   }
   function mudarFiltroErros() {
     errosCtx.filtro = document.getElementById('erros-filtro').value;
@@ -2766,7 +2265,7 @@
     if (!disc) return;
     document.getElementById('erros-disc-titulo').innerText = disc.nome;
     const lista = errosVisiveis();
-    const subtitulo = errosCtx.filtro === 'geral' ? 'Mural Geral da disciplina' : 'Erros específicos: ' + nomeTopico(disc.id, errosCtx.filtro);
+    const subtitulo = errosCtx.filtro === 'geral' ? 'Mural geral da disciplina' : 'Erros específicos: ' + nomeTopico(disc.id, errosCtx.filtro);
     document.getElementById('erros-subtitulo').innerText = `${subtitulo} · ${lista.length} erro(s). Arraste os cartões para organizar.`;
     const mural = document.getElementById('erros-mural');
     if (!lista.length) {
@@ -2778,11 +2277,11 @@
   }
   function cardErroHTML(e) {
     const cor = PALETA_POSTIT[Math.abs(e.id) % PALETA_POSTIT.length];
-    const num = numeroEdital(nomeTopico(e.discId, e.topicoId));
+    const { node } = getNodeRef(e.discId, e.topicoId);
+    const num = numeroEdital(node ? node.nome : '');
     const resumo = e.enunciado.length > 70 ? e.enunciado.slice(0, 70) + '…' : e.enunciado;
     const espelho = (errosCtx.filtro === 'geral' && e.prioridade)
       ? `<span class="text-[10px] font-bold uppercase bg-slate-900/15 px-1.5 py-0.5 rounded ml-1">Espelho</span>` : '';
-    const { node } = getNodeRef(e.discId, e.topicoId);
     return `
       <article draggable="true"
         ondragstart="dragStartErro(event, ${e.id})" ondragover="dragOverErro(event)" ondragleave="dragLeaveErro(event)"
@@ -2793,7 +2292,7 @@
             ${num ? `<span class="text-[10px] font-extrabold bg-slate-900/10 px-1.5 py-0.5 rounded">${esc(num)}</span>` : ''}
             ${e.prioridade ? `<span class="text-[10px] font-extrabold bg-slate-900 text-amber-300 px-1.5 py-0.5 rounded">★ MÁXIMA</span>` : ''}
             ${espelho}
-            ${badgeAOCPHTML(node)}
+            ${pesoBadgeHTML(node)}
           </div>
           <div class="flex gap-1 shrink-0">
             <button onclick="toggleExpandErro(${e.id})" class="w-7 h-7 rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="${e.expandido ? 'Recolher' : 'Expandir'}"><i class="fa-solid ${e.expandido ? 'fa-compress' : 'fa-expand'}"></i></button>
@@ -2853,15 +2352,14 @@
     salvarTudo();
   }
   function popularTopicosErro(sel = '') {
-    document.getElementById('erro-topico').innerHTML = optionsTopicos(document.getElementById('erro-disc').value, sel, '');
+    document.getElementById('erro-topico').innerHTML = optionsTopicos(document.getElementById('erro-disc').value, sel, '— tópico —');
   }
   function abrirModalErro(id) {
     const e = id ? cadernoErros.find(x => x.id === id) : null;
     erroEdicao = { id: e ? e.id : null, imgsNovas: [], imgsRemover: [] };
     document.getElementById('erro-modal-titulo').innerText = e ? 'Editar erro' : 'Novo erro';
-    const discSel = document.getElementById('erro-disc');
-    discSel.innerHTML = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
-    discSel.value = e ? e.discId : (errosCtx.discId || meusDados[0].id);
+    document.getElementById('erro-disc').innerHTML = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
+    document.getElementById('erro-disc').value = e ? e.discId : (errosCtx.discId || meusDados[0].id);
     popularTopicosErro(e ? e.topicoId : (errosCtx.filtro !== 'geral' ? errosCtx.filtro : ''));
     document.getElementById('erro-enunciado').value = e ? e.enunciado : '';
     document.getElementById('erro-minha').value = e ? (e.minha || '') : '';
@@ -2956,7 +2454,7 @@
   });
 
   // =====================================================================
-  // 17. BACKUP E RESTAURAÇÃO
+  // 15. BACKUP
   // =====================================================================
   function abrirModalBackup() { document.getElementById('modal-backup').classList.remove('hidden'); }
   function fecharModalBackup() { document.getElementById('modal-backup').classList.add('hidden'); }
@@ -2968,12 +2466,12 @@
         if (src) imagens[id] = src;
       }
     }
-    const payload = { app: 'Estudei_CFO_CBMPE_Amanda', dataExportacao: new Date().toISOString(), ...estadoAtual(), imagens };
+    const payload = { app: 'Central_Estudos_Jessica_PMPE', dataExportacao: new Date().toISOString(), ...estadoAtual(), imagens };
     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `backup_estudos_cbmpe_${hojeISO()}.json`;
+    a.download = `backup_central_estudos_${hojeISO()}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -2989,7 +2487,7 @@
       for (const [id, src] of Object.entries(parsed.imagens || {})) await idbPut(id, src);
       salvarTudo();
       fecharModalBackup();
-      alert('Backup restaurado com sucesso! Todos os seus dados voltaram.');
+      alert('Backup restaurado com sucesso!');
     } catch (err) {
       alert('Erro ao ler o arquivo de backup.');
     }
@@ -2997,35 +2495,28 @@
   }
 
   // =====================================================================
-  // 18. BOOT
+  // 16. INICIALIZAÇÃO
   // =====================================================================
   function iniciarApp() {
-    if (localStorage.getItem('cbmpe_theme') === 'light') {
+    if (localStorage.getItem('central_tema') === 'light') {
       document.body.classList.add('light-mode');
-      atualizarIconeTema(true);
+      document.getElementById('icon-theme').className = 'fa-solid fa-moon text-lg';
     }
     atualizarVersiculo();
     atualizarCountdown();
-
-    const rawNovo = localStorage.getItem(STORAGE_KEY);
-    const rawAntigo = localStorage.getItem(STORAGE_KEY_ANTIGO);
-    let precisaMigrar = false;
     try {
-      if (rawNovo) aplicarEstado(JSON.parse(rawNovo));
-      else if (rawAntigo) { aplicarEstado(JSON.parse(rawAntigo)); precisaMigrar = true; }
-      else aplicarEstado({});
+      aplicarEstado(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {});
     } catch (e) {
       aplicarEstado({});
     }
-
     meusDados.forEach(d => expandedNodes.add('disc_' + d.id));
+    document.getElementById('timer-duracao').value = preferencias.duracaoPadrao;
     popularSelects();
     popularFiltrosHist();
-    renderizarAtalhosHist();
-    atualizarTudoUI();
-    restaurarBilhete();
     setOrigemTimer('Cronômetro livre (sem alarme)');
-    if (precisaMigrar) mostrarTelaMigracao();
+    restaurarBilhete();
+    atualizarTudoUI();
+    navigate('dashboard');
   }
 
   iniciarApp();
