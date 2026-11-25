@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Mockup da Etapa 2 (estado inicial do cronômetro). Arquivo de referência: não é carregado pelo index.html. -->
+<title>Cronômetro zerado (escuro)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+  /* Layout: grade de estados do painel do cronômetro (direção D), seguida da lista de alterações previstas. Tema: tema escuro. */
+  :root {
+    --bg-main: #13161c; --bg-panel: #1e232d; --bg-card: #161a22; --bg-hover: #262c3a; --border-color: #2e3545; --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b; --brand: #10b981; --brand-hover: #059669; --crono-topo: #222835; --btn-iniciar-bg: #10b981; --btn-iniciar-fg: #022c22; --anel-dia: #10b981; --traco-feito: #10b981; --traco-prox: #cfd5dc; --traco-pend: #64748b; --c-alarme: #f97316; --c-parar: #ef4444; --c-pausado: #f59e0b; --t-foco: #10b981; --t-alarme: #fb923c; --t-parar: #f87171; --sombra: 0 24px 48px rgba(0,0,0,.35); color-scheme: dark;
+    --ui: 'Inter', 'Segoe UI', system-ui, sans-serif; --disp: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg-main); color: var(--text-primary); font-family: var(--ui); font-size: 14px; line-height: 1.5; margin: 0;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 64px; }
+  .wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 36px; }
+  header { display: grid; gap: 10px; max-width: 74ch; }
+  .eyebrow { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--t-foco); }
+  h1 { margin: 0; font-family: var(--disp); font-size: clamp(24px, 3.6vw, 32px); line-height: 1.15; text-wrap: balance; }
+  h2 { margin: 0; font-family: var(--disp); font-size: 20px; }
+  p { margin: 0; }
+  .lead { color: var(--text-secondary); }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px 20px; align-items: start; }
+  figure { margin: 0; display: grid; gap: 10px; justify-items: center; }
+  figcaption { width: 100%; max-width: 320px; display: grid; gap: 2px; }
+  figcaption strong { font-size: 13px; }
+  figcaption span { font-size: 12px; color: var(--text-secondary); }
+  .ic { width: 1em; height: 1em; fill: currentColor; flex: none; }
+  .ic.tr { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* ---- painel D ---- */
+  .crono { width: 100%; max-width: 320px; background: linear-gradient(180deg, var(--crono-topo) 0%, var(--bg-panel) 42%); border: 1px solid var(--border-color); border-radius: 28px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--sombra); }
+  .crono.alarme { border-color: var(--c-alarme); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-alarme) 25%, transparent), var(--sombra); }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .head .t { font-size: 12px; font-weight: 700; color: var(--text-secondary); display: inline-flex; gap: 6px; align-items: center; }
+  .head .min { width: 28px; height: 28px; display: grid; place-items: center; color: var(--text-muted); }
+  .seg { display: inline-flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 999px; padding: 3px; gap: 2px; }
+  .seg span { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: var(--text-secondary); }
+  .seg span.on { background: color-mix(in srgb, var(--brand) 16%, transparent); color: var(--t-foco); }
+  .config { display: flex; justify-content: center; gap: 6px; font-size: 11px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 600; color: var(--text-secondary); }
+  .chip.on { background: var(--btn-iniciar-bg); border-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+  .chip small { font-size: 9px; font-weight: 700; text-transform: uppercase; opacity: .8; }
+  .anel { position: relative; width: 188px; height: 188px; margin: 0 auto; flex: none; }
+  .anel svg { width: 100%; height: 100%; display: block; }
+  .centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; }
+  .mini { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-secondary); }
+  .tempo { font-size: 42px; font-weight: 600; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .tempo.dia { font-size: 34px; }
+  .de { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .selo { align-self: center; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-top: -4px; white-space: nowrap; }
+  .linha { text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: -6px; }
+  .linha b { color: var(--text-primary); font-weight: 600; }
+  .campo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); }
+  .campo .ic { color: var(--t-foco); font-size: 15px; }
+  .campo div { min-width: 0; flex: 1; }
+  .campo small { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+  .campo span { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .campo .chev { color: var(--text-muted); font-size: 11px; }
+  .campos { display: grid; gap: 8px; }
+  /* botão do estado zerado: pílula com a meta + ajuste */
+  .iniciar-linha { display: grid; grid-template-columns: 1fr 52px; gap: 8px; }
+  .btn-iniciar { position: relative; height: 52px; border-radius: 999px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--brand) 14%, transparent); }
+  .btn-iniciar .sep { opacity: .8; font-weight: 600; }
+  .btn-ajuste { height: 52px; border-radius: 50%; background: var(--bg-hover); color: var(--text-primary); display: grid; place-items: center; font-size: 18px; border: 1px solid var(--border-color); }
+  .btn-ajuste[aria-expanded="true"] { border-color: var(--brand); color: var(--t-foco); }
+  /* variação com pulso (C+B): anel que cresce e some a cada 2 s, 5 vezes (~10 s) */
+  .btn-iniciar.pulso::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 2px solid var(--brand); animation: pulso 2s ease-out 5; pointer-events: none; opacity: 0; }
+  @keyframes pulso { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.18, 1.5); } }
+  @media (prefers-reduced-motion: reduce) { .btn-iniciar.pulso::after { animation: none; } }
+  /* edição rápida de minutos */
+  .ajuste { display: grid; gap: 10px; padding: 12px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border-color); }
+  .ajuste .topo { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+  .ajuste .valor { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
+  .ajuste .valor button { height: 44px; border-radius: 12px; background: var(--bg-hover); font-size: 18px; font-weight: 700; }
+  .ajuste .valor output { text-align: center; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ajuste .valor output small { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .ajuste .atalhos { display: flex; gap: 6px; justify-content: center; }
+  .ajuste .pronto { height: 40px; border-radius: 12px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); font-weight: 700; }
+  /* controles circulares (rodando / pausado) */
+  .ctrl { display: flex; justify-content: center; align-items: flex-start; gap: 14px; }
+  .acao { display: grid; grid-template-rows: 72px auto; align-items: center; justify-items: center; gap: 4px; min-width: 56px; }
+  .bt { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-hover); color: var(--text-primary); font-size: 17px; }
+  .bt.pri { width: 72px; height: 72px; font-size: 24px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); box-shadow: 0 0 0 8px color-mix(in srgb, var(--brand) 16%, transparent); }
+  .bt.pri.parar { background: var(--c-parar); color: #fff; box-shadow: 0 0 0 8px color-mix(in srgb, var(--c-parar) 16%, transparent); }
+  .bt[disabled] { opacity: .4; }
+  .rot { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+  .extra { display: flex; justify-content: center; gap: 18px; font-size: 12px; }
+  .extra button { color: var(--text-secondary); font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+  .extra .perigo { color: var(--t-parar); }
+  .ponto { width: 6px; height: 6px; border-radius: 50%; background: var(--c-pausado); }
+
+  /* lista de alterações */
+  .alteracoes { display: grid; gap: 14px; max-width: 86ch; }
+  .alteracoes ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--text-secondary); }
+  .alteracoes li b { color: var(--text-primary); }
+  code { font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px; padding: 1px 5px; color: var(--text-primary); }
+  .contraste { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 14px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border-color); }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-secondary); background: var(--bg-card); }
+  tr:last-child td { border-bottom: 0; }
+  td.n { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .ok { color: var(--t-foco); font-weight: 700; }
+  .barra { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .barra button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 12px; font-weight: 600; color: var(--text-primary); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11.6L21 7.4V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h1zm3 0v5h8V3M7 13h10v8H7z"/></symbol>
+  <symbol id="i-ajuste" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="7" r="2.3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="17" r="2.3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-som" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-sino" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-livro" viewBox="0 0 24 24"><path d="M5 3h13a1 1 0 0 1 1 1v14H7a2 2 0 0 0 0 4h12v-2H7"/><path d="M5 3v17" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-relogio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Etapa 2 · ajuste do estado inicial · tema escuro</p>
+    <h1>Cronômetro parado mostrando o seu dia</h1>
+    <p class="lead">Com o cronômetro zerado, o anel externo mostra quanto do dia já foi estudado e os traços internos mostram as sessões do dia atual do cronograma. O botão passa a dizer a meta ("Iniciar · 50 min") e, ao lado, o ícone de ajuste abre a edição rápida de minutos. Ao iniciar, tudo volta ao painel atual. Exemplo: 1h 20 estudadas hoje, dia com 4 sessões (50, 50, 40 e 40 min = 3h), 2 já feitas.</p>
+  </header>
+
+  <section>
+    <div class="grade" id="principal"></div>
+  </section>
+
+  <section style="display:grid;gap:14px">
+    <h2>Variação com pulso (pedido C+B)</h2>
+    <p class="lead">Mesmo botão, com um anel que cresce e some a cada 2 s. O pulso para sozinho depois de 5 repetições (~10 s) e para ao iniciar. Quem ativou "reduzir movimento" no sistema não vê o pulso.</p>
+    <div class="barra"><button id="repetir" type="button">Repetir o pulso</button></div>
+    <div class="grade" id="pulso"></div>
+  </section>
+
+  <section class="alteracoes">
+    <h2>Contraste (WCAG AA) neste tema</h2>
+    <div class="contraste"><table>
+      <thead><tr><th>Elemento</th><th>Cores</th><th>Contraste</th><th>Mínimo</th></tr></thead>
+      <tbody><tr><td>Texto do botão "Iniciar · 50 min"</td><td><code>#022c22</code> sobre <code>#10b981</code></td><td class="n">5.97:1</td><td>4.5:1 <span class="ok">✓</span></td></tr><tr><td>Ícone do botão Parar</td><td><code>#ffffff</code> sobre <code>#ef4444</code></td><td class="n">3.76:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>Anel do dia / da sessão</td><td><code>#10b981</code> sobre <code>#1e232d</code></td><td class="n">6.21:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>Traço: sessão feita</td><td><code>#10b981</code> sobre <code>#1e232d</code></td><td class="n">6.21:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>Traço: próxima sessão</td><td><code>#cfd5dc</code> sobre <code>#1e232d</code></td><td class="n">10.65:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>Traço: sessão pendente</td><td><code>#64748b</code> sobre <code>#1e232d</code></td><td class="n">3.31:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>Anel da meta concluída</td><td><code>#f97316</code> sobre <code>#1e232d</code></td><td class="n">5.62:1</td><td>3:1 <span class="ok">✓</span></td></tr><tr><td>"1h 20" no centro do anel</td><td><code>#f1f5f9</code> sobre <code>#1e232d</code></td><td class="n">14.37:1</td><td>4.5:1 <span class="ok">✓</span></td></tr><tr><td>"de 3h · 44%" e rótulos</td><td><code>#94a3b8</code> sobre <code>#1e232d</code></td><td class="n">6.14:1</td><td>4.5:1 <span class="ok">✓</span></td></tr><tr><td>Selo "Missão do dia"</td><td><code>#10b981</code> sobre <code>#1c3b3a</code></td><td class="n">4.77:1</td><td>4.5:1 <span class="ok">✓</span></td></tr><tr><td>Selo "Meta concluída"</td><td><code>#fb923c</code> sobre <code>#413029</code></td><td class="n">5.52:1</td><td>4.5:1 <span class="ok">✓</span></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="alteracoes">
+    <h2>Alterações aplicadas no index.html (Etapa 2 · estado inicial)</h2>
+    <p class="lead"><b>CSS</b></p>
+    <ol>
+      <li><b>Tokens novos</b> em <code>:root</code> e <code>body.light-mode</code>: <code>--btn-iniciar-bg</code>, <code>--btn-iniciar-fg</code>, <code>--traco-feito</code>, <code>--traco-prox</code>, <code>--traco-pend</code>. O alarme no tema claro passa de <code>#f97316</code> para <code>#c2410c</code> no anel.</li>
+      <li><b>Botão principal verde</b> (<code>.crono-pri</code>, <code>.crono-chip.on</code>, <code>.b-foco</code>) usa esses tokens, para passar no AA. Hoje o branco sobre o verde fica em 2,54:1 (escuro) e 3,77:1 (claro).</li>
+      <li><b>Classes novas</b>: <code>.crono-iniciar-linha</code>, <code>.crono-btn-iniciar</code> (pílula), <code>.crono-btn-ajuste</code> e <code>.crono-ajuste</code> (edição rápida), mais <code>.crono-tempo.dia</code> para o "1h 20".</li>
+      <li><b>Se a variação com pulso for escolhida</b>: <code>.crono-btn-iniciar.pulso::after</code> com <code>@keyframes</code> de 2 s × 5 e corte em <code>prefers-reduced-motion</code>.</li>
+    </ol>
+    <p class="lead"><b>HTML</b></p>
+    <ol start="5">
+      <li><b>No painel</b>: um círculo SVG para os traços do dia (no anel interno, que já existe para o Pomodoro), a linha "Iniciar · 50 min" com o botão de ajuste, e o bloco de edição rápida (−5, valor, +5, atalhos 25 · 50 · 60 · 90, "Pronto"). Os botões Pausar e Salvar ficam ocultos só no estado zerado.</li>
+    </ol>
+    <p class="lead"><b>JS</b> (só leitura de dados que já existem; nada é gravado de novo)</p>
+    <ol start="6">
+      <li><b><code>resumoDoDia()</code></b> nova: lê <code>historicoDiario[hojeISO()]</code> (minutos de hoje) e <code>diaAtualObj().sessoes</code> (soma dos minutos = meta do dia; feitas, próxima e pendentes).</li>
+      <li><b><code>atualizarDisplayCronometro()</code></b>: quando <code>!sessaoTimerEmCurso()</code>, desenha o anel com o dia ("Hoje 1h 20 · de 3h · 44%"), os traços proporcionais à duração de cada sessão, o selo "Missão do dia · 2 de 4" e a linha "Próxima: …". Sem cronograma para hoje, mostra só "Hoje 1h 20 estudadas", sem porcentagem e sem traços. Com a sessão em curso, nada muda.</li>
+      <li><b><code>atualizarBotoesTimer()</code></b>: alterna entre a linha "Iniciar · N min" (zerado) e os controles circulares (em curso). O N vem de <code>lerDuracao()</code>, que já usa <code>timer-duracao</code>, e cai na sessão do cronograma quando ela é iniciada por lá.</li>
+      <li><b>Edição rápida</b>: <code>abrirAjusteMinutos()</code> e <code>ajustarMinutos(delta | valor)</code> escrevem em <code>timer-duracao</code> e disparam o <code>change</code> que já existe. Ele grava <code>preferencias.duracaoPadrao</code> como hoje, sem campo novo.</li>
+      <li><b>Atualização do anel do dia</b>: <code>salvarTudo()</code> já chama <code>atualizarTudoUI()</code>. Basta incluir <code>atualizarDisplayCronometro()</code> ali, para o anel refletir um registro manual ou uma sessão marcada.</li>
+      <li><b>Se houver pulso</b>: adicionar a classe <code>pulso</code> ao abrir o painel zerado (no máximo uma vez a cada abertura) e removê-la em <code>iniciarCronometro()</code>.</li>
+    </ol>
+    <p class="lead"><b>Não muda:</b> chave <code>central_estudos_jessica_v1</code>, formato dos registros, chave <code>central_cronometro_jessica_v1</code>, contagem pelo relógio, alarme, Parar com confirmação, Zerar, Testar som e Pomodoro.</p>
+  </section>
+</div>
+
+<script>
+  const ic = (n, cls = '') => `<svg class="ic ${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const R1 = 90, R2 = 76, C1 = 2 * Math.PI * R1;
+  function arco(r, a, b, cor, w) {
+    const C = 2 * Math.PI * r, len = Math.max(0, (b - a) * C);
+    return `<circle r="${r}" cx="100" cy="100" fill="none" stroke="${cor}" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${len} ${C}" stroke-dashoffset="${-a * C}" transform="rotate(-90 100 100)"/>`;
+  }
+  const trilha = (r, w) => `<circle r="${r}" cx="100" cy="100" fill="none" stroke="var(--bg-card)" stroke-width="${w}"/>`;
+  const selo = (txt, corTxt, corFundo) => `<span class="selo" style="color:${corTxt};background:color-mix(in srgb, ${corFundo} 16%, transparent)">${txt}</span>`;
+  const head = `<div class="head"><span class="t">${ic('relogio')} Cronômetro</span><div class="seg"><span>Normal</span><span class="on">Pomodoro</span></div><span class="min">${ic('chev')}</span></div>`;
+  const config = `<div class="config"><span class="chip on">✓ 25/5 <small>padrão</small></span><span class="chip">50/10</span><span class="chip">Personalizado</span></div>`;
+  const campos = `<div class="campos">
+      <div class="campo">${ic('livro')}<div><small>Língua Portuguesa</small><span>13. Concordância nominal e verbal</span></div>${ic('chev', 'chev')}</div>
+      <div class="campo">${ic('relogio')}<div><small>Modalidade · alarme</small><span>Questões · meta 50 min</span></div></div>
+    </div>`;
+  const SESSOES = [{ min: 50, feita: true }, { min: 50, feita: true }, { min: 40, feita: false }, { min: 40, feita: false }];
+
+  function anelDia(comCronograma) {
+    let svg = trilha(R1, 12);
+    if (!comCronograma) {
+      return `<svg viewBox="0 0 200 200" aria-hidden="true">${svg}</svg>
+        <div class="centro"><span class="mini">Hoje</span><span class="tempo dia">1h 20</span><span class="de">estudadas</span></div>`;
+    }
+    svg += arco(R1, 0, 80 / 180, 'var(--anel-dia)', 12);
+    const total = SESSOES.reduce((s, x) => s + x.min, 0), g = 0.018;
+    let acc = 0, proxMarcada = false;
+    SESSOES.forEach(s => {
+      const a = acc / total + g, b = (acc + s.min) / total - g;
+      let cor = 'var(--traco-pend)', w = 3;
+      if (s.feita) { cor = 'var(--traco-feito)'; w = 5; }
+      else if (!proxMarcada) { cor = 'var(--traco-prox)'; w = 5; proxMarcada = true; }
+      svg += arco(R2, a, b, cor, w);
+      acc += s.min;
+    });
+    return `<svg viewBox="0 0 200 200" role="img" aria-label="Hoje: 1 hora e 20 de 3 horas; 2 de 4 sessões feitas">${svg}</svg>
+      <div class="centro"><span class="mini">Hoje</span><span class="tempo dia">1h 20</span><span class="de">de 3h · 44%</span></div>`;
+  }
+  function linhaIniciar(pulso, ajusteAberto) {
+    return `<div class="iniciar-linha">
+        <button class="btn-iniciar ${pulso ? 'pulso' : ''}" type="button">${ic('play')} Iniciar <span class="sep">· 50 min</span></button>
+        <button class="btn-ajuste" type="button" aria-label="Ajustar minutos" aria-expanded="${ajusteAberto}">${ic('ajuste')}</button>
+      </div>
+      ${ajusteAberto ? `<div class="ajuste" role="group" aria-label="Duração da sessão">
+        <div class="topo"><span>Duração da sessão</span><span>meta do alarme</span></div>
+        <div class="valor"><button type="button" aria-label="Menos 5 minutos">−</button><output>50 <small>min</small></output><button type="button" aria-label="Mais 5 minutos">+</button></div>
+        <div class="atalhos"><span class="chip">25</span><span class="chip on">50</span><span class="chip">60</span><span class="chip">90</span></div>
+        <button class="pronto" type="button">Pronto</button>
+      </div>` : ''}
+      <div class="extra"><button type="button">${ic('som')} Testar som</button><button type="button">${ic('sino')} Avisos <span class="ponto"></span></button></div>`;
+  }
+  function zerado({ pulso = false, ajuste = false, cronograma = true } = {}) {
+    return `<div class="crono">${head}${config}
+      <div class="anel">${anelDia(cronograma)}</div>
+      ${cronograma ? selo('Missão do dia · 2 de 4', 'var(--t-foco)', 'var(--brand)') : selo('Sem cronograma para hoje', 'var(--text-secondary)', 'var(--text-muted)')}
+      <p class="linha">${cronograma ? 'Próxima: <b>Língua Portuguesa</b> · 40 min' : 'Monte o dia na aba Cronograma'}</p>
+      ${campos}${linhaIniciar(pulso, ajuste)}</div>`;
+  }
+  function rodando() {
+    const p = 12 / 3000;
+    return `<div class="crono">${head}
+      <div class="anel"><svg viewBox="0 0 200 200" aria-hidden="true">${trilha(R1, 12)}${trilha(R2, 5)}${arco(R1, 0, Math.max(p, .006), 'var(--anel-dia)', 12)}${arco(R2, 0, Math.max(12 / 1500, .008), 'var(--traco-feito)', 5)}</svg>
+        <div class="centro"><span class="tempo">00:12</span><span class="de">de 50:00 · 0%</span></div></div>
+      ${selo('Foco 1 de 2 · faltam 24:48', 'var(--t-foco)', 'var(--brand)')}
+      <p class="linha">Sessão do cronograma · alarme em 50 min</p>
+      ${campos}
+      <div class="ctrl">
+        <div class="acao"><span class="bt">${ic('pause')}</span><span class="rot">Pausar</span></div>
+        <div class="acao"><span class="bt pri parar">${ic('stop')}</span><span class="rot">Parar</span></div>
+        <div class="acao"><span class="bt">${ic('save')}</span><span class="rot">Salvar</span></div>
+      </div>
+      <div class="extra"><button type="button">${ic('sino')} Avisos <span class="ponto"></span></button></div></div>`;
+  }
+  function meta() {
+    return `<div class="crono alarme">${head}
+      <div class="anel"><svg viewBox="0 0 200 200" aria-hidden="true">${trilha(R1, 12)}${trilha(R2, 5)}${arco(R1, 0, 1, 'var(--c-alarme)', 12)}${arco(R2, 0, 1, 'var(--traco-feito)', 5)}</svg>
+        <div class="centro"><span class="tempo">50:00</span><span class="de">de 50:00 · 100%</span></div></div>
+      ${selo('Meta concluída', 'var(--t-alarme)', 'var(--c-alarme)')}
+      <p class="linha">O aviso "Tempo previsto concluído" abre por cima</p>
+      ${campos}
+      <div class="ctrl">
+        <div class="acao"><span class="bt" disabled>${ic('pause')}</span><span class="rot">Pausar</span></div>
+        <div class="acao"><span class="bt pri">${ic('play')}</span><span class="rot">Retomar</span></div>
+        <div class="acao"><span class="bt">${ic('save')}</span><span class="rot">Salvar</span></div>
+      </div>
+      <div class="extra"><button type="button">${ic('som')} Testar som</button><button type="button" class="perigo">${ic('reset')} Zerar</button></div></div>`;
+  }
+  const fig = (t, s, html) => `<figure><figcaption><strong>${t}</strong><span>${s}</span></figcaption>${html}</figure>`;
+  document.getElementById('principal').innerHTML =
+    fig('Zerado', 'O anel mostra o dia; o botão mostra a meta da sessão.', zerado()) +
+    fig('Rodando', 'Ao iniciar, o anel volta a medir a sessão (00:12 de 50:00).', rodando()) +
+    fig('Meta concluída', 'Anel laranja e selo; o aviso de fim de sessão abre por cima.', meta()) +
+    fig('Zerado · edição rápida aberta', 'Toque no ícone de ajuste: −5 / +5 e atalhos.', zerado({ ajuste: true })) +
+    fig('Zerado · sem cronograma hoje', 'Mostra só os minutos de hoje, sem porcentagem.', zerado({ cronograma: false }));
+  function montarPulso() {
+    document.getElementById('pulso').innerHTML =
+      fig('Zerado · com pulso', 'Anima por ~10 s e para sozinho.', zerado({ pulso: true })) +
+      fig('Zerado · pulso já parado', 'Depois dos 10 s (ou ao iniciar), fica igual ao estático.', zerado());
+  }
+  montarPulso();
+  document.getElementById('repetir').addEventListener('click', montarPulso);
+</script>
+</body>
+</html>

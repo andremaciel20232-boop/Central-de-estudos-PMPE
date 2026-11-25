@@ -32,6 +32,9 @@
     .text-mut { color: var(--text-muted); }
     .text-brand { color: var(--brand); }
     .bg-brand { background-color: var(--brand); }
+    /* Botões e selos verdes com texto (bg-brand + text-white): mesmos tokens do cronômetro, contraste AA nos dois temas.
+       Barras de progresso (só bg-brand, sem texto) continuam com var(--brand). */
+    .bg-brand.text-white { background-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
 
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: var(--bg-main); }
