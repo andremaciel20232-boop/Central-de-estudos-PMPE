@@ -184,9 +184,9 @@
     @media (prefers-reduced-motion: reduce) { .crono.alarme { animation: none; } .crono-anel .arco { transition: none; } .crono-btn-iniciar.pulso::after { animation: none; } }
 
     /* ===== Etapa 4: estrela AOCP, peso, árvore do Edital, seletor de tópicos e topo com fotos ===== */
-    :root { --estrela: #facc15; --estrela-fundo: rgba(250,204,21,.14); --t-alto: #f1f5f9; --t-medio: #a3adbd; --t-vazio: #3a4256;
+    :root { --estrela: #facc15; --estrela-fundo: rgba(250,204,21,.14); --t-alto: #c4b5fd; --t-medio: #a78bfa; --t-baixo: #8f7be0; --pf-borda: #78849a;
             --text-sub: #cbd5e1; --estudo: #60a5fa; --concluido: #10b981; --sel-fundo: rgba(16,185,129,.14); --anel-vazio: #3a3f52; }
-    body.light-mode { --estrela: #a16207; --estrela-fundo: rgba(202,138,4,.14); --t-alto: #0f172a; --t-medio: #5b6678; --t-vazio: #cbd5e1;
+    body.light-mode { --estrela: #a16207; --estrela-fundo: rgba(202,138,4,.14); --t-alto: #5b21b6; --t-medio: #6d28d9; --t-baixo: #7c3aed; --pf-borda: #6f7b8e;
             --text-sub: #334155; --estudo: #1d4ed8; --concluido: #047857; --sel-fundo: rgba(5,150,105,.12); --anel-vazio: #cbd5e1; }
     /* fotos: foto larga no cabeçalho, foto alta no bloco lateral, com véu escuro nos dois temas */
     .topo-foto { background: linear-gradient(90deg, rgba(19,22,28,.90) 0%, rgba(19,22,28,.84) 46%, rgba(19,22,28,.40) 100%), url(pmpe-fundo.jpg) center / cover, #13161c; }
@@ -200,16 +200,18 @@
     span.edt-estrela { cursor: default; }
     .edt-peso { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text-secondary); background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
     span.edt-peso { cursor: default; }
-    .edt-regua { width: 28px; height: 5px; border-radius: 99px; background: var(--t-vazio); overflow: hidden; display: inline-block; flex: none; }
-    .edt-regua b { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--t-medio); }
-    .edt-peso[data-nivel="alto"] .edt-regua b { width: 100%; background: var(--t-alto); }
-    .edt-peso[data-nivel="medio"] .edt-regua b { width: 66%; }
-    .edt-peso[data-nivel="baixo"] .edt-regua b { width: 33%; }
-    .edt-peso[data-nivel="alto"] .edt-peso-rot { color: var(--text-primary); font-weight: 700; }
-    .edt-peso.sobre-claro { --t-alto: #0f172a; --t-medio: #475569; --t-vazio: rgba(15,23,42,.18); }
+    .edt-seg { display: inline-flex; gap: 3px; flex: none; }
+    .edt-seg i { width: 13px; height: 9px; border-radius: 3px; background: transparent; box-shadow: inset 0 0 0 1.5px var(--pf-borda); }
+    .edt-peso[data-nivel="alto"] .edt-seg i { background: var(--t-alto); box-shadow: none; }
+    .edt-peso[data-nivel="medio"] .edt-seg i:nth-child(-n+2) { background: var(--t-medio); box-shadow: none; }
+    .edt-peso[data-nivel="baixo"] .edt-seg i:first-child { background: var(--t-baixo); box-shadow: none; }
+    .edt-peso-rot { color: var(--text-secondary); font-weight: 400; }
+    .edt-peso[data-nivel="alto"] .edt-peso-rot { color: var(--text-primary); font-weight: 800; text-transform: uppercase; letter-spacing: .05em; font-size: 10.5px; }
+    .edt-peso[data-nivel="medio"] .edt-peso-rot { color: var(--text-primary); }
+    .edt-peso.sobre-claro { --t-alto: #3b0764; --t-medio: #4c1d95; --t-baixo: #5b21b6; --pf-borda: rgba(15,23,42,.65); }
     .edt-peso.sobre-claro .edt-peso-rot { color: #1e293b !important; }
     .edt-ghost { opacity: 0; transition: opacity .15s ease; background: none; color: var(--text-muted); }
-    .edt-ghost .edt-regua { background: var(--text-muted); opacity: .6; }
+    .edt-ghost .edt-seg i { box-shadow: inset 0 0 0 1.5px var(--text-muted); }
     .edt-linha:hover .edt-ghost, .edt-linha:focus-within .edt-ghost, .edt-classificando .edt-ghost { opacity: .4; }
     .edt-ghost:hover, .edt-ghost:focus-visible { opacity: 1 !important; }
     /* árvore do Edital */
@@ -230,14 +232,19 @@
     .edt-nome { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
     .edt-t { line-height: 1.35; }
     .edt-n1 .edt-t { color: var(--text-primary); font-weight: 600; font-size: 14px; } .edt-n2 .edt-t { color: var(--text-sub); font-size: 13px; }
-    .edt-feito .edt-t { color: var(--text-secondary) !important; text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--text-muted); }
+    .edt-feito .edt-t { color: var(--text-secondary) !important; }
     .edt-em { font-size: 11px; font-weight: 700; color: var(--estudo); }
     .edt-diag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-secondary); }
     .edt-diag i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
     .edt-foco-chip { font-size: 11px; font-weight: 700; color: var(--btn-iniciar-fg); background: var(--btn-iniciar-bg); padding: 2px 8px; border-radius: 7px; white-space: nowrap; }
     .edt-linha.edt-foco { background: var(--sel-fundo); box-shadow: inset 0 0 0 1.5px var(--brand); }
-    .edt-dir { display: grid; grid-template-columns: 24px 76px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
-    .edt-dir.g { grid-template-columns: auto 24px 76px 52px 28px; }
+    .edt-dir { display: grid; grid-template-columns: 24px 92px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
+    .edt-dir.g { grid-template-columns: auto 24px 92px 52px 28px; }
+    .edt-dir.sd { grid-template-columns: 24px 92px 28px; } .edt-dir.g.sd { grid-template-columns: auto 24px 92px 28px; }
+    .edt-dir > .edt-peso { justify-self: start; }
+    .edt-det { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .edt-det span { display: inline-flex; align-items: center; gap: 5px; } .edt-det i { font-size: 11px; }
+    .sel-det { display: block; font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-top: 1px; } .sel-det i { font-size: 10px; margin: 0 2px 0 0; } .sel-det i + i, .sel-det span + span { margin-left: 8px; }
     .edt-tempo { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
     .edt-anel { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 4px; }
     .edt-mais { width: 28px; height: 28px; border-radius: 8px; color: var(--text-secondary); background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
@@ -249,7 +256,7 @@
     .edt-resumo-chip.estrela > span { color: var(--estrela); }
     @media (max-width: 640px) {
       .edt-linha { grid-template-columns: 26px 30px minmax(0,1fr); } .edt-grupo > .edt-linha { grid-template-columns: 30px 30px minmax(0,1fr); }
-      .edt-dir, .edt-dir.g { grid-column: 3; justify-items: start; grid-template-columns: auto 24px auto auto 28px; }
+      .edt-dir, .edt-dir.g, .edt-dir.sd, .edt-dir.g.sd { grid-column: 3; justify-items: start; grid-template-columns: auto 24px auto auto 28px; }
     }
     .edt-menu { position: fixed; z-index: 75; width: 280px; max-width: calc(100vw - 16px); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.35); padding: 8px; display: grid; gap: 2px; font-size: 13px; color: var(--text-primary); }
     .edt-menu .m-tit { padding: 6px 10px 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 4px; } .edt-menu .m-tit b { display: block; font-size: 13px; line-height: 1.3; } .edt-menu .m-tit span { font-size: 11px; color: var(--text-secondary); }
@@ -1120,6 +1127,18 @@
     const p = iso.split('-');
     return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : iso;
   }
+  // "há 7 dias · 18/11" (hoje e ontem sem data; outro ano mostra o ano)
+  function ultimoEstudoTexto(iso, completo = true) {
+    if (!iso) return '';
+    const p = iso.split('-').map(Number), hoje = new Date();
+    const dias = Math.round((new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()) - new Date(p[0], p[1] - 1, p[2])) / 86400000);
+    if (isNaN(dias) || dias < 0) return formatarDataBR(iso);
+    if (dias === 0) return 'hoje';
+    if (dias === 1) return 'ontem';
+    if (!completo) return `há ${dias} dias`;
+    const dd = String(p[2]).padStart(2, '0'), mm = String(p[1]).padStart(2, '0');
+    return `há ${dias} dias · ${dd}/${mm}${p[0] !== hoje.getFullYear() ? '/' + p[0] : ''}`;
+  }
   function formatarMinutos(min) {
     if (!min || min <= 0) return '0m';
     const h = Math.floor(min / 60), m = min % 60;
@@ -1317,7 +1336,7 @@
   function pesoBadgeHTML(node, sobreClaro = false) {
     if (!node || !node.peso || !PESOS[node.peso]) return '';
     const p = PESOS[node.peso];
-    return `<span class="edt-peso ${sobreClaro ? 'sobre-claro' : ''}" data-nivel="${node.peso}" title="${p.rotulo}"><span class="edt-regua"><b></b></span><span class="edt-peso-rot">${p.nome}</span></span>`;
+    return `<span class="edt-peso ${sobreClaro ? 'sobre-claro' : ''}" data-nivel="${node.peso}" title="${p.rotulo}"><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span><span class="edt-peso-rot">${p.nome}</span></span>`;
   }
 
   // =====================================================================
@@ -1738,6 +1757,26 @@
   // =====================================================================
   const nosFechados = new Set();        // grupos que ela fechou (todos abrem por padrão)
   const discClassificando = new Set();  // disciplinas com as marcas de estrela e peso à mostra
+  // "Detalhes": tempo e último estudo sob o nome. Preferência por aparelho, em chave própria (fora de central_estudos_jessica_v1).
+  // Sem escolha salva: desligado onde há mouse, ligado em celular e tablet (sem passar o cursor, o dado ficaria escondido).
+  const UI_PREFS_KEY = 'central_ui_prefs_jessica_v1';
+  function lerPrefsUI() { try { const o = JSON.parse(localStorage.getItem(UI_PREFS_KEY) || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+  function salvarPrefsUI(o) { try { localStorage.setItem(UI_PREFS_KEY, JSON.stringify(o)); } catch (e) { /* sem armazenamento: vale só nesta visita */ } }
+  function aparelhoSemMouse() { try { return window.matchMedia('(hover: none), (pointer: coarse)').matches; } catch (e) { return false; } }
+  const detalhesSessao = {};  // espelho em memória, caso o armazenamento falhe
+  function detalhesLigados(discId) {
+    const salvo = lerPrefsUI().detalhes;
+    if (salvo && typeof salvo[discId] === 'boolean') return salvo[discId];
+    return typeof detalhesSessao[discId] === 'boolean' ? detalhesSessao[discId] : aparelhoSemMouse();
+  }
+  function alternarDetalhes(discId) {
+    const novo = !detalhesLigados(discId), p = lerPrefsUI();
+    detalhesSessao[discId] = novo;
+    p.detalhes = (p.detalhes && typeof p.detalhes === 'object') ? p.detalhes : {};
+    p.detalhes[discId] = novo;
+    salvarPrefsUI(p);
+    renderizarEdital();
+  }
   function toggleExpandNode(key) {
     const set = key.startsWith('disc_') ? expandedNodes : nosFechados;
     if (set.has(key)) set.delete(key); else set.add(key);
@@ -1812,8 +1851,8 @@
   function pesoBtnHTML(discId, node) {
     const p = PESOS[node.peso], acao = `ciclarPeso('${discId}','${node.id}')`;
     return p
-      ? `<button type="button" class="edt-peso" data-nivel="${node.peso}" onclick="${acao}" title="${p.rotulo}. Toque para mudar." aria-label="${p.rotulo}. Toque para mudar."><span class="edt-regua"><b></b></span><span class="edt-peso-rot">${p.nome}</span></button>`
-      : `<button type="button" class="edt-peso edt-ghost" onclick="${acao}" title="Definir o peso" aria-label="Definir o peso"><span class="edt-regua"><b></b></span><span class="edt-peso-rot">peso</span></button>`;
+      ? `<button type="button" class="edt-peso" data-nivel="${node.peso}" onclick="${acao}" title="${p.rotulo}. Toque para mudar." aria-label="${p.rotulo}. Toque para mudar."><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span><span class="edt-peso-rot">${p.nome}</span></button>`
+      : `<button type="button" class="edt-peso edt-ghost" onclick="${acao}" title="Definir o peso" aria-label="Definir o peso"><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span><span class="edt-peso-rot">peso</span></button>`;
   }
   const SVG_SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function renderNodeHTML(discId, node, termo, nivel = 1, ctx = {}) {
@@ -1827,6 +1866,7 @@
     const num = numeroEdital(node.nome), nome = esc(nomeSemNumero(node.nome));
     const diag = DIAGNOSTICOS[node.diagnostico];
     const grupo = nivel === 1 && temFilhos;
+    const det = !!ctx.detalhes;
     let anel = '';
     if (grupo) {
       const feitos = filhos.filter(c => c.concluido).length, tot = filhos.length, C = 2 * Math.PI * 8;
@@ -1835,9 +1875,11 @@
     const centro = `<span class="edt-nome"><span class="edt-t"${grupo ? ` onclick="toggleExpandNode('${chave}')" style="cursor:pointer"` : ''}>${nome}</span>`
       + (!feito && tempo > 0 ? '<span class="edt-em">em estudo</span>' : '')
       + (emFoco ? '<span class="edt-foco-chip">No cronômetro agora</span>' : '')
-      + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '') + '</span>';
-    const lado = `<span class="edt-dir${grupo ? ' g' : ''}">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
-      + `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}">${tempo ? formatarMinutos(tempo) : ''}</span>`
+      + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '')
+      + (det && (tempo > 0 || ultima) ? `<span class="edt-det">${tempo > 0 ? `<span><i class="fa-regular fa-clock" aria-hidden="true"></i>${formatarMinutos(tempo)} de estudo</span>` : ''}${ultima ? `<span><i class="fa-regular fa-calendar" aria-hidden="true"></i>último estudo ${ultimoEstudoTexto(ultima)}</span>` : ''}</span>` : '')
+      + '</span>';
+    const lado = `<span class="edt-dir${grupo ? ' g' : ''}${det ? ' sd' : ''}">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
+      + (det ? '' : `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}">${tempo ? formatarMinutos(tempo) : ''}</span>`)
       + `<button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button></span>`;
     const numTxt = `<span class="edt-num">${num ? esc(num) + '.' : ''}</span>`;
     const classes = `edt-linha edt-n${nivel >= 2 ? 2 : 1}${feito ? ' edt-feito' : ''}${emFoco ? ' edt-foco' : ''}`;
@@ -1928,7 +1970,8 @@
                 <p class="text-xs text-sec">${discConc} de ${discTotal} itens concluídos • Tempo: ${formatarMinutos(discTempo)}</p>
               </div>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 flex-wrap justify-end">
+              <button type="button" class="edt-classificar" aria-pressed="${detalhesLigados(disc.id)}" onclick="event.stopPropagation(); alternarDetalhes('${disc.id}')" title="Mostrar o tempo de estudo e o último estudo sob cada tópico desta disciplina"><i class="fa-regular fa-eye text-[10px]"></i> Detalhes</button>
               <button type="button" class="edt-classificar" aria-pressed="${discClassificando.has(disc.id)}" onclick="event.stopPropagation(); alternarClassificar('${disc.id}')" title="Mostrar as marcas de estrela e peso em todos os tópicos desta disciplina"><i class="fa-solid ${discClassificando.has(disc.id) ? 'fa-check' : 'fa-pen'} text-[10px]"></i> ${discClassificando.has(disc.id) ? 'Pronto' : 'Classificar'}</button>
               <div class="w-28 bg-card rounded-full h-2 border border-theme hidden sm:block overflow-hidden">
                 <div class="bg-brand h-full rounded-full" style="width:${pctDisc}%"></div>
@@ -1937,7 +1980,7 @@
             </div>
           </div>`;
       if (isDiscExpanded) {
-        html += `<div class="p-3 pt-3 border-t border-theme bg-main/30 edt-lista ${discClassificando.has(disc.id) ? 'edt-classificando' : ''}">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo, 1, ctx)).join('') + `</div>`;
+        html += `<div class="p-3 pt-3 border-t border-theme bg-main/30 edt-lista ${discClassificando.has(disc.id) ? 'edt-classificando' : ''}">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo, 1, { ...ctx, detalhes: detalhesLigados(disc.id) })).join('') + `</div>`;
       }
       blocos.push(html + `</div>`);
     });
@@ -1949,7 +1992,7 @@
     document.getElementById('edital-barra-geral').style.width = `${pctTotal}%`;
 
     const pillsPeso = Object.entries(PESOS).map(([k, v]) =>
-      `<span class="edt-resumo-chip"><span class="edt-peso" data-nivel="${k}"><span class="edt-regua"><b></b></span></span>${v.nome}: ${contPeso[k]}</span>`).join('');
+      `<span class="edt-resumo-chip"><span class="edt-peso" data-nivel="${k}"><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span></span>${v.nome}: ${contPeso[k]}</span>`).join('');
     const pillsDiag = Object.entries(DIAGNOSTICOS).map(([k, v]) =>
       `<span class="edt-resumo-chip"><span class="edt-diag"><i style="background:${v.cor}"></i>${v.rotulo}: ${contDiag[k] || 0}</span></span>`).join('');
     document.getElementById('edital-diag-resumo').innerHTML = `<span class="edt-resumo-chip estrela"><span class="inline-grid">${SVG_ESTRELA}</span>${aocp} com estrela</span>` + pillsPeso + pillsDiag;
@@ -4058,6 +4101,11 @@
     document.getElementById('sel-trilha').innerHTML = `<span>${disc ? esc(disc.nome) : 'Escolha a disciplina'}</span><i class="fa-solid fa-chevron-right" style="font-size:10px"></i><b>${node ? esc(node.nome) : 'escolha o tópico'}</b>`;
     renderItensSeletor();
   }
+  function detalheSeletorHTML(n) {
+    const { tempo, ultima } = resumoNo(n);
+    if (!(tempo > 0) && !ultima) return '';
+    return `<span class="sel-det">${tempo > 0 ? `<span><i class="fa-regular fa-clock" aria-hidden="true"></i>${formatarMinutos(tempo)}</span>` : ''}${ultima ? `<span><i class="fa-regular fa-calendar" aria-hidden="true"></i>${ultimoEstudoTexto(ultima, false)}</span>` : ''}</span>`;
+  }
   function renderItensSeletor() {
     const { cfg } = sp, disc = meusDados.find(d => d.id === sp.disc), atual = cfg.lerDisc() === sp.disc ? cfg.lerTopico() : null;
     const el = document.getElementById('sel-itens');
@@ -4068,7 +4116,7 @@
       ? `<button type="button" class="sel-item vazio ${atual === cfg.vazio.valor ? 'sel' : ''}" role="option" data-topico="${esc(cfg.vazio.valor)}"><span class="ok"><i class="fa-solid fa-check"></i></span><span></span><span class="nome">${esc(cfg.vazio.rotulo)}</span><span></span></button>` : '';
     el.innerHTML = vazio + (lista.map(n => {
       const num = numeroEdital(n.nome), sel = n.id === atual;
-      return `<button type="button" class="sel-item ${sel ? 'sel' : ''}" role="option" aria-selected="${sel}" data-topico="${n.id}" style="padding-left:${10 + (Math.max(1, n.level || 1) - 1) * 10}px"><span class="ok"><i class="fa-solid fa-check"></i></span><span class="edt-num">${num ? esc(num) + '.' : ''}</span><span class="nome">${esc(nomeSemNumero(n.nome))}</span><span class="lado">${badgeAOCPHTML(n)}${pesoBadgeHTML(n)}</span></button>`;
+      return `<button type="button" class="sel-item ${sel ? 'sel' : ''}" role="option" aria-selected="${sel}" data-topico="${n.id}" style="padding-left:${10 + (Math.max(1, n.level || 1) - 1) * 10}px"><span class="ok"><i class="fa-solid fa-check"></i></span><span class="edt-num">${num ? esc(num) + '.' : ''}</span><span class="nome">${esc(nomeSemNumero(n.nome))}${detalheSeletorHTML(n)}</span><span class="lado">${badgeAOCPHTML(n)}${pesoBadgeHTML(n)}</span></button>`;
     }).join('') || (vazio ? '' : '<p class="sel-vazio-msg">Nenhum tópico com esse filtro.</p>'));
     document.getElementById('sel-cont').innerText = `${lista.length} de ${todos.length} tópicos`;
   }
