@@ -52,7 +52,6 @@
       50%     { box-shadow: 0 0 0 10px rgba(249,115,22,0); }
     }
     .alerta-pulse { animation: alerta-pulse 1.6s infinite; }
-    .badge-aocp-animado { animation: alerta-pulse 2.4s infinite; }
 
     .tree-children { transition: all .2s ease-out; }
     .chevron-icon { transition: transform .2s ease; }
@@ -183,15 +182,126 @@
     .crono-extra .perigo { color: var(--c-parar); }
     .crono button:focus-visible, .crono select:focus-visible, .crono input:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     @media (prefers-reduced-motion: reduce) { .crono.alarme { animation: none; } .crono-anel .arco { transition: none; } .crono-btn-iniciar.pulso::after { animation: none; } }
+
+    /* ===== Etapa 4: estrela AOCP, peso, árvore do Edital, seletor de tópicos e topo com fotos ===== */
+    :root { --estrela: #facc15; --estrela-fundo: rgba(250,204,21,.14); --t-alto: #f1f5f9; --t-medio: #a3adbd; --t-vazio: #3a4256;
+            --text-sub: #cbd5e1; --estudo: #60a5fa; --concluido: #10b981; --sel-fundo: rgba(16,185,129,.14); --anel-vazio: #3a3f52; }
+    body.light-mode { --estrela: #a16207; --estrela-fundo: rgba(202,138,4,.14); --t-alto: #0f172a; --t-medio: #5b6678; --t-vazio: #cbd5e1;
+            --text-sub: #334155; --estudo: #1d4ed8; --concluido: #047857; --sel-fundo: rgba(5,150,105,.12); --anel-vazio: #cbd5e1; }
+    /* fotos: foto larga no cabeçalho, foto alta no bloco lateral, com véu escuro nos dois temas */
+    .topo-foto { background: linear-gradient(90deg, rgba(19,22,28,.90) 0%, rgba(19,22,28,.84) 46%, rgba(19,22,28,.40) 100%), url(pmpe-fundo.jpg) center / cover, #13161c; }
+    .topo-titulo { color: #f1f5f9; } .topo-sub { color: #cbd5e1; }
+    .lat-foto { background: linear-gradient(180deg, rgba(19,22,28,.74) 0%, rgba(19,22,28,.84) 100%), url(pmpe-banner.jpg) center top / cover, #13161c; min-height: 220px; justify-content: center; }
+    .lat-foto h1 { color: #f1f5f9; } .lat-foto p { color: #cbd5e1; }
+    .lat-avatar { width: 84px; height: 84px; border-radius: 50%; border: 3px solid rgba(255,255,255,.85); background: #0f172a; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,.4); flex: none; }
+    .lat-avatar img { width: 100%; height: 100%; object-fit: cover; } .lat-avatar img.logo-fallback { object-fit: contain; padding: 6px; }
+    /* estrela e peso */
+    .edt-estrela { width: 24px; height: 24px; border-radius: 7px; display: inline-grid; place-items: center; border: 0; cursor: pointer; color: var(--estrela); background: var(--estrela-fundo); padding: 0; flex: none; }
+    span.edt-estrela { cursor: default; }
+    .edt-peso { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text-secondary); background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
+    span.edt-peso { cursor: default; }
+    .edt-regua { width: 28px; height: 5px; border-radius: 99px; background: var(--t-vazio); overflow: hidden; display: inline-block; flex: none; }
+    .edt-regua b { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--t-medio); }
+    .edt-peso[data-nivel="alto"] .edt-regua b { width: 100%; background: var(--t-alto); }
+    .edt-peso[data-nivel="medio"] .edt-regua b { width: 66%; }
+    .edt-peso[data-nivel="baixo"] .edt-regua b { width: 33%; }
+    .edt-peso[data-nivel="alto"] .edt-peso-rot { color: var(--text-primary); font-weight: 700; }
+    .edt-peso.sobre-claro { --t-alto: #0f172a; --t-medio: #475569; --t-vazio: rgba(15,23,42,.18); }
+    .edt-peso.sobre-claro .edt-peso-rot { color: #1e293b !important; }
+    .edt-ghost { opacity: 0; transition: opacity .15s ease; background: none; color: var(--text-muted); }
+    .edt-ghost .edt-regua { background: var(--text-muted); opacity: .6; }
+    .edt-linha:hover .edt-ghost, .edt-linha:focus-within .edt-ghost, .edt-classificando .edt-ghost { opacity: .4; }
+    .edt-ghost:hover, .edt-ghost:focus-visible { opacity: 1 !important; }
+    /* árvore do Edital */
+    .edt-lista { display: grid; gap: 8px; }
+    .edt-caixa { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-card); overflow: hidden; }
+    .edt-linha { display: grid; grid-template-columns: 26px 34px minmax(0,1fr) auto; gap: 8px; align-items: center; padding: 8px 12px 8px 8px; }
+    .edt-grupo > .edt-linha { grid-template-columns: 30px 34px minmax(0,1fr) auto; padding: 10px 12px 10px 8px; }
+    .edt-filhos { border-top: 1px solid var(--border-color); padding: 4px 6px 6px; display: grid; gap: 2px; }
+    .edt-filhos .edt-linha { padding: 6px 8px 6px 4px; border-radius: 10px; }
+    .edt-filhos .edt-aninhado { border-top: 0; border-left: 2px solid var(--border-color); margin-left: 22px; padding: 0 0 0 4px; }
+    .edt-chkw { display: grid; place-items: center; width: 26px; height: 26px; cursor: pointer; }
+    .edt-chk { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; border: 1.5px solid var(--text-muted); border-radius: 4px; background: transparent; cursor: pointer; display: grid; place-items: center; margin: 0; }
+    .edt-chk:checked { background: var(--concluido); border-color: var(--concluido); }
+    .edt-chk:checked::after { content: ""; width: 7px; height: 3.5px; border-left: 2px solid var(--bg-panel); border-bottom: 2px solid var(--bg-panel); transform: rotate(-45deg) translate(.5px,-.5px); }
+    .edt-seta { width: 28px; height: 28px; border-radius: 9px; background: var(--bg-hover); color: var(--text-primary); display: grid; place-items: center; border: 1px solid var(--border-color); cursor: pointer; padding: 0; }
+    .edt-seta svg { width: 14px; height: 14px; transition: transform .15s ease; } .edt-seta[aria-expanded="false"] svg { transform: rotate(-90deg); }
+    .edt-num { font-size: 11px; font-weight: 800; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .edt-nome { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+    .edt-t { line-height: 1.35; }
+    .edt-n1 .edt-t { color: var(--text-primary); font-weight: 600; font-size: 14px; } .edt-n2 .edt-t { color: var(--text-sub); font-size: 13px; }
+    .edt-feito .edt-t { color: var(--text-secondary) !important; text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--text-muted); }
+    .edt-em { font-size: 11px; font-weight: 700; color: var(--estudo); }
+    .edt-diag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+    .edt-diag i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .edt-foco-chip { font-size: 11px; font-weight: 700; color: var(--btn-iniciar-fg); background: var(--btn-iniciar-bg); padding: 2px 8px; border-radius: 7px; white-space: nowrap; }
+    .edt-linha.edt-foco { background: var(--sel-fundo); box-shadow: inset 0 0 0 1.5px var(--brand); }
+    .edt-dir { display: grid; grid-template-columns: 24px 76px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
+    .edt-dir.g { grid-template-columns: auto 24px 76px 52px 28px; }
+    .edt-tempo { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .edt-anel { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 4px; }
+    .edt-mais { width: 28px; height: 28px; border-radius: 8px; color: var(--text-secondary); background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
+    .edt-mais:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .edt-classificar { height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-secondary); font-size: 11px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+    .edt-classificar[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    .edt-resumo-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-color); }
+    .edt-resumo-chip.estrela { color: var(--text-primary); background: var(--estrela-fundo); border-color: transparent; }
+    .edt-resumo-chip.estrela > span { color: var(--estrela); }
+    @media (max-width: 640px) {
+      .edt-linha { grid-template-columns: 26px 30px minmax(0,1fr); } .edt-grupo > .edt-linha { grid-template-columns: 30px 30px minmax(0,1fr); }
+      .edt-dir, .edt-dir.g { grid-column: 3; justify-items: start; grid-template-columns: auto 24px auto auto 28px; }
+    }
+    .edt-menu { position: fixed; z-index: 75; width: 280px; max-width: calc(100vw - 16px); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.35); padding: 8px; display: grid; gap: 2px; font-size: 13px; color: var(--text-primary); }
+    .edt-menu .m-tit { padding: 6px 10px 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 4px; } .edt-menu .m-tit b { display: block; font-size: 13px; line-height: 1.3; } .edt-menu .m-tit span { font-size: 11px; color: var(--text-secondary); }
+    .edt-menu .m-rot { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); padding: 8px 10px 2px; margin: 0; }
+    .edt-menu > button { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 8px 10px; border-radius: 8px; color: var(--text-primary); background: none; border: 0; cursor: pointer; }
+    .edt-menu > button:hover { background: var(--bg-hover); }
+    .edt-menu .m-estrela { color: var(--estrela); display: inline-grid; } .edt-menu .m-estado { margin-left: auto; font-size: 11px; color: var(--text-secondary); }
+    .edt-menu .m-opcoes { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 6px 4px; }
+    .edt-menu .m-opcoes button { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .edt-menu .m-opcoes button[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    /* seletor de tópicos em duas etapas */
+    .sel-gatilho { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; cursor: pointer; font-size: 13px; }
+    .sel-gatilho:hover:not(:disabled) { border-color: var(--brand); } .sel-gatilho:disabled { opacity: .55; cursor: not-allowed; }
+    .sel-gatilho .sel-txt { flex: 1; min-width: 0; display: block; }
+    .sel-gatilho small { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+    .sel-gatilho .sel-valor { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .sel-gatilho .sel-valor.sel-vazio { color: var(--text-secondary); }
+    .sel-gatilho .sel-marcas { display: inline-flex; gap: 6px; align-items: center; } .sel-gatilho .sel-chev { color: var(--text-muted); font-size: 11px; }
+    .sel-gatilho.sel-crono { background: none; border: 0; padding: 0; min-height: 0; } .sel-gatilho.sel-compacto { width: auto; max-width: 22rem; min-height: 36px; }
+    .sel-fundo { position: fixed; inset: 0; z-index: 80; background: rgba(0,0,0,.7); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .sel-caixa { width: 100%; max-width: 560px; max-height: min(88vh, 720px); display: flex; flex-direction: column; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.45); overflow: hidden; color: var(--text-primary); }
+    .sel-cab { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border-color); background: var(--bg-card); } .sel-cab button { color: var(--text-secondary); width: 30px; height: 30px; border-radius: 8px; }
+    .sel-corpo { padding: 14px 16px 16px; display: grid; gap: 10px; overflow: hidden; min-height: 0; grid-template-rows: auto auto auto minmax(0,1fr); }
+    .sel-rot { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin: 0; }
+    .sel-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sel-chip { height: 30px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+    .sel-chip[aria-pressed="true"] { background: var(--btn-iniciar-bg); border-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    .sel-trilha { font-size: 12px; color: var(--text-secondary); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; } .sel-trilha b { color: var(--text-primary); }
+    .sel-lista-caixa { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-panel); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+    .sel-busca { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
+    .sel-busca input { flex: 1; min-width: 0; border: 0; background: none; color: var(--text-primary); font-size: 14px; outline: none; } .sel-busca input::placeholder { color: var(--text-secondary); }
+    .sel-filtros { display: flex; gap: 6px; flex-wrap: wrap; padding: 8px 12px; border-bottom: 1px solid var(--border-color); }
+    .sel-filtro { height: 26px; padding: 0 10px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 11px; font-weight: 600; color: var(--text-secondary); display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+    .sel-filtro[aria-pressed="true"] { background: var(--btn-iniciar-bg); border-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    .sel-itens { padding: 6px; display: grid; gap: 2px; overflow: auto; min-height: 120px; align-content: start; }
+    .sel-item { display: grid; grid-template-columns: 16px 34px minmax(0,1fr) auto; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 10px; border: 0; background: none; text-align: left; cursor: pointer; width: 100%; color: var(--text-primary); }
+    .sel-item:hover, .sel-item:focus-visible { background: var(--bg-hover); } .sel-item.sel { background: var(--sel-fundo); }
+    .sel-item .ok { color: var(--t-foco, var(--brand)); opacity: 0; } .sel-item.sel .ok { opacity: 1; }
+    .sel-item .nome { font-size: 13px; line-height: 1.3; } .sel-item.sel .nome { font-weight: 700; }
+    .sel-item .lado { display: inline-flex; gap: 6px; align-items: center; justify-content: flex-end; }
+    .sel-item.vazio .nome { color: var(--text-secondary); font-style: italic; }
+    .sel-vazio-msg { padding: 14px 12px; font-size: 13px; color: var(--text-secondary); }
+    .sel-pe { padding: 8px 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--text-secondary); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 640px) { .sel-fundo { align-items: flex-end; padding: 0; } .sel-caixa { max-width: none; border-radius: 18px 18px 0 0; max-height: 90vh; } }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
   <!-- ================= SIDEBAR ================= -->
   <aside class="w-64 bg-panel flex flex-col border-r border-theme shrink-0 z-20">
-    <div class="p-5 border-b border-theme flex flex-col items-center gap-2.5 text-center">
-      <div class="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden border-2 border-emerald-500/40 bg-card p-1.5 shadow-inner">
-        <img src="logo.png" alt="PMPE" class="w-full h-full object-contain" onerror="this.src='https://placehold.co/100x100/1e232d/10b981?text=PMPE'">
+    <div class="lat-foto p-5 border-b border-theme flex flex-col items-center gap-2.5 text-center">
+      <div class="lat-avatar">
+        <img src="perfil.jpg" alt="Foto de perfil" onerror="if(!this.dataset.f){this.dataset.f='1';this.classList.add('logo-fallback');this.src='logo.png';}else{this.src='https://placehold.co/100x100/1e232d/10b981?text=PMPE';}">
       </div>
       <div>
         <h1 class="text-base font-bold tracking-tight">Central de Estudos</h1>
@@ -227,10 +337,10 @@
 
   <!-- ================= MAIN ================= -->
   <main class="flex-1 overflow-y-auto relative" id="main-content">
-    <header class="sticky top-0 bg-main/90 backdrop-blur-md z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
+    <header class="sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
       <div>
-        <h2 class="text-xl md:text-2xl font-bold">Olá, Jéssica Dayane</h2>
-        <p class="text-sec text-xs md:text-sm">Continue, seu melhor dia para retornar é agora!</p>
+        <h2 class="text-xl md:text-2xl font-bold topo-titulo">Olá, Jéssica Dayane</h2>
+        <p class="topo-sub text-xs md:text-sm">Constância vence a pressa: um passo por dia até a prova.</p>
       </div>
       <div class="flex items-center gap-2.5">
         <button onclick="toggleTheme()" id="btn-theme" title="Alternar tema" class="w-10 h-10 rounded-lg bg-panel border border-theme hover-bg flex items-center justify-center text-amber-400 transition shadow-sm">
@@ -1179,15 +1289,14 @@
     nao_estudado: { rotulo: 'Não Estudado',     cor: '#6b7280' },
     menor:        { rotulo: 'Menor Relevância', cor: '#6366f1' }
   };
-  const AOCP_TAGS = {
-    prioridade: { texto: '⭐ PRIORIDADE AOCP', bg: '#b45309' },
-    relevante:  { texto: '🚩 RELEVANTE AOCP',  bg: '#d97706' }
-  };
+  // Estrela AOCP: qualquer valor em node.aocp ("prioridade" ou o antigo "relevante") aparece como estrela
   const PESOS = {
-    alto:  { rotulo: 'Peso alto',  cor: '#e11d48' },
-    medio: { rotulo: 'Peso médio', cor: '#f59e0b' },
-    baixo: { rotulo: 'Peso baixo', cor: '#3b82f6' }
+    alto:  { rotulo: 'Peso alto',  nome: 'Alto' },
+    medio: { rotulo: 'Peso médio', nome: 'Médio' },
+    baixo: { rotulo: 'Peso baixo', nome: 'Baixo' }
   };
+  const SVG_ESTRELA = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg>';
+  const SVG_ESTRELA_VAZIA = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
   const CAPAS = {
     portugues:       { grad: ['#7c3aed', '#db2777'], icone: 'fa-feather-pointed' },
     historia_pe:     { grad: ['#b45309', '#78350f'], icone: 'fa-landmark' },
@@ -1200,15 +1309,15 @@
   const HIST_PALETA = ['#f9a8d4','#a7f3d0','#bfdbfe','#fde68a','#ddd6fe','#fed7aa'];
   const MOTIVOS = ['Não sabia o conceito', 'Interpretação', 'Distração', 'Pegadinha da banca', 'Cálculo / conta', 'Memória (esqueci)'];
 
+  // Versões só de leitura (Missão do Dia, Caderno de Erros, seletor). Sem marca, não mostram nada.
   function badgeAOCPHTML(node) {
-    if (!node || !node.aocp || !AOCP_TAGS[node.aocp]) return '';
-    const t = AOCP_TAGS[node.aocp];
-    return `<span class="${node.aocp === 'prioridade' ? 'badge-aocp-animado' : ''} inline-flex items-center align-middle ml-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold tracking-wide whitespace-nowrap border border-white/25" style="background:${t.bg};color:#fffbeb">${t.texto}</span>`;
+    if (!node || !node.aocp) return '';
+    return `<span class="edt-estrela" title="Prioridade AOCP" aria-label="Prioridade AOCP">${SVG_ESTRELA}</span>`;
   }
-  function pesoBadgeHTML(node) {
+  function pesoBadgeHTML(node, sobreClaro = false) {
     if (!node || !node.peso || !PESOS[node.peso]) return '';
     const p = PESOS[node.peso];
-    return `<span class="inline-flex items-center align-middle mr-1.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase text-white whitespace-nowrap" style="background:${p.cor}">${p.rotulo}</span>`;
+    return `<span class="edt-peso ${sobreClaro ? 'sobre-claro' : ''}" data-nivel="${node.peso}" title="${p.rotulo}"><span class="edt-regua"><b></b></span><span class="edt-peso-rot">${p.nome}</span></span>`;
   }
 
   // =====================================================================
@@ -1417,6 +1526,7 @@
     if (visivel('view-revisoes')) renderizarRevisoes();
     if (visivel('view-historico')) renderizarHistorico();
     atualizarDisplayCronometro();   // anel do dia no cronômetro zerado
+    atualizarSeletores();           // estrela e peso nos gatilhos dos seletores
   }
 
   // =====================================================================
@@ -1455,7 +1565,7 @@
     if (atual > recorde) recorde = atual;
     document.getElementById('streak-msg').innerHTML = atual > 0
       ? `<i class="fa-solid fa-fire text-orange-500 mr-1.5"></i> Você está há <strong class="text-brand">${atual} dias</strong> sem falhar. Recorde: <strong class="text-brand">${recorde} dias</strong>`
-      : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Continue, seu melhor dia para retornar é agora!${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Recorde anterior: ${recorde} dias)</span>` : ''}`;
+      : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Recomeçar também é avançar. Seu próximo passo é hoje.${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Recorde anterior: ${recorde} dias)</span>` : ''}`;
     for (let i = 13; i >= 0; i--) {
       const d = new Date(hoje); d.setDate(d.getDate() - i);
       const s = isoLocal(d);
@@ -1594,7 +1704,7 @@
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${b.feito ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
             ${disc ? `<p class="text-[11px] text-sec truncate">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
-            ${node ? `<div class="mt-1">${pesoBadgeHTML(node)}${badgeAOCPHTML(node)}</div>` : ''}
+            ${node ? `<div class="mt-1 flex items-center gap-2">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}</div>` : ''}
           </div>
           <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
           <button onclick="removerBlocoPlano(${b.id})" class="w-8 h-8 rounded-md text-red-400 hover-bg shrink-0" title="Remover"><i class="fa-solid fa-xmark"></i></button>
@@ -1626,18 +1736,27 @@
   // =====================================================================
   // 8. EDITAL VERTICALIZADO
   // =====================================================================
+  const nosFechados = new Set();        // grupos que ela fechou (todos abrem por padrão)
+  const discClassificando = new Set();  // disciplinas com as marcas de estrela e peso à mostra
   function toggleExpandNode(key) {
-    if (expandedNodes.has(key)) expandedNodes.delete(key); else expandedNodes.add(key);
+    const set = key.startsWith('disc_') ? expandedNodes : nosFechados;
+    if (set.has(key)) set.delete(key); else set.add(key);
     renderizarEdital();
   }
   function expandirTodosEdital() {
-    meusDados.forEach(d => {
-      expandedNodes.add('disc_' + d.id);
-      percorrerNos(d.topicos, n => { if (n.children && n.children.length) expandedNodes.add(d.id + '_' + n.id); });
-    });
+    nosFechados.clear();
+    meusDados.forEach(d => expandedNodes.add('disc_' + d.id));
     renderizarEdital();
   }
-  function recolherTodosEdital() { expandedNodes.clear(); renderizarEdital(); }
+  function recolherTodosEdital() {
+    expandedNodes.clear();
+    meusDados.forEach(d => percorrerNos(d.topicos, n => { if (n.children && n.children.length) nosFechados.add(d.id + '_' + n.id); }));
+    renderizarEdital();
+  }
+  function alternarClassificar(discId) {
+    if (discClassificando.has(discId)) discClassificando.delete(discId); else discClassificando.add(discId);
+    renderizarEdital();
+  }
   function marcarNoRecursivo(node, status, dataHoje) {
     node.concluido = status;
     node.dataConclusao = status ? dataHoje : null;
@@ -1656,73 +1775,116 @@
     node[campo] = valor;
     salvarTudo();
   }
+  // Estrela: toque liga e desliga. Peso: toque percorre sem peso → baixo → médio → alto → sem peso.
+  function alternarEstrela(discId, nodeId) {
+    const { node } = getNodeRef(discId, nodeId);
+    if (!node) return;
+    node.aocp = node.aocp ? '' : 'prioridade';
+    salvarTudo();
+  }
+  function ciclarPeso(discId, nodeId) {
+    const { node } = getNodeRef(discId, nodeId);
+    if (!node) return;
+    const ordem = ['', 'baixo', 'medio', 'alto'];
+    node.peso = ordem[(ordem.indexOf(node.peso || '') + 1) % ordem.length];
+    salvarTudo();
+  }
+  function nomeSemNumero(nome) { return String(nome || '').replace(/^\s*\d+(?:\.\d+)*\.?\s*/, ''); }
+  function resumoNo(node) {
+    let tempo = node.tempo || 0, ultima = node.ultimaData || null;
+    percorrerNos(node.children || [], c => {
+      tempo += c.tempo || 0;
+      if (c.ultimaData && (!ultima || c.ultimaData > ultima)) ultima = c.ultimaData;
+    });
+    return { tempo, ultima };
+  }
   function nodeMatchesFilter(node, termo) {
     if (!termo) return true;
     if (node.nome.toLowerCase().includes(termo)) return true;
     return (node.children || []).some(c => nodeMatchesFilter(c, termo));
   }
-  function renderNodeHTML(discId, node, termo) {
-    if (!nodeMatchesFilter(node, termo)) return '';
-    const hasChildren = (node.children || []).length > 0;
-    const nodeKey = discId + '_' + node.id;
-    const isExpanded = termo ? true : expandedNodes.has(nodeKey);
-    let tempo = node.tempo || 0, ultima = node.ultimaData || null;
-    if (hasChildren) percorrerNos(node.children, c => {
-      tempo += c.tempo || 0;
-      if (c.ultimaData && (!ultima || c.ultimaData > ultima)) ultima = c.ultimaData;
-    });
-    const indent = node.level === 1 ? '' : (node.level === 2 ? 'ml-5 border-l-2 border-theme pl-3' : 'ml-9 border-l-2 border-emerald-500/30 pl-3');
-    const diag = DIAGNOSTICOS[node.diagnostico];
-
-    const selectDiag = `
-      <select onchange="definirCampoNo('${discId}', '${node.id}', 'diagnostico', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" style="color:${diag ? diag.cor : 'inherit'}" title="Diagnóstico de nível">
-        <option value="" ${!node.diagnostico ? 'selected' : ''}>— diagnóstico —</option>
-        ${Object.entries(DIAGNOSTICOS).map(([k, v]) => `<option value="${k}" ${k === node.diagnostico ? 'selected' : ''}>${v.rotulo}</option>`).join('')}
-      </select>`;
-    const selectPeso = `
-      <select onchange="definirCampoNo('${discId}', '${node.id}', 'peso', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" title="Peso estimado">
-        <option value="" ${!node.peso ? 'selected' : ''}>— peso —</option>
-        ${Object.entries(PESOS).map(([k, v]) => `<option value="${k}" ${k === node.peso ? 'selected' : ''}>${v.rotulo}</option>`).join('')}
-      </select>`;
-    const selectAocp = `
-      <select onchange="definirCampoNo('${discId}', '${node.id}', 'aocp', this.value)" class="text-[11px] font-bold rounded-md px-1.5 py-1 bg-card border border-theme outline-none" title="Tag AOCP">
-        <option value="" ${!node.aocp ? 'selected' : ''}>— tag AOCP —</option>
-        <option value="prioridade" ${node.aocp === 'prioridade' ? 'selected' : ''}>⭐ Prioridade AOCP</option>
-        <option value="relevante" ${node.aocp === 'relevante' ? 'selected' : ''}>🚩 Relevante AOCP</option>
-      </select>`;
-
-    let html = `
-      <div class="${indent} my-1.5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-lg bg-card border border-theme hover-bg transition">
-          <div class="flex items-start gap-2.5 flex-1 min-w-0">
-            ${hasChildren ? `
-              <button onclick="toggleExpandNode('${nodeKey}')" class="mt-0.5 w-6 h-6 rounded hover:bg-emerald-500/15 text-sec hover:text-brand flex items-center justify-center shrink-0 transition" title="Expandir/Ocultar">
-                <i class="fa-solid fa-caret-right chevron-icon ${isExpanded ? 'chevron-open text-brand' : ''}"></i>
-              </button>` : `<span class="w-6 shrink-0"></span>`}
-            <input type="checkbox" class="mt-1 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0" ${node.concluido ? 'checked' : ''} onchange="alternarStatusTopico('${discId}', '${node.id}', this.checked)">
-            <div class="flex-1 min-w-0">
-              <span onclick="${hasChildren ? `toggleExpandNode('${nodeKey}')` : ''}" class="${hasChildren ? 'cursor-pointer font-semibold' : 'font-normal'} ${node.concluido ? 'line-through text-mut' : 'text-main'} text-sm leading-snug block">
-                ${pesoBadgeHTML(node)}${esc(node.nome)}${badgeAOCPHTML(node)}
-              </span>
-              <div class="flex flex-wrap items-center gap-1.5 mt-1.5">${selectDiag}${selectPeso}${selectAocp}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 pl-8 sm:pl-0 shrink-0 text-xs">
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium"><i class="fa-regular fa-clock text-brand"></i> ${formatarMinutos(tempo)}</span>
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-panel border border-theme text-sec font-medium"><i class="fa-regular fa-calendar text-blue-400"></i> ${ultima ? formatarDataBR(ultima) : 'Nunca estudado'}</span>
-            <button onclick="abrirMateriais('${discId}', '${node.id}')" class="h-7 px-2 rounded-md bg-card hover-bg border border-theme text-sec hover:text-brand text-[11px] font-semibold flex items-center gap-1 transition" title="Materiais externos">
-              <i class="fa-solid fa-paperclip"></i> Materiais${(node.materiais || []).length ? ` (${node.materiais.length})` : ''}
-            </button>
-            <button onclick="abrirRegistroRapido('${discId}', '${node.id}')" class="w-7 h-7 rounded-md bg-emerald-500/10 hover:bg-emerald-500/25 text-brand flex items-center justify-center transition" title="Registrar estudo">
-              <i class="fa-solid fa-plus text-xs"></i>
-            </button>
-          </div>
-        </div>`;
-    if (hasChildren && isExpanded) {
-      html += `<div class="tree-children mt-1">` + node.children.map(c => renderNodeHTML(discId, c, termo)).join('') + `</div>`;
-    }
-    return html + `</div>`;
+  function estrelaBtnHTML(discId, node) {
+    const acao = `alternarEstrela('${discId}','${node.id}')`;
+    return node.aocp
+      ? `<button type="button" class="edt-estrela" aria-pressed="true" onclick="${acao}" title="Prioridade AOCP. Toque para tirar." aria-label="Prioridade AOCP, marcada. Toque para tirar.">${SVG_ESTRELA}</button>`
+      : `<button type="button" class="edt-estrela edt-ghost" aria-pressed="false" onclick="${acao}" title="Marcar como prioridade AOCP" aria-label="Marcar como prioridade AOCP">${SVG_ESTRELA_VAZIA}</button>`;
   }
+  function pesoBtnHTML(discId, node) {
+    const p = PESOS[node.peso], acao = `ciclarPeso('${discId}','${node.id}')`;
+    return p
+      ? `<button type="button" class="edt-peso" data-nivel="${node.peso}" onclick="${acao}" title="${p.rotulo}. Toque para mudar." aria-label="${p.rotulo}. Toque para mudar."><span class="edt-regua"><b></b></span><span class="edt-peso-rot">${p.nome}</span></button>`
+      : `<button type="button" class="edt-peso edt-ghost" onclick="${acao}" title="Definir o peso" aria-label="Definir o peso"><span class="edt-regua"><b></b></span><span class="edt-peso-rot">peso</span></button>`;
+  }
+  const SVG_SETA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function renderNodeHTML(discId, node, termo, nivel = 1, ctx = {}) {
+    if (!nodeMatchesFilter(node, termo)) return '';
+    const filhos = node.children || [], temFilhos = filhos.length > 0;
+    const chave = discId + '_' + node.id;
+    const aberto = temFilhos && (termo ? true : !nosFechados.has(chave));
+    const { tempo, ultima } = resumoNo(node);
+    const feito = !!node.concluido;
+    const emFoco = !!(ctx.foco && ctx.foco.discId === discId && ctx.foco.nodeId === node.id);
+    const num = numeroEdital(node.nome), nome = esc(nomeSemNumero(node.nome));
+    const diag = DIAGNOSTICOS[node.diagnostico];
+    const grupo = nivel === 1 && temFilhos;
+    let anel = '';
+    if (grupo) {
+      const feitos = filhos.filter(c => c.concluido).length, tot = filhos.length, C = 2 * Math.PI * 8;
+      anel = `<span class="edt-anel" title="${feitos} de ${tot} subtópicos concluídos"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="var(--anel-vazio)" stroke-width="3"/><circle cx="10" cy="10" r="8" fill="none" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-dasharray="${C * feitos / tot} ${C}" transform="rotate(-90 10 10)"/></svg>${feitos} de ${tot}</span>`;
+    }
+    const centro = `<span class="edt-nome"><span class="edt-t"${grupo ? ` onclick="toggleExpandNode('${chave}')" style="cursor:pointer"` : ''}>${nome}</span>`
+      + (!feito && tempo > 0 ? '<span class="edt-em">em estudo</span>' : '')
+      + (emFoco ? '<span class="edt-foco-chip">No cronômetro agora</span>' : '')
+      + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '') + '</span>';
+    const lado = `<span class="edt-dir${grupo ? ' g' : ''}">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
+      + `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}">${tempo ? formatarMinutos(tempo) : ''}</span>`
+      + `<button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button></span>`;
+    const numTxt = `<span class="edt-num">${num ? esc(num) + '.' : ''}</span>`;
+    const classes = `edt-linha edt-n${nivel >= 2 ? 2 : 1}${feito ? ' edt-feito' : ''}${emFoco ? ' edt-foco' : ''}`;
+    if (grupo) {
+      return `<div class="edt-caixa edt-grupo"><div class="${classes}">
+          <button type="button" class="edt-seta" onclick="toggleExpandNode('${chave}')" aria-expanded="${aberto}" aria-label="${aberto ? 'Fechar' : 'Abrir'} subtópicos" title="${aberto ? 'Fechar' : 'Abrir'} subtópicos">${SVG_SETA}</button>
+          ${numTxt}${centro}${lado}</div>
+        ${aberto ? `<div class="edt-filhos">${filhos.map(c => renderNodeHTML(discId, c, termo, 2, ctx)).join('')}</div>` : ''}</div>`;
+    }
+    const check = `<label class="edt-chkw" title="Marcar como concluído"><input type="checkbox" class="edt-chk" ${feito ? 'checked' : ''} onchange="alternarStatusTopico('${discId}', '${node.id}', this.checked)" aria-label="Concluído: ${nome}"></label>`;
+    const linha = `<div class="${classes}">${check}${numTxt}${centro}${lado}</div>`;
+    if (nivel === 1) return `<div class="edt-caixa">${linha}</div>`;
+    return linha + (temFilhos ? `<div class="edt-filhos edt-aninhado">${filhos.map(c => renderNodeHTML(discId, c, termo, nivel + 1, ctx)).join('')}</div>` : '');
+  }
+  // Menu "⋯" do tópico: estrela, peso, diagnóstico e ações
+  let menuTopicoEl = null;
+  function fecharMenuTopico() { if (menuTopicoEl) { menuTopicoEl.remove(); menuTopicoEl = null; } }
+  function abrirMenuTopico(ev, discId, nodeId) {
+    ev.stopPropagation();
+    const botao = ev.currentTarget, chave = discId + '_' + nodeId;
+    const reabrir = menuTopicoEl && menuTopicoEl.dataset.k === chave;
+    fecharMenuTopico();
+    if (reabrir) return;
+    const { node } = getNodeRef(discId, nodeId);
+    if (!node) return;
+    const { ultima } = resumoNo(node), num = numeroEdital(node.nome), q = a => `fecharMenuTopico(); ${a}`;
+    const opcoes = (campo, lista, atual) => `<div class="m-opcoes">${lista.map(([k, t]) => `<button type="button" aria-pressed="${(atual || '') === k}" onclick="${q(`definirCampoNo('${discId}','${nodeId}','${campo}','${k}')`)}">${t}</button>`).join('')}</div>`;
+    const el = document.createElement('div');
+    el.className = 'edt-menu'; el.dataset.k = chave; el.setAttribute('role', 'menu');
+    el.innerHTML = `
+      <div class="m-tit"><b>${num ? esc(num) + '. ' : ''}${esc(nomeSemNumero(node.nome))}</b><span>${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}</span></div>
+      <button type="button" role="menuitem" aria-pressed="${!!node.aocp}" onclick="${q(`alternarEstrela('${discId}','${nodeId}')`)}"><span class="m-estrela">${SVG_ESTRELA}</span> Prioridade AOCP <span class="m-estado">${node.aocp ? 'marcada' : 'sem marca'}</span></button>
+      <p class="m-rot">Peso</p>${opcoes('peso', [['', 'Sem peso'], ...Object.entries(PESOS).map(([k, v]) => [k, v.nome])], node.peso)}
+      <p class="m-rot">Diagnóstico</p>${opcoes('diagnostico', [['', 'Nenhum'], ...Object.entries(DIAGNOSTICOS).map(([k, v]) => [k, v.rotulo])], node.diagnostico)}
+      <p class="m-rot">Mais</p>
+      <button type="button" role="menuitem" onclick="${q(`abrirRegistroRapido('${discId}','${nodeId}')`)}"><i class="fa-solid fa-plus"></i> Registrar estudo</button>
+      <button type="button" role="menuitem" onclick="${q(`abrirMateriais('${discId}','${nodeId}')`)}"><i class="fa-solid fa-paperclip"></i> Materiais${(node.materiais || []).length ? ` (${node.materiais.length})` : ''}</button>
+      ${(node.children || []).length ? `<button type="button" role="menuitem" onclick="${q(`alternarStatusTopico('${discId}','${nodeId}',${!node.concluido})`)}"><i class="fa-solid fa-check-double"></i> ${node.concluido ? 'Desmarcar' : 'Marcar'} tudo como concluído</button>` : ''}`;
+    document.body.appendChild(el);
+    const r = botao.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+    el.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.right - w)) + 'px';
+    el.style.top = (r.bottom + 6 + h > window.innerHeight ? Math.max(8, r.top - h - 6) : r.bottom + 6) + 'px';
+    menuTopicoEl = el;
+  }
+  document.addEventListener('click', e => { if (menuTopicoEl && !menuTopicoEl.contains(e.target)) fecharMenuTopico(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharMenuTopico(); });
+  document.addEventListener('scroll', fecharMenuTopico, true);
   function renderizarEdital() {
     if (!meusDados.length) return;
     const termo = (document.getElementById('busca-edital')?.value || '').trim().toLowerCase();
@@ -1733,6 +1895,8 @@
     const contPeso = { alto: 0, medio: 0, baixo: 0 };
     let aocp = 0;
     const blocos = [];
+    // tópico que está no cronômetro agora (com sessão em curso)
+    const ctx = { foco: sessaoTimerEmCurso() ? { discId: document.getElementById('timer-disc').value, nodeId: document.getElementById('timer-topico').value } : null };
 
     meusDados.forEach(disc => {
       let discTotal = 0, discConc = 0, discTempo = 0;
@@ -1765,6 +1929,7 @@
               </div>
             </div>
             <div class="flex items-center gap-3">
+              <button type="button" class="edt-classificar" aria-pressed="${discClassificando.has(disc.id)}" onclick="event.stopPropagation(); alternarClassificar('${disc.id}')" title="Mostrar as marcas de estrela e peso em todos os tópicos desta disciplina"><i class="fa-solid ${discClassificando.has(disc.id) ? 'fa-check' : 'fa-pen'} text-[10px]"></i> ${discClassificando.has(disc.id) ? 'Pronto' : 'Classificar'}</button>
               <div class="w-28 bg-card rounded-full h-2 border border-theme hidden sm:block overflow-hidden">
                 <div class="bg-brand h-full rounded-full" style="width:${pctDisc}%"></div>
               </div>
@@ -1772,7 +1937,7 @@
             </div>
           </div>`;
       if (isDiscExpanded) {
-        html += `<div class="p-4 pt-1 border-t border-theme bg-main/30">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo)).join('') + `</div>`;
+        html += `<div class="p-3 pt-3 border-t border-theme bg-main/30 edt-lista ${discClassificando.has(disc.id) ? 'edt-classificando' : ''}">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo, 1, ctx)).join('') + `</div>`;
       }
       blocos.push(html + `</div>`);
     });
@@ -1784,11 +1949,10 @@
     document.getElementById('edital-barra-geral').style.width = `${pctTotal}%`;
 
     const pillsPeso = Object.entries(PESOS).map(([k, v]) =>
-      `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold text-white" style="background:${v.cor}">${v.rotulo}: ${contPeso[k]}</span>`).join('');
+      `<span class="edt-resumo-chip"><span class="edt-peso" data-nivel="${k}"><span class="edt-regua"><b></b></span></span>${v.nome}: ${contPeso[k]}</span>`).join('');
     const pillsDiag = Object.entries(DIAGNOSTICOS).map(([k, v]) =>
-      `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border" style="color:${v.cor};border-color:${v.cor}66;background:${v.cor}1f">${v.rotulo}: ${contDiag[k] || 0}</span>`).join('');
-    document.getElementById('edital-diag-resumo').innerHTML = pillsPeso + pillsDiag +
-      `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-700/20 text-amber-400 border border-amber-600/40">Tags AOCP: ${aocp}</span>`;
+      `<span class="edt-resumo-chip"><span class="edt-diag"><i style="background:${v.cor}"></i>${v.rotulo}: ${contDiag[k] || 0}</span></span>`).join('');
+    document.getElementById('edital-diag-resumo').innerHTML = `<span class="edt-resumo-chip estrela"><span class="inline-grid">${SVG_ESTRELA}</span>${aocp} com estrela</span>` + pillsPeso + pillsDiag;
   }
   function abrirRegistroRapido(discId, nodeId) {
     openModalEstudo();
@@ -1956,9 +2120,7 @@
             <button onclick="moverSessao(${i}, ${s.id}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer"><i class="fa-solid fa-arrow-down"></i></button>
             <button onclick="removerSessao(${i}, ${s.id})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover"><i class="fa-solid fa-xmark"></i></button>
           </div>
-          <select onchange="editarTopicoSessao(${i}, ${s.id}, this.value)" class="mt-2 w-full bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none">
-            ${optionsTopicos(s.disc, s.topicoId, '— disciplina inteira —')}
-          </select>
+          <button type="button" class="sel-gatilho mt-2" onclick="abrirSeletorSessao(${i}, ${s.id})" aria-haspopup="dialog">${rotuloSeletorHTML(s.disc, s.topicoId || '', { valor: '', rotulo: 'Disciplina inteira' }, null)}<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i></button>
         </div>`;
     }).join('');
 
@@ -1998,6 +2160,7 @@
       ? cronograma.historico.slice().reverse().map(h =>
           `<div class="flex justify-between p-2.5 rounded-lg bg-card border border-theme"><span class="font-semibold">Rodada ${h.rodada}</span><span class="text-sec">concluída em ${formatarDataBR(h.concluidaEm)}</span></div>`).join('')
       : '<p class="text-xs text-mut italic">Nenhuma rodada concluída ainda.</p>';
+    vincularSeletoresDias();   // seletor de tópicos das sessões novas de cada dia
   }
 
   // =====================================================================
@@ -2201,6 +2364,14 @@
     el.style.background = fundo;
     el.innerHTML = html;
   }
+  // Tópico em estudo no cronômetro: destaca na árvore do Edital (só redesenha quando muda)
+  let focoEditalChave = null;
+  function atualizarDestaqueEdital() {
+    const chave = sessaoTimerEmCurso() ? document.getElementById('timer-disc').value + '|' + document.getElementById('timer-topico').value : '';
+    if (chave === focoEditalChave) return;
+    focoEditalChave = chave;
+    if (visivel('view-edital')) renderizarEdital();
+  }
   function atualizarBotoesTimer() {
     const btn = document.getElementById('timer-btn-iniciar');
     if (!btn) return;
@@ -2251,6 +2422,7 @@
     document.getElementById('timer-card').classList.toggle('alarme', est === 'alarme');
     renderizarBannerTimer(est);
     atualizarDisplayCronometro();
+    atualizarDestaqueEdital();
   }
   function definirModoTimer(modo) {
     if (sessaoTimerEmCurso()) return;
@@ -2876,6 +3048,7 @@
   });
   ['timer-disc', 'timer-topico', 'timer-tipo'].forEach(id =>
     document.getElementById(id).addEventListener('change', salvarEstadoTimer));
+  document.getElementById('timer-topico').addEventListener('change', () => atualizarDestaqueEdital());
   // Meta (alarme padrão) e ciclos personalizados atualizam o anel na hora
   document.getElementById('timer-duracao').addEventListener('input', () => { if (!sessaoTimerEmCurso()) atualizarBotoesTimer(); });
   ['timer-pomo-foco', 'timer-pomo-pausa'].forEach(id =>
@@ -3543,7 +3716,7 @@
             ${num ? `<span class="text-[10px] font-extrabold bg-slate-900/10 px-1.5 py-0.5 rounded">${esc(num)}</span>` : ''}
             ${e.prioridade ? `<span class="text-[10px] font-extrabold bg-slate-900 text-amber-300 px-1.5 py-0.5 rounded">★ MÁXIMA</span>` : ''}
             ${espelho}
-            ${pesoBadgeHTML(node)}
+            ${pesoBadgeHTML(node, true)}
           </div>
           <div class="flex gap-1 shrink-0">
             <button onclick="toggleExpandErro(${e.id})" class="w-7 h-7 rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="${e.expandido ? 'Recolher' : 'Expandir'}"><i class="fa-solid ${e.expandido ? 'fa-compress' : 'fa-expand'}"></i></button>
@@ -3763,6 +3936,164 @@
   }
 
   // =====================================================================
+  // 15b. SELETOR DE TÓPICOS EM DUAS ETAPAS (disciplina → tópico), com filtros
+  // O <select> original continua no HTML (escondido) como fonte do valor; o resto do código não muda.
+  // =====================================================================
+  const resolver = v => (typeof v === 'function' ? v() : v);
+  const valorNativo = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+  const seletoresVinculados = [];
+  function rotuloSeletorHTML(discId, topicoId, vazio, discVazio, desabilitado) {
+    const disc = meusDados.find(d => d.id === discId);
+    const { node } = disc && topicoId ? getNodeRef(discId, topicoId) : { node: null };
+    if (node) {
+      const num = numeroEdital(node.nome);
+      return `<span class="sel-txt"><small>${esc(disc.nome)}</small><span class="sel-valor">${num ? `<b>${esc(num)}.</b> ` : ''}${esc(nomeSemNumero(node.nome))}</span></span><span class="sel-marcas">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}</span>`;
+    }
+    let cap, txt;
+    if (disc) { cap = disc.nome; txt = vazio ? vazio.rotulo : 'Escolher o tópico'; }
+    else if (discVazio) { cap = discVazio; txt = vazio ? vazio.rotulo : ''; }
+    else { cap = 'Disciplina'; txt = 'Escolher disciplina e tópico'; }
+    return `<span class="sel-txt"><small>${esc(cap)}</small><span class="sel-valor sel-vazio">${esc(txt)}</span></span>`;
+  }
+  function observarSelect(sel, fn) {
+    Object.defineProperty(sel, 'value', { configurable: true, get() { return valorNativo.get.call(this); }, set(v) { valorNativo.set.call(this, v); fn(); } });
+    new MutationObserver(fn).observe(sel, { childList: true, attributes: true, attributeFilter: ['disabled'] });
+    sel.addEventListener('change', fn);
+  }
+  // cfg: { disc, top, vazio:{valor,rotulo}|fn, discVazio:'texto'|fn, discFixo:fn, span, classe }
+  function vincularSeletor(cfg) {
+    const top = document.getElementById(cfg.top);
+    if (!top || top.dataset.seletor) return;
+    const disc = cfg.disc ? document.getElementById(cfg.disc) : null;
+    const topCaixa = top.previousElementSibling && top.previousElementSibling.tagName === 'LABEL' ? top.parentElement : null;
+    const botao = document.createElement('button');
+    botao.type = 'button'; botao.className = 'sel-gatilho' + (cfg.classe ? ' ' + cfg.classe : '');
+    botao.setAttribute('aria-haspopup', 'dialog');
+    top.dataset.seletor = '1';
+    top.classList.add('hidden');
+    top.insertAdjacentElement('beforebegin', botao);
+    if (disc) {
+      if (disc.previousElementSibling && disc.previousElementSibling.tagName === 'LABEL') { disc.parentElement.classList.add('hidden'); if (topCaixa && cfg.span) topCaixa.style.gridColumn = cfg.span; }
+      else { disc.classList.add('hidden'); if (cfg.span) botao.style.gridColumn = cfg.span; }
+    }
+    const lerDisc = () => (disc ? disc.value : (cfg.discFixo ? cfg.discFixo() : ''));
+    const atualizar = () => {
+      botao.innerHTML = rotuloSeletorHTML(lerDisc(), top.value, resolver(cfg.vazio), resolver(cfg.discVazio)) + '<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i>';
+      botao.disabled = disc ? disc.disabled : top.disabled;
+    };
+    [top, disc].filter(Boolean).forEach(s => observarSelect(s, atualizar));
+    botao.onclick = () => abrirSeletorTopico({
+      lerDisc, lerTopico: () => top.value, fixarDisc: !disc, vazio: resolver(cfg.vazio), discVazio: resolver(cfg.discVazio),
+      aplicar(d, t) {
+        if (disc && disc.value !== d) { disc.value = d; disc.dispatchEvent(new Event('change', { bubbles: true })); }
+        top.value = t; top.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+    seletoresVinculados.push(atualizar);
+    atualizar();
+  }
+  function atualizarSeletores() { seletoresVinculados.forEach(f => f()); }
+  let sp = null, spFoco = null;
+  function abrirSeletorTopico(cfg) {
+    fecharSeletorTopico();
+    spFoco = document.activeElement;
+    sp = { cfg, disc: cfg.lerDisc() || '', q: '', fE: false, fA: false };
+    const el = document.createElement('div');
+    el.className = 'sel-fundo'; el.id = 'sel-painel';
+    el.innerHTML = `<div class="sel-caixa" role="dialog" aria-modal="true" aria-label="Escolher tópico">
+        <div class="sel-cab"><b>Escolher tópico</b><button type="button" data-acao="fechar" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="sel-corpo">
+          <div id="sel-etapa1"><p class="sel-rot" style="margin-bottom:6px">1 · Disciplina</p><div class="sel-chips" id="sel-chips"></div></div>
+          <div class="sel-trilha" id="sel-trilha"></div>
+          <p class="sel-rot">2 · Tópico</p>
+          <div class="sel-lista-caixa">
+            <div class="sel-busca"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="sel-busca" type="search" placeholder="Buscar por nome ou número (ex.: 5.4)" aria-label="Buscar tópico" autocomplete="off"></div>
+            <div class="sel-filtros"><button type="button" class="sel-filtro" data-f="e" aria-pressed="false"><span style="color:var(--estrela);display:inline-grid">${SVG_ESTRELA}</span> Só com estrela</button><button type="button" class="sel-filtro" data-f="a" aria-pressed="false">Peso alto</button></div>
+            <div class="sel-itens" id="sel-itens" role="listbox" aria-label="Tópicos"></div>
+            <div class="sel-pe"><span id="sel-cont"></span><span>↑ ↓ navegar · Enter escolher · Esc fechar</span></div>
+          </div>
+        </div></div>`;
+    el.addEventListener('click', ev => {
+      if (ev.target === el) return fecharSeletorTopico();
+      const b = ev.target.closest('[data-acao],[data-disc],[data-f],[data-topico]');
+      if (!b || !sp) return;
+      if (b.dataset.acao === 'fechar') return fecharSeletorTopico();
+      if (b.dataset.f) { if (b.dataset.f === 'e') sp.fE = !sp.fE; else sp.fA = !sp.fA; b.setAttribute('aria-pressed', String(b.dataset.f === 'e' ? sp.fE : sp.fA)); return renderItensSeletor(); }
+      if (b.dataset.disc !== undefined) {
+        if (b.dataset.disc === '') { const c = sp.cfg; fecharSeletorTopico(); return c.aplicar('', c.vazio ? c.vazio.valor : ''); }
+        sp.disc = b.dataset.disc; return renderSeletorPainel();
+      }
+      if (b.dataset.topico !== undefined) { const c = sp.cfg, d = sp.disc; fecharSeletorTopico(); c.aplicar(d, b.dataset.topico); }
+    });
+    el.addEventListener('input', ev => { if (ev.target.id === 'sel-busca') { sp.q = ev.target.value.trim().toLowerCase(); renderItensSeletor(); } });
+    el.addEventListener('keydown', ev => {
+      if (ev.key === 'Escape') { ev.preventDefault(); return fecharSeletorTopico(); }
+      if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
+      const itens = [...el.querySelectorAll('.sel-item')], i = itens.indexOf(document.activeElement);
+      if (!itens.length) return;
+      ev.preventDefault();
+      if (ev.key === 'ArrowDown') (itens[i + 1] || itens[0]).focus();
+      else if (i <= 0) el.querySelector('#sel-busca').focus(); else itens[i - 1].focus();
+    });
+    document.body.appendChild(el);
+    renderSeletorPainel();
+    el.querySelector('#sel-busca').focus();
+  }
+  function fecharSeletorTopico() {
+    const el = document.getElementById('sel-painel');
+    if (el) el.remove();
+    sp = null;
+    if (spFoco && document.body.contains(spFoco)) { try { spFoco.focus(); } catch (e) {} }
+    spFoco = null;
+  }
+  function renderSeletorPainel() {
+    const { cfg } = sp;
+    document.getElementById('sel-etapa1').style.display = cfg.fixarDisc ? 'none' : '';
+    if (!cfg.fixarDisc) {
+      document.getElementById('sel-chips').innerHTML = (cfg.discVazio ? `<button type="button" class="sel-chip" data-disc="" aria-pressed="false">${esc(cfg.discVazio)}</button>` : '')
+        + meusDados.map(d => `<button type="button" class="sel-chip" data-disc="${d.id}" aria-pressed="${d.id === sp.disc}">${esc(d.nome)}</button>`).join('');
+    }
+    const disc = meusDados.find(d => d.id === sp.disc), atual = cfg.lerDisc() === sp.disc ? cfg.lerTopico() : '';
+    const { node } = disc && atual ? getNodeRef(sp.disc, atual) : { node: null };
+    document.getElementById('sel-trilha').innerHTML = `<span>${disc ? esc(disc.nome) : 'Escolha a disciplina'}</span><i class="fa-solid fa-chevron-right" style="font-size:10px"></i><b>${node ? esc(node.nome) : 'escolha o tópico'}</b>`;
+    renderItensSeletor();
+  }
+  function renderItensSeletor() {
+    const { cfg } = sp, disc = meusDados.find(d => d.id === sp.disc), atual = cfg.lerDisc() === sp.disc ? cfg.lerTopico() : null;
+    const el = document.getElementById('sel-itens');
+    if (!disc) { el.innerHTML = '<p class="sel-vazio-msg">Escolha uma disciplina para ver os tópicos.</p>'; document.getElementById('sel-cont').innerText = ''; return; }
+    const todos = listarTodosNosDisciplina(disc);
+    const lista = todos.filter(n => (!sp.q || (numeroEdital(n.nome) + ' ' + n.nome).toLowerCase().includes(sp.q)) && (!sp.fE || n.aocp) && (!sp.fA || n.peso === 'alto'));
+    const vazio = cfg.vazio && !sp.q && !sp.fE && !sp.fA
+      ? `<button type="button" class="sel-item vazio ${atual === cfg.vazio.valor ? 'sel' : ''}" role="option" data-topico="${esc(cfg.vazio.valor)}"><span class="ok"><i class="fa-solid fa-check"></i></span><span></span><span class="nome">${esc(cfg.vazio.rotulo)}</span><span></span></button>` : '';
+    el.innerHTML = vazio + (lista.map(n => {
+      const num = numeroEdital(n.nome), sel = n.id === atual;
+      return `<button type="button" class="sel-item ${sel ? 'sel' : ''}" role="option" aria-selected="${sel}" data-topico="${n.id}" style="padding-left:${10 + (Math.max(1, n.level || 1) - 1) * 10}px"><span class="ok"><i class="fa-solid fa-check"></i></span><span class="edt-num">${num ? esc(num) + '.' : ''}</span><span class="nome">${esc(nomeSemNumero(n.nome))}</span><span class="lado">${badgeAOCPHTML(n)}${pesoBadgeHTML(n)}</span></button>`;
+    }).join('') || (vazio ? '' : '<p class="sel-vazio-msg">Nenhum tópico com esse filtro.</p>'));
+    document.getElementById('sel-cont').innerText = `${lista.length} de ${todos.length} tópicos`;
+  }
+  // Escolher o tópico de uma sessão do cronograma (a disciplina da sessão é fixa)
+  function abrirSeletorSessao(diaIdx, sid) {
+    const dia = cronograma.dias[diaIdx], s = dia && dia.sessoes.find(x => x.id === sid);
+    if (!s) return;
+    abrirSeletorTopico({ lerDisc: () => s.disc, lerTopico: () => s.topicoId || '', fixarDisc: true, vazio: { valor: '', rotulo: 'Disciplina inteira' }, discVazio: null,
+      aplicar: (d, t) => editarTopicoSessao(diaIdx, sid, t) });
+  }
+  function vincularSeletoresDias() {
+    cronograma.dias.forEach(d => vincularSeletor({ disc: `sd-disc-${d.id}`, top: `sd-top-${d.id}`, vazio: { valor: '', rotulo: 'Disciplina inteira' }, span: 'span 2' }));
+  }
+  function iniciarSeletoresDeTopico() {
+    vincularSeletor({ disc: 'plano-disc', top: 'plano-topico', vazio: { valor: '', rotulo: 'Tópico (opcional)' }, discVazio: 'Sem disciplina', span: 'span 2' });
+    vincularSeletor({ disc: 'timer-disc', top: 'timer-topico', classe: 'sel-crono' });
+    vincularSeletor({ disc: 'modal-disc', top: 'modal-topico' });
+    vincularSeletor({ disc: 'rev-disc', top: 'rev-topico' });
+    vincularSeletor({ disc: 'reg-disc', top: 'reg-topico', vazio: () => (registroEdicao && registroEdicao.semTopico ? { valor: '', rotulo: 'Sem tópico' } : null), discVazio: () => (registroEdicao && registroEdicao.semTopico ? 'Sem disciplina' : null) });
+    vincularSeletor({ disc: 'erro-disc', top: 'erro-topico' });
+    vincularSeletor({ disc: 'hist-disc', top: 'hist-topico', vazio: { valor: '', rotulo: 'Todos os tópicos' }, discVazio: 'Todas as disciplinas', span: 'span 2' });
+    vincularSeletor({ top: 'erros-filtro', discFixo: () => errosCtx.discId, vazio: { valor: 'geral', rotulo: 'Mural geral' }, classe: 'sel-compacto' });
+  }
+
+  // =====================================================================
   // 16. INICIALIZAÇÃO
   // =====================================================================
   function iniciarApp() {
@@ -3788,6 +4119,7 @@
     document.getElementById('timer-duracao').value = preferencias.duracaoPadrao;
     popularSelects();
     popularFiltrosHist();
+    iniciarSeletoresDeTopico();
     setOrigemTimer('Cronômetro livre (sem alarme)');
     restaurarBilhete();
     atualizarTudoUI();
