@@ -62,6 +62,68 @@
     .bilhete-mini { width: 44px; height: 44px; }
     .capa-caderno { transition: transform .3s ease, box-shadow .3s ease; }
     .capa-caderno:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 30px rgba(0,0,0,.35); }
+
+    /* ===== Cronômetro (Etapa 2 · direção D: anel + campos + controles circulares) ===== */
+    :root { --crono-topo: #222835; --c-foco: #10b981; --c-parar: #ef4444; --c-pausado: #f59e0b; --c-pausa: #38bdf8; --c-alarme: #f97316; }
+    body.light-mode { --crono-topo: #eef2f7; --c-pausa: #0284c7; }
+    .crono { background: linear-gradient(180deg, var(--crono-topo) 0%, var(--bg-panel) 42%); border: 1px solid var(--border-color); border-radius: 28px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 48px rgba(0,0,0,.35); }
+    .crono .hidden { display: none !important; }
+    .crono .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .crono.alarme { border-color: var(--c-alarme); animation: alerta-pulse 1.6s infinite; }
+    .crono-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .crono-titulo { font-size: 12px; font-weight: 700; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; }
+    .crono-min { width: 28px; height: 28px; border-radius: 50%; color: var(--text-muted); display: grid; place-items: center; }
+    .crono-min:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .crono-seg { display: inline-flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 999px; padding: 3px; gap: 2px; }
+    .crono-seg button { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: var(--text-secondary); transition: background .2s ease, color .2s ease; }
+    .crono-seg button.on { background: rgba(16,185,129,.16); color: var(--brand); }
+    .crono-seg button:disabled { cursor: not-allowed; }
+    .crono-seg button:disabled:not(.on) { opacity: .45; }
+    .crono-config { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: var(--text-secondary); }
+    .crono-chip { padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 600; color: var(--text-secondary); }
+    .crono-chip.on { border-color: var(--brand); color: var(--brand); background: rgba(16,185,129,.12); }
+    .crono-custom { width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px; }
+    .crono-custom input { width: 52px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 3px 6px; color: var(--text-primary); outline: none; }
+    .crono-anel { position: relative; width: 188px; height: 188px; margin: 0 auto; flex: none; }
+    .crono-anel svg { width: 100%; height: 100%; display: block; }
+    .crono-anel circle { fill: none; }
+    .crono-anel .trilha { stroke: var(--bg-card); }
+    .crono-anel .arco { stroke-linecap: round; transition: stroke-dasharray .45s ease, stroke .3s ease; }
+    .crono-centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; }
+    .crono-tempo { font-family: 'Inter', system-ui, sans-serif; font-size: 42px; font-weight: 600; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+    .crono-de { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    .crono-fase { align-self: center; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-top: -4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .crono-origem { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: -6px; }
+    .crono-banner { display: grid; gap: 8px; border-radius: 16px; padding: 10px 12px; font-size: 12px; color: var(--text-primary); }
+    .crono-banner .acts { display: flex; gap: 8px; }
+    .crono-banner .acts button { flex: 1; padding: 8px; border-radius: 12px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .crono-banner .b-pausa { background: var(--c-pausa); color: #06222f; }
+    .crono-banner .b-foco { background: var(--c-foco); color: #fff; }
+    .crono-banner .b-neutro { background: var(--bg-hover); color: var(--text-primary); }
+    .crono-campos { display: grid; gap: 8px; }
+    .crono-campo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); transition: border-color .2s ease; }
+    .crono-campo:focus-within { border-color: var(--brand); }
+    .crono-campo > i { color: var(--brand); font-size: 14px; width: 16px; text-align: center; }
+    .crono-campo .crono-chev { color: var(--text-muted); font-size: 11px; }
+    .crono-campo select, .crono-campo input { -webkit-appearance: none; appearance: none; background: transparent; border: 0; outline: none; color: var(--text-primary); font: inherit; }
+    .crono-campo option { background: var(--bg-panel); color: var(--text-primary); text-transform: none; letter-spacing: normal; font-weight: 400; }
+    .crono-cap, .crono-sel-cap { display: block; width: 100%; font-size: 10px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted) !important; cursor: pointer; }
+    .crono-sel { display: block; width: 100%; font-size: 13px; cursor: pointer; text-overflow: ellipsis; }
+    .crono-linha { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-secondary); }
+    .crono-linha select { width: auto; min-width: 0; color: var(--text-primary); }
+    .crono-linha input { width: 40px; text-align: center; border-bottom: 1px dashed var(--border-color) !important; color: var(--text-primary); }
+    .crono-ctrl { display: flex; justify-content: center; align-items: center; gap: 14px; padding-top: 2px; }
+    .crono-bt { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-hover); color: var(--text-primary); font-size: 17px; transition: transform .15s ease, background .2s ease, box-shadow .2s ease; }
+    .crono-bt:not(:disabled):hover { transform: scale(1.06); }
+    .crono-bt:disabled { opacity: .35; cursor: default; }
+    .crono-bt.crono-pri { width: 72px; height: 72px; font-size: 24px; background: var(--c-foco); color: #fff; box-shadow: 0 0 0 8px rgba(16,185,129,.16); }
+    .crono-bt.crono-pri.parar { background: var(--c-parar); box-shadow: 0 0 0 8px rgba(239,68,68,.16); }
+    .crono-extra { display: flex; justify-content: center; gap: 18px; font-size: 12px; }
+    .crono-extra button { color: var(--text-secondary); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+    .crono-extra button:hover { color: var(--text-primary); }
+    .crono-extra .perigo { color: var(--c-parar); }
+    .crono button:focus-visible, .crono select:focus-visible, .crono input:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { .crono.alarme { animation: none; } .crono-anel .arco { transition: none; } }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -428,49 +490,78 @@
       <i class="fa-solid fa-stopwatch text-2xl"></i>
       <span id="timer-fab-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 animate-ping"></span>
     </button>
-    <div id="timer-panel" class="hidden w-80 bg-panel border border-theme rounded-2xl shadow-2xl overflow-hidden">
-      <div class="px-4 py-3 bg-card border-b border-theme flex justify-between items-center">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand flex items-center gap-1.5"><i class="fa-solid fa-stopwatch"></i> Cronômetro</span>
-        <button onclick="toggleFloatingTimer(false)" class="text-sec hover:text-main p-1" title="Minimizar"><i class="fa-solid fa-compress"></i></button>
-      </div>
-      <div class="p-4 space-y-3">
-        <div class="text-center bg-card py-3 rounded-xl border border-theme">
-          <p id="timer-display" class="text-3xl font-mono font-extrabold tracking-widest text-main">00:00:00</p>
-          <p id="timer-origem" class="text-[11px] text-sec mt-1">Cronômetro livre (sem alarme)</p>
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-sec mb-1">Disciplina</label>
-          <select id="timer-disc" onchange="popularTopicosTimer()" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
-        </div>
-        <div>
-          <label class="block text-[11px] font-bold text-sec mb-1">Tópico / Subtópico (obrigatório para salvar)</label>
-          <select id="timer-topico" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[11px] font-bold text-sec mb-1">Modalidade</label>
-            <select id="timer-tipo" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">
-              <option>Teoria</option><option>Leitura</option><option>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option>
-            </select>
+    <div id="timer-panel" class="hidden w-80 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-3rem)] overflow-y-auto rounded-[28px]">
+      <div id="timer-card" class="crono">
+        <div class="crono-head">
+          <span class="crono-titulo"><i class="fa-regular fa-clock"></i> Cronômetro</span>
+          <div class="crono-seg" role="group" aria-label="Modo do relógio">
+            <button id="timer-modo-normal" onclick="definirModoTimer('normal')" class="on">Normal</button>
+            <button id="timer-modo-pomodoro" onclick="definirModoTimer('pomodoro')">Pomodoro</button>
           </div>
-          <div>
-            <label class="block text-[11px] font-bold text-sec mb-1">Alarme padrão (min)</label>
-            <input id="timer-duracao" type="number" min="1" value="50" class="w-full bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">
+          <button onclick="toggleFloatingTimer(false)" class="crono-min" title="Minimizar" aria-label="Minimizar"><i class="fa-solid fa-chevron-down"></i></button>
+        </div>
+        <div id="timer-pomo-config" class="crono-config hidden">
+          <span>Ciclos:</span>
+          <button id="timer-pomo-25" onclick="definirPresetPomodoro(25, 5)" class="crono-chip">25/5</button>
+          <button id="timer-pomo-50" onclick="definirPresetPomodoro(50, 10)" class="crono-chip">50/10</button>
+          <button id="timer-pomo-custom-btn" onclick="definirPresetPomodoro('custom')" class="crono-chip">Personalizado</button>
+          <div id="timer-pomo-custom" class="crono-custom hidden">
+            <label for="timer-pomo-foco">Foco</label><input id="timer-pomo-foco" type="number" min="0.5" step="0.5" value="25"> min
+            <label for="timer-pomo-pausa">· Pausa</label><input id="timer-pomo-pausa" type="number" min="0.5" step="0.5" value="5"> min
           </div>
         </div>
-        <div class="grid grid-cols-3 gap-2 pt-1">
-          <button id="timer-btn-iniciar" onclick="alternarIniciarParar()" class="py-2 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition"><i class="fa-solid fa-play mr-1"></i> Iniciar</button>
-          <button onclick="pausarCronometro()" class="py-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold text-xs transition"><i class="fa-solid fa-pause mr-1"></i> Pausar</button>
-          <button onclick="salvarCronometro()" class="py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition"><i class="fa-solid fa-floppy-disk mr-1"></i> Salvar</button>
+        <div class="crono-anel">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="trilha" r="90" cx="100" cy="100" stroke-width="12"></circle>
+            <circle id="timer-anel-ciclo-trilha" class="trilha hidden" r="76" cx="100" cy="100" stroke-width="5"></circle>
+            <circle id="timer-anel-meta" class="arco" r="90" cx="100" cy="100" stroke-width="12" stroke-dasharray="0 566" transform="rotate(-90 100 100)"></circle>
+            <circle id="timer-anel-ciclo" class="arco hidden" r="76" cx="100" cy="100" stroke-width="5" stroke-dasharray="0 478" transform="rotate(-90 100 100)"></circle>
+          </svg>
+          <div class="crono-centro">
+            <p id="timer-display" class="crono-tempo">00:00</p>
+            <p id="timer-meta-txt" class="crono-de">de 50:00 · 0%</p>
+          </div>
         </div>
-        <div class="flex gap-2">
-          <button id="timer-btn-testar-som" onclick="testarSom()" class="flex-1 py-1.5 rounded-lg bg-card border border-theme text-sec hover:text-main font-bold text-[11px] transition"><i class="fa-solid fa-volume-high mr-1"></i> Testar som</button>
-          <button id="timer-btn-zerar" onclick="zerarCronometro()" class="hidden flex-1 py-1.5 rounded-lg bg-red-500/15 border border-red-500/40 text-red-400 font-bold text-[11px] transition"><i class="fa-solid fa-rotate-left mr-1"></i> Zerar</button>
+        <span id="timer-fase" class="crono-fase">Pronto para começar</span>
+        <p id="timer-origem" class="crono-origem">Cronômetro livre (sem alarme)</p>
+        <div id="timer-banner" class="crono-banner hidden" role="status"></div>
+        <div class="crono-campos">
+          <div class="crono-campo">
+            <i class="fa-solid fa-book"></i>
+            <div class="flex-1 min-w-0">
+              <select id="timer-disc" onchange="popularTopicosTimer()" class="crono-sel-cap" aria-label="Disciplina"></select>
+              <select id="timer-topico" class="crono-sel" aria-label="Tópico ou subtópico (obrigatório para salvar)"></select>
+            </div>
+            <i class="fa-solid fa-chevron-down crono-chev"></i>
+          </div>
+          <div class="crono-campo">
+            <i class="fa-regular fa-clock"></i>
+            <div class="flex-1 min-w-0">
+              <span class="crono-cap">Modalidade · alarme</span>
+              <div class="crono-linha">
+                <select id="timer-tipo" aria-label="Modalidade">
+                  <option>Teoria</option><option>Leitura</option><option>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option>
+                </select>
+                <span>· meta</span>
+                <input id="timer-duracao" type="number" min="1" value="50" aria-label="Alarme padrão (min)">
+                <span>min</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <p id="timer-teste-som-msg" class="hidden text-[11px] text-sec"></p>
-        <div id="timer-aviso-notif" class="hidden text-[11px] text-sec bg-card border border-theme rounded-lg p-2.5 space-y-2">
+        <div class="crono-ctrl">
+          <button id="timer-btn-pausar" onclick="pausarCronometro()" class="crono-bt" title="Pausar" aria-label="Pausar" disabled><i class="fa-solid fa-pause"></i></button>
+          <button id="timer-btn-iniciar" onclick="alternarIniciarParar()" class="crono-bt crono-pri" title="Iniciar"><i class="fa-solid fa-play"></i><span class="sr-only">Iniciar</span></button>
+          <button id="timer-btn-salvar" onclick="salvarCronometro()" class="crono-bt" title="Salvar" aria-label="Salvar" disabled><i class="fa-solid fa-floppy-disk"></i></button>
+        </div>
+        <div class="crono-extra">
+          <button id="timer-btn-testar-som" onclick="testarSom()"><i class="fa-solid fa-volume-high"></i> Testar som</button>
+          <button id="timer-btn-zerar" onclick="zerarCronometro()" class="perigo hidden"><i class="fa-solid fa-rotate-left"></i> Zerar</button>
+        </div>
+        <p id="timer-teste-som-msg" class="hidden text-[11px] text-sec text-center"></p>
+        <div id="timer-aviso-notif" class="hidden text-[11px] text-sec bg-card border border-theme rounded-xl p-2.5 space-y-2">
           <p id="timer-aviso-notif-texto">Ative os avisos do navegador para ser avisada quando o tempo da sessão terminar, mesmo com a aba minimizada.</p>
-          <button id="timer-aviso-notif-btn" onclick="pedirPermissaoNotificacao()" class="w-full py-1.5 rounded-md bg-blue-500/15 border border-blue-500/40 text-blue-400 font-bold"><i class="fa-solid fa-bell mr-1"></i> Ativar avisos</button>
+          <button id="timer-aviso-notif-btn" onclick="pedirPermissaoNotificacao()" class="w-full py-1.5 rounded-lg bg-blue-500/15 border border-blue-500/40 text-blue-400 font-bold"><i class="fa-solid fa-bell mr-1"></i> Ativar avisos</button>
         </div>
       </div>
     </div>
@@ -1703,15 +1794,31 @@
   let timerInicioMs = null;       // Date.now() do início do trecho em andamento (null = parado/pausado)
   let timerAcumuladoMs = 0;       // ms de trechos anteriores (antes de pausas)
   let timerAlarmeTimeout = null;  // disparo agendado do alarme (funciona com a aba minimizada)
+  // Pomodoro (modo opcional). Os ciclos dividem a meta; o alarme da sessão continua valendo.
+  // O relógio de estudo (acumulado + início) fica parado durante a pausa: a pausa não conta como estudo.
+  let timerModo = 'normal';        // 'normal' | 'pomodoro'
+  let pomoFocoSeg = 25 * 60;       // duração do foco
+  let pomoPausaSeg = 5 * 60;       // duração da pausa
+  let pomoFase = 'foco';           // 'foco' | 'fim_foco' (espera "Iniciar pausa") | 'pausa' | 'fim_pausa' (espera "Voltar ao foco")
+  let pomoCiclo = 1;               // número do foco atual
+  let pomoFimFocoSeg = 25 * 60;    // segundos de estudo em que o foco atual termina
+  let pomoPausaInicioMs = null;    // Date.now() do início da pausa em andamento
+  let pomoTimeout = null;          // disparo agendado do fim do foco/pausa
+  let pomoMostrarCustom = false;   // só interface: campos do Personalizado abertos
 
   function segundosDecorridos() {
     const emAndamento = timerInicioMs ? Math.max(0, Date.now() - timerInicioMs) : 0;
     return Math.floor((timerAcumuladoMs + emAndamento) / 1000);
   }
+  function sessaoTimerEmCurso() { return !!timerInterval || timerAcumuladoMs > 0 || !!pomoPausaInicioMs; }
+  // Estado salvo em central_cronometro_jessica_v1. versao 2 acrescenta modo e Pomodoro;
+  // um estado antigo (sem esses campos) é lido como modo Normal.
   function salvarEstadoTimer() {
     try {
-      if (!timerInicioMs && timerAcumuladoMs === 0) { localStorage.removeItem(TIMER_KEY); return; }
+      const config = { versao: 2, modo: timerModo, pomoFocoSeg, pomoPausaSeg };
+      if (!sessaoTimerEmCurso()) { localStorage.setItem(TIMER_KEY, JSON.stringify({ ...config, estado: 'parado' })); return; }
       localStorage.setItem(TIMER_KEY, JSON.stringify({
+        ...config,
         estado: timerInicioMs ? 'rodando' : 'pausado',
         inicio: timerInicioMs,
         acumuladoMs: timerAcumuladoMs,
@@ -1724,7 +1831,9 @@
         disc: document.getElementById('timer-disc').value,
         topico: document.getElementById('timer-topico').value,
         tipo: document.getElementById('timer-tipo').value,
-        origem: document.getElementById('timer-origem').innerText
+        origem: document.getElementById('timer-origem').innerText,
+        pomoFase, pomoCiclo, pomoFimFocoSeg,
+        pomoPausaInicio: pomoPausaInicioMs
       }));
     } catch (e) { /* armazenamento indisponível: o cronômetro segue só em memória */ }
   }
@@ -1732,6 +1841,17 @@
     let st = null;
     try { st = JSON.parse(localStorage.getItem(TIMER_KEY)); } catch (e) { st = null; }
     if (!st) { atualizarBotoesTimer(); return; }
+    // Configuração (com padrão para o estado antigo, sem campos novos)
+    timerModo = st.modo === 'pomodoro' ? 'pomodoro' : 'normal';
+    pomoFocoSeg = Number(st.pomoFocoSeg) >= 30 ? Number(st.pomoFocoSeg) : 25 * 60;
+    pomoPausaSeg = Number(st.pomoPausaSeg) >= 30 ? Number(st.pomoPausaSeg) : 5 * 60;
+    const fases = ['foco', 'fim_foco', 'pausa', 'fim_pausa'];
+    pomoFase = timerModo === 'pomodoro' && fases.includes(st.pomoFase) ? st.pomoFase : 'foco';
+    pomoCiclo = Number(st.pomoCiclo) >= 1 ? Number(st.pomoCiclo) : 1;
+    pomoFimFocoSeg = Number(st.pomoFimFocoSeg) > 0 ? Number(st.pomoFimFocoSeg) : pomoCiclo * pomoFocoSeg;
+    pomoPausaInicioMs = pomoFase === 'pausa' ? (Number(st.pomoPausaInicio) || Date.now()) : null;
+    const temTempo = Number(st.acumuladoMs) > 0 || (st.estado === 'rodando' && st.inicio) || pomoPausaInicioMs;
+    if (st.estado === 'parado' || !temTempo) { pomoFase = 'foco'; pomoPausaInicioMs = null; atualizarBotoesTimer(); return; }
     timerAcumuladoMs = Number(st.acumuladoMs) || 0;
     timerDuracaoMin = Number(st.duracaoMin) || preferencias.duracaoPadrao;
     timerAlarmeAtivo = !!st.alarmeAtivo;
@@ -1749,6 +1869,9 @@
     if (st.estado === 'rodando' && st.inicio) {
       timerInicioMs = Number(st.inicio);
       startTick();
+    } else if (pomoFase === 'pausa' && pomoPausaInicioMs) {
+      timerSeconds = segundosDecorridos();
+      startTick();   // só o relógio da pausa corre; o estudo segue congelado
     } else {
       timerSeconds = segundosDecorridos();
       atualizarDisplayCronometro();
@@ -1756,19 +1879,128 @@
       if (timerAlarmeAtivo && timerAlarmeDisparado) mostrarModalFimSessao();
     }
   }
+
+  // ---------- Painel visual (direção D) ----------
+  const CORES_TIMER = { parado: 'var(--text-muted)', rodando: 'var(--c-foco)', pausado: 'var(--c-pausado)', pausa: 'var(--c-pausa)', fim_foco: 'var(--c-foco)', fim_pausa: 'var(--c-pausa)', alarme: 'var(--c-alarme)' };
+  const pad2 = n => String(n).padStart(2, '0');
+  function fmtRelogio(seg) {
+    seg = Math.max(0, Math.floor(seg));
+    const h = Math.floor(seg / 3600), m = Math.floor((seg % 3600) / 60), s = seg % 60;
+    return h ? `${h}:${pad2(m)}:${pad2(s)}` : `${pad2(m)}:${pad2(s)}`;
+  }
+  function fmtDuracaoCurta(seg) {
+    const m = Math.floor(seg / 60), s = seg % 60;
+    return m && s ? `${m} min ${s} s` : m ? `${m} min` : `${s} s`;
+  }
+  function estadoVisualTimer() {
+    if (timerAlarmeAtivo && timerAlarmeDisparado) return 'alarme';
+    if (timerModo === 'pomodoro') {
+      if (pomoFase === 'pausa' && pomoPausaInicioMs) return 'pausa';
+      if (pomoFase === 'fim_foco') return 'fim_foco';
+      if (pomoFase === 'fim_pausa') return 'fim_pausa';
+    }
+    if (timerInicioMs) return 'rodando';
+    if (timerAcumuladoMs > 0) return 'pausado';
+    return 'parado';
+  }
+  function metaTimerSeg() { return (sessaoTimerEmCurso() ? timerDuracaoMin : lerDuracao()) * 60; }
+  function pausaDecorridaSeg() { return pomoPausaInicioMs ? Math.floor(Math.max(0, Date.now() - pomoPausaInicioMs) / 1000) : 0; }
+  function textoFaseTimer(est) {
+    const metaSeg = metaTimerSeg();
+    const total = timerAlarmeAtivo ? ` de ${Math.max(1, Math.ceil(metaSeg / pomoFocoSeg))}` : '';
+    if (est === 'alarme') return 'Meta concluída';
+    if (timerModo === 'pomodoro') {
+      if (est === 'parado') return `Pomodoro ${fmtDuracaoCurta(pomoFocoSeg)} / ${fmtDuracaoCurta(pomoPausaSeg)}`;
+      if (est === 'fim_foco') return `Foco ${pomoCiclo} concluído`;
+      if (est === 'pausa') return `Pausa · volta em ${fmtRelogio(pomoPausaSeg - pausaDecorridaSeg())}`;
+      if (est === 'fim_pausa') return 'Pausa concluída';
+      if (est === 'pausado') return `Pausado · foco ${pomoCiclo}${total}`;
+      return `Foco ${pomoCiclo}${total} · faltam ${fmtRelogio(pomoFimFocoSeg - timerSeconds)}`;
+    }
+    return { parado: 'Pronto para começar', rodando: 'Rodando', pausado: 'Pausado' }[est] || '';
+  }
+  function renderizarBannerTimer(est) {
+    const el = document.getElementById('timer-banner');
+    if (!el) return;
+    let html = '', fundo = '';
+    if (est === 'fim_foco') {
+      fundo = 'rgba(16,185,129,.14)';
+      html = `<p><b>Foco ${pomoCiclo} concluído.</b> Hora da pausa de ${fmtDuracaoCurta(pomoPausaSeg)}. Ela não conta como estudo.</p>
+        <div class="acts"><button class="b-pausa" onclick="iniciarPausaPomodoro()"><i class="fa-solid fa-mug-hot"></i> Iniciar pausa</button><button class="b-neutro" onclick="pularPausaPomodoro()">Pular pausa</button></div>`;
+    } else if (est === 'pausa') {
+      fundo = 'rgba(56,189,248,.14)';
+      html = `<p><i class="fa-solid fa-mug-hot"></i> Pausa em andamento. Quando acabar, um aviso chama de volta ao foco.</p>
+        <div class="acts"><button class="b-neutro" onclick="voltarAoFoco()"><i class="fa-solid fa-forward-step"></i> Voltar ao foco agora</button></div>`;
+    } else if (est === 'fim_pausa') {
+      fundo = 'rgba(56,189,248,.14)';
+      html = `<p><b>Pausa concluída.</b> Toque para começar o foco ${pomoCiclo + 1}.</p>
+        <div class="acts"><button class="b-foco" onclick="voltarAoFoco()"><i class="fa-solid fa-play"></i> Voltar ao foco</button></div>`;
+    }
+    el.classList.toggle('hidden', !html);
+    el.style.background = fundo;
+    el.innerHTML = html;
+  }
   function atualizarBotoesTimer() {
     const btn = document.getElementById('timer-btn-iniciar');
     if (!btn) return;
     const rodando = !!timerInterval;
-    btn.innerHTML = rodando
-      ? '<i class="fa-solid fa-stop mr-1"></i> Parar'
-      : `<i class="fa-solid fa-play mr-1"></i> ${timerAcumuladoMs > 0 ? 'Retomar' : 'Iniciar'}`;
-    btn.classList.toggle('bg-brand', !rodando);
-    btn.classList.toggle('bg-red-500', rodando);
-    btn.classList.toggle('hover:bg-red-600', rodando);
+    const rotulo = rodando ? 'Parar' : (timerAcumuladoMs > 0 ? 'Retomar' : 'Iniciar');
+    btn.innerHTML = `<i class="fa-solid ${rodando ? 'fa-stop' : 'fa-play'}"></i><span class="sr-only">${rotulo}</span>`;
+    btn.title = rotulo;
+    btn.classList.toggle('parar', rodando);
+    document.getElementById('timer-btn-pausar').disabled = !rodando;
+    document.getElementById('timer-btn-salvar').disabled = !(timerAcumuladoMs > 0 || timerInicioMs);
     // Zerar: só com o cronômetro parado e tempo acumulado
     const zerar = document.getElementById('timer-btn-zerar');
     if (zerar) zerar.classList.toggle('hidden', rodando || timerAcumuladoMs <= 0);
+    // Modo e ciclos: só podem mudar com o cronômetro zerado
+    const emCurso = sessaoTimerEmCurso();
+    const pomo = timerModo === 'pomodoro';
+    [['timer-modo-normal', !pomo], ['timer-modo-pomodoro', pomo]].forEach(([id, on]) => {
+      const b = document.getElementById(id);
+      b.classList.toggle('on', on);
+      b.disabled = emCurso;
+      b.title = emCurso ? 'Para trocar o modo, salve ou zere o cronômetro' : '';
+    });
+    document.getElementById('timer-pomo-config').classList.toggle('hidden', !pomo || emCurso);
+    const p25 = pomoFocoSeg === 1500 && pomoPausaSeg === 300, p50 = pomoFocoSeg === 3000 && pomoPausaSeg === 600;
+    const custom = pomoMostrarCustom || (!p25 && !p50);
+    document.getElementById('timer-pomo-25').classList.toggle('on', p25 && !custom);
+    document.getElementById('timer-pomo-50').classList.toggle('on', p50 && !custom);
+    document.getElementById('timer-pomo-custom-btn').classList.toggle('on', custom);
+    document.getElementById('timer-pomo-custom').classList.toggle('hidden', !custom);
+    document.getElementById('timer-pomo-foco').value = +(pomoFocoSeg / 60).toFixed(2);
+    document.getElementById('timer-pomo-pausa').value = +(pomoPausaSeg / 60).toFixed(2);
+    const est = estadoVisualTimer();
+    document.getElementById('timer-card').classList.toggle('alarme', est === 'alarme');
+    renderizarBannerTimer(est);
+    atualizarDisplayCronometro();
+  }
+  function definirModoTimer(modo) {
+    if (sessaoTimerEmCurso()) return;
+    timerModo = modo === 'pomodoro' ? 'pomodoro' : 'normal';
+    pomoFase = 'foco'; pomoCiclo = 1; pomoFimFocoSeg = pomoFocoSeg;
+    salvarEstadoTimer();
+    atualizarBotoesTimer();
+  }
+  function definirPresetPomodoro(foco, pausa) {
+    if (sessaoTimerEmCurso()) return;
+    if (foco === 'custom') { pomoMostrarCustom = true; }
+    else { pomoMostrarCustom = false; pomoFocoSeg = foco * 60; pomoPausaSeg = pausa * 60; }
+    pomoFimFocoSeg = pomoFocoSeg;
+    salvarEstadoTimer();
+    atualizarBotoesTimer();
+  }
+  function lerCicloPersonalizado() {
+    if (sessaoTimerEmCurso()) return;
+    const f = parseFloat(document.getElementById('timer-pomo-foco').value);
+    const p = parseFloat(document.getElementById('timer-pomo-pausa').value);
+    if (f >= 0.5) pomoFocoSeg = Math.round(f * 60);
+    if (p >= 0.5) pomoPausaSeg = Math.round(p * 60);
+    pomoMostrarCustom = true;
+    pomoFimFocoSeg = pomoFocoSeg;
+    salvarEstadoTimer();
+    atualizarBotoesTimer();
   }
   function atualizarAvisoNotificacao() {
     const box = document.getElementById('timer-aviso-notif');
@@ -1788,24 +2020,55 @@
       if (r && r.then) r.then(atualizarAvisoNotificacao);
     } catch (e) { atualizarAvisoNotificacao(); }
   }
-  function notificarFimSessao(texto) {
+  function notificar(titulo, texto, tag, vibracao) {
     try {
       if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('⏰ Tempo da sessão concluído', { body: texto, tag: 'central-fim-sessao', requireInteraction: true });
+        new Notification(titulo, { body: texto, tag, requireInteraction: true });
       }
     } catch (e) { /* alguns navegadores móveis exigem service worker; o modal e o som continuam */ }
-    try { if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 400]); } catch (e) {}
+    try { if (navigator.vibrate) navigator.vibrate(vibracao); } catch (e) {}
+  }
+  function notificarFimSessao(texto) {
+    notificar('⏰ Tempo da sessão concluído', texto, 'central-fim-sessao', [400, 200, 400, 200, 400]);
   }
 
   function toggleFloatingTimer(expand) {
     document.getElementById('timer-fab').classList.toggle('hidden', expand);
     document.getElementById('timer-panel').classList.toggle('hidden', !expand);
   }
+  // Tempo no centro do anel; anel externo = estudo até a meta; anel interno = ciclo do Pomodoro
   function atualizarDisplayCronometro() {
-    const h = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
-    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
-    const s = String(timerSeconds % 60).padStart(2, '0');
-    document.getElementById('timer-display').innerText = `${h}:${m}:${s}`;
+    document.getElementById('timer-display').innerText = fmtRelogio(timerSeconds);
+    const est = estadoVisualTimer();
+    const cor = CORES_TIMER[est];
+    const metaSeg = metaTimerSeg();
+    const pct = metaSeg ? timerSeconds / metaSeg : 0;
+    document.getElementById('timer-meta-txt').innerText = `de ${fmtRelogio(metaSeg)} · ${Math.round(pct * 100)}%`;
+    const anel = document.getElementById('timer-anel-meta');
+    const C1 = 2 * Math.PI * 90;
+    anel.setAttribute('stroke-dasharray', `${Math.min(1, pct) * C1} ${C1}`);
+    anel.style.stroke = cor;
+    anel.style.opacity = pct > 0 ? 1 : 0;
+    const pomo = timerModo === 'pomodoro';
+    const ciclo = document.getElementById('timer-anel-ciclo');
+    document.getElementById('timer-anel-ciclo-trilha').classList.toggle('hidden', !pomo);
+    ciclo.classList.toggle('hidden', !pomo);
+    if (pomo) {
+      let p = 0, corCiclo = 'rgba(16,185,129,.55)';
+      if (est === 'pausa') { p = pausaDecorridaSeg() / pomoPausaSeg; corCiclo = 'var(--c-pausa)'; }
+      else if (est === 'fim_pausa') { p = 1; corCiclo = 'var(--c-pausa)'; }
+      else if (est === 'fim_foco') p = 1;
+      else if (sessaoTimerEmCurso()) p = (timerSeconds - (pomoFimFocoSeg - pomoFocoSeg)) / pomoFocoSeg;
+      const C2 = 2 * Math.PI * 76;
+      p = Math.max(0, Math.min(1, p));
+      ciclo.setAttribute('stroke-dasharray', `${p * C2} ${C2}`);
+      ciclo.style.stroke = corCiclo;
+      ciclo.style.opacity = p > 0 ? 1 : 0;
+    }
+    const fase = document.getElementById('timer-fase');
+    fase.innerText = textoFaseTimer(est);
+    fase.style.color = est === 'parado' ? 'var(--text-secondary)' : cor;
+    fase.style.background = est === 'parado' ? 'var(--bg-card)' : `color-mix(in srgb, ${cor} 16%, transparent)`;
   }
   function popularTopicosTimer() {
     document.getElementById('timer-topico').innerHTML = optionsTopicos(document.getElementById('timer-disc').value, '', '— escolha o tópico —');
@@ -1839,6 +2102,7 @@
     timerAlarmeDisparado = false;
     timerSessao = null;
     timerRevisaoId = null;
+    pomoFase = 'foco'; pomoCiclo = 1; pomoFimFocoSeg = pomoFocoSeg; pomoPausaInicioMs = null;
     setOrigemTimer('Cronômetro livre (sem alarme)');
     atualizarDisplayCronometro();
     atualizarBotoesTimer();
@@ -1879,19 +2143,22 @@
     const msg = document.getElementById('timer-teste-som-msg');
     msg.classList.remove('hidden');
     if (!audioCtx) { msg.innerText = 'Este navegador não permite tocar som. O alarme aparecerá só na tela.'; return; }
-    const t = audioCtx.currentTime + 0.05;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine'; osc.frequency.value = 880;
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
-    osc.start(t); osc.stop(t + 0.35);
+    bipe(audioCtx.currentTime + 0.05, 880, 0.3);
     msg.innerText = 'Bipe tocado. Não ouviu? Aumente o volume e, no iPhone, desligue o modo silencioso.';
     setTimeout(() => {
       if (!audioCtx || audioCtx.state !== 'running') msg.innerText = 'O navegador bloqueou o som. Toque em "Testar som" de novo.';
     }, 500);
+  }
+  // Um bipe senoidal (mesmo envelope usado no alarme e no Testar som)
+  function bipe(t, freq, dur) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.value = freq;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t); osc.stop(t + dur + 0.05);
   }
   function tocarAlarme() {
     if (!audioCtx) garantirAudio();
@@ -1899,23 +2166,80 @@
     try { if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
     const agora = audioCtx.currentTime + 0.05;
     for (let serie = 0; serie < 3; serie++) {
-      for (let i = 0; i < 3; i++) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine'; osc.frequency.value = 880;
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        const t = agora + serie * 1.8 + i * 0.45;
-        gain.gain.setValueAtTime(0.0001, t);
-        gain.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-        osc.start(t); osc.stop(t + 0.4);
-      }
+      for (let i = 0; i < 3; i++) bipe(agora + serie * 1.8 + i * 0.45, 880, 0.35);
     }
+  }
+  // Aviso de ciclo do Pomodoro: mais curto e com tons diferentes do alarme da sessão
+  function tocarAvisoCiclo(tipo) {
+    if (!audioCtx) garantirAudio();
+    if (!audioCtx) return;
+    try { if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+    const t = audioCtx.currentTime + 0.05;
+    const tons = tipo === 'pausa' ? [784, 659] : [659, 988];   // fim do foco desce; fim da pausa sobe
+    for (let serie = 0; serie < 2; serie++) tons.forEach((f, i) => bipe(t + serie * 1.1 + i * 0.32, f, 0.26));
   }
   function tickCronometro() {
     timerSeconds = segundosDecorridos();
     atualizarDisplayCronometro();
-    verificarFimSessao();
+    verificarFimSessao();     // o alarme da sessão tem prioridade
+    verificarPomodoro();
+  }
+  // Fim do foco: para o estudo e espera "Iniciar pausa". Fim da pausa: espera "Voltar ao foco".
+  function verificarPomodoro() {
+    if (timerModo !== 'pomodoro') return;
+    if (pomoFase === 'foco' && timerInicioMs && timerSeconds >= pomoFimFocoSeg) {
+      pausarCronometro();
+      pomoFase = 'fim_foco';
+      tocarAvisoCiclo('pausa');
+      notificar('☕ Foco concluído', `Hora da pausa de ${fmtDuracaoCurta(pomoPausaSeg)}. Ela não conta como estudo.`, 'central-pomodoro', [300, 150, 300]);
+      toggleFloatingTimer(true);
+      atualizarBotoesTimer();
+      salvarEstadoTimer();
+      return;
+    }
+    if (pomoFase === 'pausa' && pomoPausaInicioMs && Date.now() - pomoPausaInicioMs >= pomoPausaSeg * 1000) {
+      clearInterval(timerInterval); timerInterval = null;
+      clearTimeout(pomoTimeout); pomoTimeout = null;
+      pomoPausaInicioMs = null;
+      pomoFase = 'fim_pausa';
+      document.getElementById('timer-fab-badge').classList.add('hidden');
+      tocarAvisoCiclo('foco');
+      notificar('🎯 Pausa concluída', 'Toque em "Voltar ao foco" quando estiver pronta.', 'central-pomodoro', [200, 100, 200, 100, 200]);
+      toggleFloatingTimer(true);
+      atualizarBotoesTimer();
+      salvarEstadoTimer();
+    }
+  }
+  function agendarPomodoro() {
+    clearTimeout(pomoTimeout);
+    pomoTimeout = null;
+    if (timerModo !== 'pomodoro') return;
+    let faltaMs = null;
+    if (pomoFase === 'foco' && timerInicioMs) faltaMs = pomoFimFocoSeg * 1000 - (timerAcumuladoMs + (Date.now() - timerInicioMs));
+    else if (pomoFase === 'pausa' && pomoPausaInicioMs) faltaMs = pomoPausaSeg * 1000 - (Date.now() - pomoPausaInicioMs);
+    if (faltaMs !== null) pomoTimeout = setTimeout(tickCronometro, Math.max(0, faltaMs) + 100);
+  }
+  function iniciarPausaPomodoro() {
+    if (timerModo !== 'pomodoro' || pomoFase !== 'fim_foco' || timerInterval) return;
+    garantirAudio();
+    pomoFase = 'pausa';
+    pomoPausaInicioMs = Date.now();
+    startTick();
+    salvarEstadoTimer();
+  }
+  function pularPausaPomodoro() {
+    if (pomoFase !== 'fim_foco') return;
+    iniciarCronometro();   // começa o próximo foco direto
+  }
+  function voltarAoFoco() {
+    if (pomoFase === 'pausa') {   // encerra a pausa antes da hora
+      clearInterval(timerInterval); timerInterval = null;
+      clearTimeout(pomoTimeout); pomoTimeout = null;
+      pomoPausaInicioMs = null;
+      pomoFase = 'fim_pausa';
+    }
+    if (pomoFase !== 'fim_pausa') return;
+    iniciarCronometro();
   }
   // Disparo único no horário exato do alarme: não depende de ticks (que o navegador desacelera em segundo plano)
   function agendarAlarme() {
@@ -1931,6 +2255,7 @@
     timerInterval = setInterval(tickCronometro, 1000);
     atualizarBotoesTimer();
     agendarAlarme();
+    agendarPomodoro();
     tickCronometro();
   }
   function iniciarCronometro() {
@@ -1941,12 +2266,23 @@
       timerDuracaoMin = lerDuracao();
       timerAlarmeAtivo = !!timerSessao;
       timerAlarmeDisparado = false;
+      pomoFase = 'foco'; pomoCiclo = 1; pomoFimFocoSeg = pomoFocoSeg; pomoPausaInicioMs = null;
+    } else if (timerModo === 'pomodoro' && (pomoFase === 'fim_foco' || pomoFase === 'fim_pausa')) {
+      // próximo foco (depois da pausa ou pulando a pausa)
+      pomoFase = 'foco'; pomoCiclo++; pomoFimFocoSeg = segundosDecorridos() + pomoFocoSeg;
     }
     timerInicioMs = Date.now();
     startTick();
     salvarEstadoTimer();
   }
   function pausarCronometro() {
+    // Pausar durante a pausa do Pomodoro encerra a pausa; o próximo Retomar começa um novo foco
+    if (pomoFase === 'pausa') {
+      pomoPausaInicioMs = null;
+      pomoFase = 'foco'; pomoCiclo++; pomoFimFocoSeg = segundosDecorridos() + pomoFocoSeg;
+    }
+    clearTimeout(pomoTimeout);
+    pomoTimeout = null;
     if (timerInicioMs) {
       timerAcumuladoMs += Math.max(0, Date.now() - timerInicioMs);
       timerInicioMs = null;
@@ -1978,6 +2314,10 @@
   function fimSessaoAdiar(min) {
     timerDuracaoMin += min;
     timerAlarmeDisparado = false;
+    // Pomodoro: se o foco também terminou junto com a meta, os minutos extras seguem como novo foco
+    if (timerModo === 'pomodoro' && pomoFimFocoSeg <= segundosDecorridos()) {
+      pomoFase = 'foco'; pomoCiclo++; pomoFimFocoSeg = segundosDecorridos() + pomoFocoSeg;
+    }
     document.getElementById('modal-fim-sessao').classList.add('hidden');
     timerInicioMs = Date.now();
     startTick();
@@ -2075,6 +2415,10 @@
   });
   ['timer-disc', 'timer-topico', 'timer-tipo'].forEach(id =>
     document.getElementById(id).addEventListener('change', salvarEstadoTimer));
+  // Meta (alarme padrão) e ciclos personalizados atualizam o anel na hora
+  document.getElementById('timer-duracao').addEventListener('input', () => { if (!sessaoTimerEmCurso()) atualizarDisplayCronometro(); });
+  ['timer-pomo-foco', 'timer-pomo-pausa'].forEach(id =>
+    document.getElementById(id).addEventListener('change', lerCicloPersonalizado));
 
   // Registro manual
   function popularSelects() {
