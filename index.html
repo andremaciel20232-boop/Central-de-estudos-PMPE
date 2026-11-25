@@ -35,6 +35,13 @@
     /* Botões e selos verdes com texto (bg-brand + text-white): mesmos tokens do cronômetro, contraste AA nos dois temas.
        Barras de progresso (só bg-brand, sem texto) continuam com var(--brand). */
     .bg-brand.text-white { background-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    /* Botões azuis com texto branco (Iniciar, Revisar agora, Estudar N min agora): blue-600, 5,17:1; hover blue-700, 6,7:1 */
+    .bg-blue-500.text-white { background-color: #2563eb; }
+    .bg-blue-500.text-white:hover { background-color: #1d4ed8; }
+    /* Tema claro: textos coloridos de botões e menu com 4,5:1 ou mais (no escuro eles já passam) */
+    body.light-mode .text-brand { color: var(--brand-hover); }
+    body.light-mode .text-blue-400 { color: #1d4ed8; }
+    body.light-mode .text-red-400 { color: #b91c1c; }
 
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: var(--bg-main); }
@@ -61,6 +68,15 @@
     .post-it.drop-alvo { outline: 3px dashed #10b981; outline-offset: 4px; }
 
     .sessao-concluida { background: rgba(16,185,129,.12) !important; border-color: rgba(16,185,129,.5) !important; }
+    /* Etapa 3: sessão parcialmente concluída e pendências (texto com --t-pausado: 4,5:1 ou mais nos dois temas) */
+    .sessao-parcial { background: rgba(245,158,11,.10) !important; border-color: rgba(245,158,11,.55) !important; }
+    .selo-parcial, .selo-pendencia { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+      color: var(--t-pausado); background: color-mix(in srgb, var(--c-pausado) 16%, transparent); }
+    .aviso-outra-aba { position: fixed; left: 50%; transform: translateX(-50%); top: max(16px, env(safe-area-inset-top, 0px)); z-index: 65; width: min(92vw, 460px);
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--bg-panel); color: var(--text-primary);
+      border: 1px solid var(--c-pausado); box-shadow: 0 16px 36px rgba(0,0,0,.35); font-size: 13px; }
+    .aviso-outra-aba i { color: var(--t-pausado); margin-top: 2px; }
+    .aviso-outra-aba button { margin-left: auto; font-weight: 700; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
     .bilhete-fixo { transition: all .25s ease; }
     .bilhete-mini { width: 44px; height: 44px; }
     .capa-caderno { transition: transform .3s ease, box-shadow .3s ease; }
@@ -73,11 +89,11 @@
             --t-foco: #10b981; --t-pausado: #f59e0b; --t-pausa: #38bdf8; --t-alarme: #fb923c;
             /* botões verdes do cronômetro (texto 5,97:1) e traços das sessões do dia (3:1 ou mais) */
             --btn-iniciar-bg: var(--brand); --btn-iniciar-fg: #022c22;
-            --traco-feito: var(--brand); --traco-prox: #cfd5dc; --traco-pend: var(--text-muted); }
+            --traco-feito: var(--brand); --traco-prox: #cfd5dc; --traco-pend: var(--text-muted); --traco-parcial: #f59e0b; }
     body.light-mode { --crono-topo: #eef2f7; --c-pausa: #0369a1; --c-pausa-fg: #ffffff;
             --c-foco: #059669; --c-alarme: #c2410c;
             --btn-iniciar-bg: var(--brand-hover); --btn-iniciar-fg: #ffffff;
-            --traco-feito: var(--brand); --traco-prox: #334155; --traco-pend: var(--text-muted);
+            --traco-feito: var(--brand); --traco-prox: #334155; --traco-pend: var(--text-muted); --traco-parcial: #b45309;
             --t-foco: #065f46; --t-pausado: #92400e; --t-pausa: #0369a1; --t-alarme: #9a3412; }
     .crono { background: linear-gradient(180deg, var(--crono-topo) 0%, var(--bg-panel) 42%); border: 1px solid var(--border-color); border-radius: 28px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 48px rgba(0,0,0,.35); }
     .crono .hidden { display: none !important; }
@@ -193,7 +209,7 @@
         <i class="fa-solid fa-diagram-project w-5 text-center text-emerald-400"></i> <span>Cronograma</span>
       </button>
       <button onclick="navigate('revisoes')" id="nav-revisoes" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i> <span>Mural de Revisões</span>
+        <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i> <span>Pendências e Revisões</span>
       </button>
       <button onclick="navigate('erros')" id="nav-erros" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
         <i class="fa-solid fa-book-bookmark w-5 text-center text-rose-400"></i> <span>Caderno de Erros</span>
@@ -392,8 +408,8 @@
       <div id="view-revisoes" class="hidden max-w-6xl mx-auto">
         <div class="flex flex-wrap justify-between items-end gap-4 mb-6">
           <header>
-            <h2 class="text-2xl font-bold mb-1">Mural de Revisões Espaçadas</h2>
-            <p class="text-sec text-sm">Revise o conteúdo em intervalos para memorizar até a prova.</p>
+            <h2 class="text-2xl font-bold mb-1">Painel de Pendências e Revisões</h2>
+            <p class="text-sec text-sm">Complete o que ficou faltando nas sessões parciais e revise o conteúdo em intervalos até a prova.</p>
           </header>
           <button onclick="abrirNovaRevisao()" class="bg-brand hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition text-sm"><i class="fa-solid fa-calendar-plus mr-2"></i> Nova revisão</button>
         </div>
@@ -488,7 +504,7 @@
             <table class="w-full text-sm">
               <thead>
                 <tr class="text-left text-xs text-sec uppercase border-b border-theme">
-                  <th class="py-2 pr-3">Data</th><th class="py-2 pr-3">Disciplina</th><th class="py-2 pr-3">Tópico</th><th class="py-2 pr-3">Tempo</th><th class="py-2">Modalidade</th>
+                  <th class="py-2 pr-3">Data</th><th class="py-2 pr-3">Disciplina</th><th class="py-2 pr-3">Tópico</th><th class="py-2 pr-3">Tempo</th><th class="py-2 pr-3">Modalidade</th><th class="py-2"><span class="sr-only">Editar</span></th>
                 </tr>
               </thead>
               <tbody id="hist-tabela"></tbody>
@@ -839,6 +855,62 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: EDITAR REGISTRO (Etapa 3) ================= -->
+  <div id="modal-registro" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center backdrop-blur-sm p-4">
+    <div class="bg-panel w-full max-w-lg rounded-2xl border border-theme shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+      <div class="p-5 border-b border-theme flex justify-between items-center bg-card">
+        <h3 id="reg-titulo" class="font-bold text-base">Editar registro de estudo</h3>
+        <button onclick="fecharEdicaoRegistro()" class="text-sec hover:text-main" aria-label="Fechar"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <div id="reg-passo-form" class="p-6 space-y-4 overflow-y-auto">
+        <p id="reg-origem" class="text-xs text-sec"></p>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="reg-data" class="block text-xs font-bold text-sec mb-1">Data</label>
+            <input type="date" id="reg-data" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
+          </div>
+          <div>
+            <label for="reg-min" class="block text-xs font-bold text-sec mb-1">Tempo (min)</label>
+            <input type="number" id="reg-min" min="1" max="1440" step="1" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
+          </div>
+        </div>
+        <div>
+          <label for="reg-disc" class="block text-xs font-bold text-sec mb-1">Disciplina</label>
+          <select id="reg-disc" onchange="popularTopicosRegistro()" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
+        </div>
+        <div>
+          <label for="reg-topico" class="block text-xs font-bold text-sec mb-1">Tópico / Subtópico</label>
+          <select id="reg-topico" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
+        </div>
+        <div>
+          <label for="reg-tipo" class="block text-xs font-bold text-sec mb-1">Modalidade</label>
+          <select id="reg-tipo" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
+            <option>Teoria</option><option>Leitura</option><option>Revisão</option><option>Simulado</option><option>Questões</option><option>Flashcards</option><option>Não informado</option>
+          </select>
+        </div>
+      </div>
+      <div id="reg-passo-resumo" class="hidden p-6 space-y-4 overflow-y-auto">
+        <p id="reg-resumo-titulo" class="text-sm text-main font-semibold">Confira o que vai mudar. Nada é gravado antes de você confirmar.</p>
+        <div id="reg-resumo"></div>
+      </div>
+      <div class="p-5 border-t border-theme flex justify-end gap-3 bg-card">
+        <button id="reg-btn-excluir" onclick="revisarExclusaoRegistro()" class="mr-auto px-4 py-2 rounded-lg text-xs font-bold text-red-400 hover-bg"><i class="fa-solid fa-trash mr-1"></i> Excluir registro</button>
+        <button id="reg-btn-cancelar" onclick="fecharEdicaoRegistro()" class="px-4 py-2 rounded-lg text-xs font-bold text-sec hover:text-main">Cancelar</button>
+        <button id="reg-btn-voltar" onclick="voltarEdicaoRegistro()" class="hidden px-4 py-2 rounded-lg text-xs font-bold text-sec hover:text-main">Voltar e corrigir</button>
+        <button id="reg-btn-revisar" onclick="revisarEdicaoRegistro()" class="px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white">Ver o que muda</button>
+        <button id="reg-btn-confirmar" onclick="confirmarEdicaoRegistro()" class="hidden px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white">Confirmar e recalcular</button>
+        <button id="reg-btn-confirmar-excluir" onclick="confirmarExclusaoRegistro()" class="hidden px-6 py-2 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-700 text-white">Confirmar exclusão</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= AVISO: CRONÔMETRO EM OUTRA ABA (Etapa 3) ================= -->
+  <div id="aviso-outra-aba" class="aviso-outra-aba hidden" role="alert">
+    <i class="fa-solid fa-clone"></i>
+    <p><b>O cronômetro está aberto em outra aba.</b> Use só uma aba para estudar, para não duplicar registros. As duas mostram o mesmo cronômetro e os mesmos dados.</p>
+    <button onclick="document.getElementById('aviso-outra-aba').classList.add('hidden')">Entendi</button>
+  </div>
+
   <!-- ================= AVISO: DADOS ILEGÍVEIS ================= -->
   <div id="aviso-dados-ilegiveis" class="hidden fixed inset-0 bg-black/85 z-[70] flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-md rounded-2xl border-2 border-red-500 shadow-2xl p-6 space-y-4">
@@ -874,6 +946,11 @@
             <i class="fa-solid fa-upload"></i> Selecionar arquivo e restaurar
             <input type="file" accept=".json" onchange="importarBackup(event)" class="hidden">
           </label>
+        </div>
+        <div id="backup-pre-etapa3" class="hidden bg-card p-4 rounded-xl border border-theme space-y-2">
+          <h4 class="text-xs font-bold uppercase text-main">3. Backup automático da atualização</h4>
+          <p class="text-[11px] text-sec">Cópia dos seus dados feita antes da atualização do tempo e dos registros (Etapa 3). Baixe se precisar voltar ao estado anterior; os prints ficam no navegador e não estão nela.</p>
+          <button onclick="baixarBackupPreEtapa3()" class="w-full py-2.5 rounded-lg bg-card border border-theme text-main font-bold text-xs hover-bg transition flex items-center justify-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Baixar backup automático</button>
         </div>
       </div>
     </div>
@@ -1154,7 +1231,9 @@
       id: r.id != null ? r.id : novoId(),
       discId: r.discId, nodeId: r.nodeId, dataAgendada: r.dataAgendada,
       status: r.status || 'programada', tipo: r.tipo || 'Revisão',
-      concluidaEm: r.concluidaEm || null
+      concluidaEm: r.concluidaEm || null,
+      // pendência de sessão parcial (Etapa 3): { sessaoId, planejadoMin, estudadoMin, faltamMin, data }
+      ...(r.pendencia ? { pendencia: r.pendencia } : {})
     };
   }
   function aplicarEstado(p) {
@@ -1174,12 +1253,108 @@
     cadernoErros = p.cadernoErros || [];
     cronograma = p.cronograma || { dias: [], diaAtual: 0, rodada: 1, historico: [] };
     preferencias = Object.assign({ duracaoPadrao: 50 }, p.preferencias || {});
+    versaoDados = Number(p.versaoDados) || 1;
+    migracaoEtapa3 = p.migracaoEtapa3 || null;
+    if (versaoDados >= VERSAO_DADOS) recalcularTemposDosRegistros();
   }
   function estadoAtual() {
     return {
       dados: meusDados, revisoes: minhasRevisoes, registrosEstudo, historicoDiario,
-      lembretes, planoDia, cadernoErros, cronograma, preferencias
+      lembretes, planoDia, cadernoErros, cronograma, preferencias,
+      versaoDados, ...(migracaoEtapa3 ? { migracaoEtapa3 } : {})
     };
+  }
+
+  // ---------- Etapa 3: registrosEstudo é a única fonte de tempo ----------
+  // node.tempo e historicoDiario são recalculados a partir dos registros (continuam gravados como cópia derivada).
+  const VERSAO_DADOS = 3;
+  const BACKUP_PRE_ETAPA3_KEY = 'central_backup_pre_etapa3';
+  let versaoDados = 1;
+  let migracaoEtapa3 = null;
+  function recalcularTemposDosRegistros() {
+    const porNo = {}, porDia = {};
+    registrosEstudo.forEach(r => {
+      const m = Number(r.minutos) || 0;
+      if (r.discId && r.topicoId) porNo[r.discId + '|' + r.topicoId] = (porNo[r.discId + '|' + r.topicoId] || 0) + m;
+      if (r.data) porDia[r.data] = (porDia[r.data] || 0) + m;
+    });
+    meusDados.forEach(d => percorrerNos(d.topicos, n => { n.tempo = porNo[d.id + '|' + n.id] || 0; }));
+    historicoDiario = porDia;
+  }
+  // Toda gravação de tempo passa por aqui
+  function registrarEstudo(r) {
+    registrosEstudo.push(r);
+    if (versaoDados >= VERSAO_DADOS) { recalcularTemposDosRegistros(); return; }
+    // Modo antigo (só se a migração não pôde rodar): mantém os totais gravados como antes
+    const { node } = getNodeRef(r.discId, r.topicoId);
+    if (node) node.tempo = (node.tempo || 0) + r.minutos;
+    historicoDiario[r.data] = (historicoDiario[r.data] || 0) + r.minutos;
+  }
+  // Registros de ajuste que preservam os totais antigos (tempo por tópico e minutos por dia) sem registro correspondente
+  function gerarAjustesMigracao() {
+    const usados = new Set(registrosEstudo.map(r => r.id));
+    const idUnico = () => { let id; do { id = novoId(); } while (usados.has(id)); usados.add(id); return id; };
+    const ajuste = (data, discId, topicoId, minutos) => ({ id: idUnico(), data, discId, topicoId, minutos, segundos: minutos * 60, tipo: 'Não informado', origem: 'migracao' });
+    const somaNo = {}, somaDia = {};
+    registrosEstudo.forEach(r => {
+      const m = Number(r.minutos) || 0;
+      if (r.discId && r.topicoId) somaNo[r.discId + '|' + r.topicoId] = (somaNo[r.discId + '|' + r.topicoId] || 0) + m;
+      if (r.data) somaDia[r.data] = (somaDia[r.data] || 0) + m;
+    });
+    const sobraDia = {};
+    Object.entries(historicoDiario || {}).forEach(([dia, min]) => {
+      const s = Math.round(Number(min) || 0) - (somaDia[dia] || 0);
+      if (s > 0) sobraDia[dia] = s;
+    });
+    const ajustes = [];
+    meusDados.forEach(d => percorrerNos(d.topicos, n => {
+      let falta = Math.round(Number(n.tempo) || 0) - (somaNo[d.id + '|' + n.id] || 0);
+      if (falta <= 0) return;
+      // usa primeiro os minutos "sobrando" nos dias (o dia do último estudo do tópico vem antes)
+      const dias = Object.keys(sobraDia).filter(k => sobraDia[k] > 0)
+        .sort((a, b) => (b === n.ultimaData) - (a === n.ultimaData) || b.localeCompare(a));
+      for (const dia of dias) {
+        if (falta <= 0) break;
+        const m = Math.min(falta, sobraDia[dia]);
+        ajustes.push(ajuste(dia, d.id, n.id, m));
+        sobraDia[dia] -= m; falta -= m;
+      }
+      if (falta > 0) ajustes.push(ajuste(n.ultimaData || n.dataConclusao || hojeISO(), d.id, n.id, falta));
+    }));
+    // minutos de dias sem tópico conhecido: registro sem tópico (mantém sequência e histórico)
+    Object.entries(sobraDia).forEach(([dia, m]) => { if (m > 0) ajustes.push(ajuste(dia, null, null, m)); });
+    return ajustes;
+  }
+  // Migração automática (uma vez): backup completo em central_backup_pre_etapa3, conversão e registro da versão
+  function migrarDadosEtapa3(bruto) {
+    if (gravacaoBloqueada || versaoDados >= VERSAO_DADOS) return false;
+    if (!bruto) { versaoDados = VERSAO_DADOS; return false; }   // primeiro uso: nada a converter
+    try {
+      if (!localStorage.getItem(BACKUP_PRE_ETAPA3_KEY)) {
+        localStorage.setItem(BACKUP_PRE_ETAPA3_KEY, JSON.stringify({
+          criadoEm: new Date().toISOString(), versaoOrigem: versaoDados,
+          central_estudos_jessica_v1: bruto,
+          central_cronometro_jessica_v1: localStorage.getItem(TIMER_KEY)
+        }));
+      }
+    } catch (e) {
+      alert('Não foi possível guardar o backup automático antes de atualizar seus dados (espaço do navegador cheio). Seus dados continuam como estavam. Faça um backup pelo botão Backup.');
+      return false;
+    }
+    const ajustes = gerarAjustesMigracao();
+    registrosEstudo.push(...ajustes);
+    versaoDados = VERSAO_DADOS;
+    migracaoEtapa3 = { em: new Date().toISOString(), versaoOrigem: Number(JSON.parse(bruto).versaoDados) || 1,
+      ajustesCriados: ajustes.length, minutosAjustados: ajustes.reduce((s, r) => s + r.minutos, 0) };
+    recalcularTemposDosRegistros();
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoAtual())); } catch (e) { /* salvarTudo tenta de novo */ }
+    return true;
+  }
+  function baixarBackupPreEtapa3() {
+    const b = localStorage.getItem(BACKUP_PRE_ETAPA3_KEY);
+    if (!b) { alert('Não há backup automático da Etapa 3 neste navegador.'); return; }
+    const { central_estudos_jessica_v1: dados } = JSON.parse(b);
+    baixarArquivo(dados, `backup_automatico_pre_etapa3_${hojeISO()}.json`);
   }
   // Se os dados salvos não puderem ser lidos, nada é gravado (protege o original).
   let gravacaoBloqueada = false;
@@ -1397,14 +1572,16 @@
     const blocoCron = sessoes.map((s, k) => {
       const d = meusDados.find(x => x.id === s.disc);
       const { node } = getNodeRef(s.disc, s.topicoId);
+      const parcial = s.feita && s.parcial;
       return `
-        <div class="flex items-center gap-3 p-3 rounded-lg border transition ${s.feita ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
+        <div class="flex items-center gap-3 p-3 rounded-lg border transition ${parcial ? 'sessao-parcial' : s.feita ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
           <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="w-4 h-4 accent-emerald-500 shrink-0">
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold truncate ${s.feita ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
+            <p class="text-sm font-semibold truncate ${s.feita && !parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
             <p class="text-[11px] text-sec truncate">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
           </div>
-          ${s.feita ? '<span class="text-xs font-bold text-brand">Feita</span>'
+          ${parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>`
+            : s.feita ? '<span class="text-xs font-bold text-brand">Feita</span>'
             : `<button onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>`}
         </div>`;
     }).join('');
@@ -1435,6 +1612,8 @@
     timerSessao = null;
     timerRevisaoId = null;
     timerAlarmeAtivo = false;
+    timerMetaPreparadaMin = null;
+    atualizarBotoesTimer();
     toggleFloatingTimer(true);
     if (b.discId) {
       document.getElementById('timer-disc').value = b.discId;
@@ -1680,6 +1859,7 @@
     const s = dia && dia.sessoes.find(x => x.id === sid);
     if (!s) return;
     s.feita = !s.feita;
+    delete s.parcial;   // marcar/desmarcar à mão deixa a sessão inteira (a pendência, se houver, continua no painel)
     if (diaIdx === cronograma.diaAtual && dia.sessoes.length && dia.sessoes.every(x => x.feita)) avancarDia();
     salvarTudo();
   }
@@ -1689,7 +1869,7 @@
       cronograma.historico.push({ rodada: cronograma.rodada, concluidaEm: hojeISO() });
       cronograma.rodada++;
       cronograma.diaAtual = 0;
-      cronograma.dias.forEach(d => d.sessoes.forEach(s => s.feita = false));
+      cronograma.dias.forEach(d => d.sessoes.forEach(s => { s.feita = false; delete s.parcial; }));
     }
   }
   function pularDia() {
@@ -1765,10 +1945,11 @@
     const sessoes = dia.sessoes.map((s, k) => {
       const d = meusDados.find(x => x.id === s.disc);
       return `
-        <div class="p-2.5 rounded-lg border border-theme bg-card ${s.feita ? 'sessao-concluida' : ''}">
+        <div class="p-2.5 rounded-lg border border-theme bg-card ${s.feita && s.parcial ? 'sessao-parcial' : s.feita ? 'sessao-concluida' : ''}">
           <div class="flex flex-wrap items-center gap-2">
             <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500">
-            <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
+            <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita && !s.parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
+            ${s.feita && s.parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : ''}
             <input type="number" min="5" value="${s.min}" onchange="editarMinSessao(${i}, ${s.id}, this.value)" class="w-20 bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none" title="Minutos">
             <span class="text-[11px] text-sec">min</span>
             <button onclick="moverSessao(${i}, ${s.id}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir"><i class="fa-solid fa-arrow-up"></i></button>
@@ -1880,6 +2061,9 @@
   let pomoPausaInicioMs = null;    // Date.now() do início da pausa em andamento
   let pomoTimeout = null;          // disparo agendado do fim do foco/pausa
   let pomoMostrarCustom = false;   // só interface: campos do Personalizado abertos
+  // Meta preparada antes de iniciar: duração da sessão do cronograma ou minutos que faltam na pendência
+  let timerMetaPreparadaMin = null;
+  function metaPreparadaOuPadrao() { return timerMetaPreparadaMin || lerDuracao(); }
 
   function segundosDecorridos() {
     const emAndamento = timerInicioMs ? Math.max(0, Date.now() - timerInicioMs) : 0;
@@ -1980,7 +2164,7 @@
     if (timerAcumuladoMs > 0) return 'pausado';
     return 'parado';
   }
-  function metaTimerSeg() { return (sessaoTimerEmCurso() ? timerDuracaoMin : lerDuracao()) * 60; }
+  function metaTimerSeg() { return (sessaoTimerEmCurso() ? timerDuracaoMin : metaPreparadaOuPadrao()) * 60; }
   function pausaDecorridaSeg() { return pomoPausaInicioMs ? Math.floor(Math.max(0, Date.now() - pomoPausaInicioMs) / 1000) : 0; }
   function textoFaseTimer(est) {
     const metaSeg = metaTimerSeg();
@@ -2054,7 +2238,7 @@
     document.getElementById('timer-pomo-pausa').value = +(pomoPausaSeg / 60).toFixed(2);
     // Zerado: pílula "Iniciar · N min" + ajuste; os controles circulares só aparecem com a sessão em curso
     const zeradoTimer = !emCurso;
-    const minMeta = lerDuracao();
+    const minMeta = metaPreparadaOuPadrao();
     document.getElementById('timer-iniciar-linha').classList.toggle('hidden', !zeradoTimer);
     document.getElementById('timer-ctrl').classList.toggle('hidden', zeradoTimer);
     document.getElementById('timer-meta-min').innerText = `· ${minMeta} min`;
@@ -2174,7 +2358,7 @@
     if (total > 0) r.sessoes.forEach(s => {
       const a = acc / total + folga, b = Math.max(a + 0.004, (acc + (s.min || 0)) / total - folga);
       let cor = 'var(--traco-pend)', w = 3;
-      if (s.feita) { cor = 'var(--traco-feito)'; w = 5; }
+      if (s.feita) { cor = s.parcial ? 'var(--traco-parcial)' : 'var(--traco-feito)'; w = 5; }
       else if (!proxMarcada) { cor = 'var(--traco-prox)'; w = 5; proxMarcada = true; }
       html += `<circle r="76" cx="100" cy="100" fill="none" stroke="${cor}" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${(b - a) * C2} ${C2}" stroke-dashoffset="${-a * C2}" transform="rotate(-90 100 100)"></circle>`;
       acc += s.min || 0;
@@ -2221,10 +2405,14 @@
   function fecharAjusteMinutos() { ajusteMinutosAberto = false; atualizarBotoesTimer(); }
   function ajustarMinutos(v) {
     if (sessaoTimerEmCurso()) return;
-    const novo = typeof v === 'string' ? parseInt(v.slice(1), 10) : lerDuracao() + v;
-    const inp = document.getElementById('timer-duracao');
-    inp.value = Math.max(1, Math.min(240, novo || 1));
-    inp.dispatchEvent(new Event('change'));
+    const novo = Math.max(1, Math.min(240, (typeof v === 'string' ? parseInt(v.slice(1), 10) : metaPreparadaOuPadrao() + v) || 1));
+    if (timerMetaPreparadaMin) {   // sessão/pendência preparada: ajusta só esta meta, sem mudar o padrão
+      timerMetaPreparadaMin = novo;
+    } else {
+      const inp = document.getElementById('timer-duracao');
+      inp.value = novo;
+      inp.dispatchEvent(new Event('change'));
+    }
     atualizarBotoesTimer();
   }
 
@@ -2278,6 +2466,12 @@
   }
   function cronometroOcupado() {
     if (timerInterval) { alert('O cronômetro está rodando. Pause ou salve antes de iniciar outra sessão.'); return true; }
+    // A pausa pertence à sessão ativa: com tempo pausado, outra sessão não começa (o tempo não se mistura)
+    if (sessaoTimerEmCurso()) {
+      toggleFloatingTimer(true);
+      alert(`Há uma sessão pausada com ${fmtRelogio(segundosDecorridos())} no cronômetro. A pausa pertence a essa sessão: salve ou zere antes de iniciar outra.`);
+      return true;
+    }
     return false;
   }
   function alternarIniciarParar() {
@@ -2304,6 +2498,7 @@
     timerAlarmeDisparado = false;
     timerSessao = null;
     timerRevisaoId = null;
+    timerMetaPreparadaMin = null;
     pomoFase = 'foco'; pomoCiclo = 1; pomoFimFocoSeg = pomoFocoSeg; pomoPausaInicioMs = null;
     setOrigemTimer('Cronômetro livre (sem alarme)');
     atualizarDisplayCronometro();
@@ -2466,8 +2661,8 @@
     garantirAudio();
     pedirPermissaoNotificacao();
     if (timerAcumuladoMs === 0) {   // início do zero (retomar após pausa mantém meta e alarme)
-      timerDuracaoMin = lerDuracao();
-      timerAlarmeAtivo = !!timerSessao;
+      timerDuracaoMin = metaPreparadaOuPadrao();
+      timerAlarmeAtivo = !!timerSessao || !!timerMetaPreparadaMin;
       timerAlarmeDisparado = false;
       pomoFase = 'foco'; pomoCiclo = 1; pomoFimFocoSeg = pomoFocoSeg; pomoPausaInicioMs = null;
     } else if (timerModo === 'pomodoro' && (pomoFase === 'fim_foco' || pomoFase === 'fim_pausa')) {
@@ -2530,6 +2725,43 @@
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && timerInterval) tickCronometro();
   });
+
+  // ---------- Etapa 3: duas abas (evento "storage") ----------
+  // A aba que abre diz "olá"; se outra responder, a nova aba avisa que o cronômetro já está aberto.
+  // Mudanças no cronômetro ou nos dados feitas na outra aba são carregadas aqui, para uma aba não apagar o que a outra gravou.
+  const ABAS_KEY = 'central_cronometro_abas';
+  const ABA_ID = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  function avisarAbas(msg) {
+    try { localStorage.setItem(ABAS_KEY, JSON.stringify({ ...msg, de: ABA_ID, t: Date.now() })); } catch (e) {}
+  }
+  function mostrarAvisoOutraAba() { document.getElementById('aviso-outra-aba').classList.remove('hidden'); }
+  function sincronizarTimerDeOutraAba() {
+    clearInterval(timerInterval); timerInterval = null;
+    clearTimeout(timerAlarmeTimeout); timerAlarmeTimeout = null;
+    clearTimeout(pomoTimeout); pomoTimeout = null;
+    timerInicioMs = null; timerAcumuladoMs = 0; timerSeconds = 0;
+    timerAlarmeAtivo = false; timerAlarmeDisparado = false;
+    timerSessao = null; timerRevisaoId = null; timerMetaPreparadaMin = null;
+    pomoFase = 'foco'; pomoCiclo = 1; pomoPausaInicioMs = null;
+    document.getElementById('timer-fab-badge').classList.add('hidden');
+    document.getElementById('modal-fim-sessao').classList.add('hidden');
+    document.getElementById('timer-origem').innerText = 'Cronômetro livre (sem alarme)';
+    restaurarEstadoTimer();   // só lê o estado gravado pela outra aba
+  }
+  window.addEventListener('storage', e => {
+    if (e.storageArea !== localStorage) return;
+    if (e.key === ABAS_KEY && e.newValue) {
+      let m = null; try { m = JSON.parse(e.newValue); } catch (err) { return; }
+      if (!m || m.de === ABA_ID) return;
+      if (m.tipo === 'ola') avisarAbas({ tipo: 'presente', para: m.de });
+      else if (m.tipo === 'presente' && m.para === ABA_ID) mostrarAvisoOutraAba();
+    } else if (e.key === TIMER_KEY) {
+      sincronizarTimerDeOutraAba();
+      mostrarAvisoOutraAba();
+    } else if (e.key === STORAGE_KEY && e.newValue && !gravacaoBloqueada) {
+      try { aplicarEstado(JSON.parse(e.newValue)); atualizarTudoUI(); } catch (err) { /* mantém o estado desta aba */ }
+    }
+  });
   function fimSessaoSalvar() {
     document.getElementById('modal-fim-sessao').classList.add('hidden');
     salvarCronometro();
@@ -2544,8 +2776,10 @@
     document.getElementById('timer-disc').value = s.disc;
     popularTopicosTimer();
     if (s.topicoId) document.getElementById('timer-topico').value = s.topicoId;
-    setOrigemTimer(`Sessão do cronograma · alarme em ${lerDuracao()} min`);
-    timerDuracaoMin = lerDuracao();
+    // a meta e o alarme vêm da duração planejada da própria sessão
+    timerMetaPreparadaMin = s.min;
+    setOrigemTimer(`Sessão do cronograma · alarme em ${s.min} min`);
+    timerDuracaoMin = s.min;
     timerAlarmeAtivo = true;
     timerAlarmeDisparado = false;
     iniciarCronometro();
@@ -2556,12 +2790,15 @@
     timerSessao = null;
     timerRevisaoId = r.id;
     timerAlarmeAtivo = false;
+    // pendência: alarme nos minutos que faltam; revisão: sem alarme
+    timerMetaPreparadaMin = r.pendencia ? r.pendencia.faltamMin : null;
     toggleFloatingTimer(true);
     document.getElementById('timer-disc').value = r.discId;
     popularTopicosTimer();
     document.getElementById('timer-topico').value = r.nodeId;
-    document.getElementById('timer-tipo').value = r.tipo;
-    setOrigemTimer(`Revisão · ${r.tipo} · sem alarme`);
+    if (!r.pendencia) document.getElementById('timer-tipo').value = r.tipo;
+    setOrigemTimer(r.pendencia ? `Pendência · faltam ${r.pendencia.faltamMin} min · alarme em ${r.pendencia.faltamMin} min` : `Revisão · ${r.tipo} · sem alarme`);
+    atualizarBotoesTimer();   // pílula "Iniciar · N min" com a meta preparada
     salvarEstadoTimer();
   }
   function salvarCronometro() {
@@ -2576,27 +2813,48 @@
     const minutos = Math.max(1, Math.round(segundos / 60));
     const tipo = document.getElementById('timer-tipo').value;
     const hoje = hojeISO();
-    node.tempo = (node.tempo || 0) + minutos;
     node.ultimaData = hoje;
-    historicoDiario[hoje] = (historicoDiario[hoje] || 0) + minutos;
-    registrosEstudo.push({
+    registrarEstudo({
       id: novoId(), data: hoje, discId: dId, topicoId: nodeId,
       minutos, segundos, tipo, origem: timerSessao ? 'cronograma' : (timerRevisaoId ? 'revisao' : 'cronometro')
     });
 
     const sessao = timerSessao, revId = timerRevisaoId;
-    descartarCronometro();   // zera o cronômetro e limpa central_cronometro_jessica_v1
+    descartarCronometro();   // zera o cronômetro (a pausa ficou fora do tempo gravado)
 
     if (sessao) {
       const dia = cronograma.dias[sessao.diaIdx];
       const s = dia && dia.sessoes.find(x => x.id === sessao.sid);
-      if (s && !s.feita && confirm('Marcar esta sessão do cronograma como concluída?')) {
-        alternarSessao(sessao.diaIdx, sessao.sid);
+      if (s && !s.feita) {
+        if (minutos < s.min) {
+          // Sessão abaixo da meta: parcialmente concluída + pendência real no painel
+          if (confirm(`Esta sessão era de ${s.min} min e você estudou ${minutos} min. Deseja marcar como parcialmente concluída?`)) {
+            marcarSessaoParcial(sessao.diaIdx, s, minutos, dId, nodeId);
+          }
+        } else if (confirm('Marcar esta sessão do cronograma como concluída?')) {
+          alternarSessao(sessao.diaIdx, sessao.sid);
+        }
       }
     }
     salvarTudo();
     alert(`Estudo de ${minutos} min registrado em "${node.nome}".`);
-    if (revId) perguntarIntervaloRev(revId);
+    if (revId) {
+      const r = minhasRevisoes.find(x => String(x.id) === String(revId));
+      if (r && r.pendencia) { if (r.status !== 'concluida' && confirm('Marcar esta pendência como resolvida?')) resolverPendencia(r.id); }
+      else perguntarIntervaloRev(revId);
+    }
+  }
+  // Sessão parcial: a sessão fica "parcialmente concluída" e a lacuna vira pendência no Painel de Pendências e Revisões
+  function marcarSessaoParcial(diaIdx, s, estudadoMin, discId, topicoId) {
+    const hoje = hojeISO();
+    s.feita = true;
+    s.parcial = { estudadoMin, data: hoje };
+    minhasRevisoes.push(normalizarRevisao({
+      discId, nodeId: topicoId, tipo: 'Pendência', dataAgendada: hoje, status: 'programada',
+      pendencia: { sessaoId: s.id, planejadoMin: s.min, estudadoMin, faltamMin: s.min - estudadoMin, data: hoje }
+    }));
+    const dia = cronograma.dias[diaIdx];
+    if (diaIdx === cronograma.diaAtual && dia.sessoes.length && dia.sessoes.every(x => x.feita)) avancarDia();
   }
   // Revisão estudada no cronômetro: pergunta o intervalo da próxima (+7, +15, +30)
   let revIntervaloId = null;
@@ -2656,13 +2914,11 @@
     const marcar = document.getElementById('modal-marcar-concluido').checked;
     if (min <= 0 && ac <= 0 && tot <= 0 && !marcar) { alert('Informe tempo, questões ou marque como concluído.'); return; }
     const hoje = hojeISO();
-    node.tempo = (node.tempo || 0) + min;
     node.acertos = (node.acertos || 0) + ac;
     node.totais = (node.totais || 0) + tot;
     if (min > 0 || tot > 0 || marcar) node.ultimaData = hoje;
     if (min > 0) {
-      historicoDiario[hoje] = (historicoDiario[hoje] || 0) + min;
-      registrosEstudo.push({ id: novoId(), data: hoje, discId: dId, topicoId: nodeId, minutos: min, segundos: min * 60, tipo, origem: 'manual' });
+      registrarEstudo({ id: novoId(), data: hoje, discId: dId, topicoId: nodeId, minutos: min, segundos: min * 60, tipo, origem: 'manual' });
     }
     if (marcar) marcarNoRecursivo(node, true, hoje);
     closeModalEstudo();
@@ -2683,19 +2939,22 @@
   function setFiltroRev(f) { revFiltro = f; renderizarRevisoes(); }
   function renderizarRevisoes() {
     const hoje = hojeISO();
-    const cont = {
-      programadas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'programada').length,
-      atrasadas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'atrasada').length,
-      ignoradas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'ignorada').length,
-      concluidas: minhasRevisoes.filter(r => statusEfetivoRev(r) === 'concluida').length
+    // Pendências abertas (sessões parciais) têm aba própria; não se repetem em Programadas/Atrasadas
+    const pendAberta = r => !!r.pendencia && ['programada', 'atrasada'].includes(statusEfetivoRev(r));
+    const naAba = {
+      pendencias: r => pendAberta(r),
+      programadas: r => !r.pendencia && statusEfetivoRev(r) === 'programada',
+      atrasadas: r => !r.pendencia && statusEfetivoRev(r) === 'atrasada',
+      ignoradas: r => statusEfetivoRev(r) === 'ignorada',
+      concluidas: r => statusEfetivoRev(r) === 'concluida'
     };
-    const abas = [['programadas', 'Programadas', 'text-blue-400'], ['atrasadas', 'Atrasadas', 'text-red-400'],
+    const cont = Object.fromEntries(Object.entries(naAba).map(([k, f]) => [k, minhasRevisoes.filter(f).length]));
+    const abas = [['pendencias', 'Pendências', 'selo-cont-pend'], ['programadas', 'Programadas', 'text-blue-400'], ['atrasadas', 'Atrasadas', 'text-red-400'],
                   ['ignoradas', 'Ignoradas', 'text-mut'], ['concluidas', 'Concluídas', 'text-brand']];
     document.getElementById('rev-filtros').innerHTML = abas.map(([k, t, c]) =>
-      `<button onclick="setFiltroRev('${k}')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${revFiltro === k ? 'bg-card border-brand text-brand' : 'bg-panel border-theme text-sec hover-bg'}">${t} <span class="${c}">(${cont[k]})</span></button>`
+      `<button onclick="setFiltroRev('${k}')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${revFiltro === k ? 'bg-card border-brand text-brand' : 'bg-panel border-theme text-sec hover-bg'}">${t} <span class="${c}" ${c === 'selo-cont-pend' ? 'style="color:var(--t-pausado)"' : ''}>(${cont[k]})</span></button>`
     ).join('');
-    const alvo = { programadas: 'programada', atrasadas: 'atrasada', ignoradas: 'ignorada', concluidas: 'concluida' }[revFiltro];
-    let lista = minhasRevisoes.filter(r => statusEfetivoRev(r) === alvo)
+    let lista = minhasRevisoes.filter(naAba[revFiltro] || naAba.programadas)
       .sort((a, b) => (a.dataAgendada || '').localeCompare(b.dataAgendada || ''));
     if (revFiltro === 'concluidas') lista.reverse();
     const el = document.getElementById('rev-lista');
@@ -2711,8 +2970,16 @@
         : diff < 0 ? `Atrasada ${Math.abs(diff)} dia(s) · ${formatarDataBR(r.dataAgendada)}`
         : diff === 0 ? 'Para hoje'
         : `Em ${diff} dia(s) · ${formatarDataBR(r.dataAgendada)}`;
-      const borda = st === 'atrasada' ? 'border-l-red-500' : st === 'concluida' ? 'border-l-emerald-500' : st === 'ignorada' ? 'border-l-slate-500' : 'border-l-blue-500';
-      const acoes = (st === 'concluida' || st === 'ignorada') ? '' : `
+      const borda = st === 'atrasada' ? 'border-l-red-500' : st === 'concluida' ? 'border-l-emerald-500' : st === 'ignorada' ? 'border-l-slate-500' : r.pendencia ? 'border-l-amber-500' : 'border-l-blue-500';
+      const p = r.pendencia;
+      const detalhe = p ? `<p class="text-[11px] text-sec mt-1">Sessão de ${p.planejadoMin} min em ${formatarDataBR(p.data)}: estudou ${p.estudadoMin} min.</p>` : '';
+      const acoes = (st === 'concluida' || st === 'ignorada') ? '' : p ? `
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          <button onclick="revisarAgora('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold"><i class="fa-solid fa-stopwatch mr-1"></i>Estudar ${p.faltamMin} min agora</button>
+          <button onclick="resolverPendencia('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-brand hover:opacity-90 text-white text-[11px] font-bold">Resolver</button>
+          <button onclick="abrirReagendar('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-card border border-theme text-[11px] font-bold">Reagendar</button>
+          <button onclick="ignorarRev('${r.id}')" class="px-2.5 py-1.5 rounded-md text-[11px] font-bold text-sec hover-bg">Ignorar</button>
+        </div>` : `
         <div class="flex flex-wrap gap-1.5 mt-3">
           <button onclick="revisarAgora('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold"><i class="fa-solid fa-stopwatch mr-1"></i>Revisar agora</button>
           <button onclick="concluirRev('${r.id}', 7)" class="px-2.5 py-1.5 rounded-md bg-brand hover:opacity-90 text-white text-[11px] font-bold">Concluir +7d</button>
@@ -2728,8 +2995,10 @@
               <p class="text-xs font-bold text-main">${txt}</p>
               <p class="text-[11px] text-sec font-bold uppercase mt-1">${esc(disc ? disc.nome : '—')}</p>
               <p class="text-sm font-medium text-main mt-0.5">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${esc(node ? node.nome : 'Tópico removido')}</p>
+              ${detalhe}
             </div>
-            <span class="shrink-0 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-card border border-theme text-sec">${esc(r.tipo)}</span>
+            ${p ? `<span class="selo-pendencia shrink-0">Pendência · faltam ${p.faltamMin} min</span>`
+              : `<span class="shrink-0 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-card border border-theme text-sec">${esc(r.tipo)}</span>`}
           </div>
           ${acoes}
         </div>`;
@@ -2742,6 +3011,14 @@
     r.concluidaEm = hojeISO();
     const prox = new Date(); prox.setDate(prox.getDate() + dias);
     minhasRevisoes.push(normalizarRevisao({ discId: r.discId, nodeId: r.nodeId, tipo: r.tipo, dataAgendada: isoLocal(prox), status: 'programada' }));
+    salvarTudo();
+  }
+  // Pendência resolvida: sai da aba Pendências (não gera revisão seguinte)
+  function resolverPendencia(id) {
+    const r = minhasRevisoes.find(x => String(x.id) === String(id));
+    if (!r || !r.pendencia) return;
+    r.status = 'concluida';
+    r.concluidaEm = hojeISO();
     salvarTudo();
   }
   function ignorarRev(id) {
@@ -2759,7 +3036,8 @@
     document.getElementById('rev-disc').disabled = true;
     popularTopicosRev(r.nodeId);
     document.getElementById('rev-topico').disabled = true;
-    document.getElementById('rev-tipo').value = r.tipo;
+    document.getElementById('rev-tipo').disabled = !!r.pendencia;   // pendência mantém o tipo
+    if (!r.pendencia) document.getElementById('rev-tipo').value = r.tipo;
     document.getElementById('rev-data').value = r.dataAgendada >= hojeISO() ? r.dataAgendada : hojeISO();
     document.getElementById('modal-rev').classList.remove('hidden');
   }
@@ -2770,6 +3048,7 @@
     document.getElementById('rev-topico').disabled = false;
     document.getElementById('rev-disc').innerHTML = optionsDisciplinas('', '— disciplina —');
     popularTopicosRev();
+    document.getElementById('rev-tipo').disabled = false;
     document.getElementById('rev-tipo').value = 'Revisão';
     document.getElementById('rev-data').value = hojeISO();
     document.getElementById('modal-rev').classList.remove('hidden');
@@ -2792,7 +3071,7 @@
       minhasRevisoes.push(normalizarRevisao({ discId, nodeId, tipo, dataAgendada: data, status: 'programada' }));
     } else if (revEdicao) {
       const r = minhasRevisoes.find(x => String(x.id) === String(revEdicao.id));
-      if (r) { r.dataAgendada = data; r.tipo = tipo; r.status = 'programada'; }
+      if (r) { r.dataAgendada = data; if (!r.pendencia) r.tipo = tipo; r.status = 'programada'; }
     }
     fecharModalRev();
     salvarTudo();
@@ -2964,12 +3243,150 @@
               <td class="py-2 pr-3">${esc(d ? d.nome : '—')}</td>
               <td class="py-2 pr-3">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${node ? esc(node.nome) : '—'}</td>
               <td class="py-2 pr-3 whitespace-nowrap">${formatarMinutos(r.minutos)}</td>
-              <td class="py-2">${esc(r.tipo || 'Não informado')}</td>
+              <td class="py-2 pr-3">${esc(r.tipo || 'Não informado')}${r.origem === 'migracao' ? '<span class="block text-[11px] text-sec">ajuste da migração</span>' : ''}${r.editadoEm ? '<span class="block text-[11px] text-sec">editado</span>' : ''}</td>
+              <td class="py-2 text-right"><button onclick="abrirEdicaoRegistro('${r.id}')" class="w-8 h-8 rounded-md text-sec hover:text-brand hover-bg" title="Editar registro" aria-label="Editar registro de ${formatarDataBR(r.data)}"><i class="fa-solid fa-pen"></i></button></td>
             </tr>`;
         }).join('')
-      : `<tr><td colspan="5" class="py-6 text-center text-mut italic">Nenhum registro neste filtro.</td></tr>`;
+      : `<tr><td colspan="6" class="py-6 text-center text-mut italic">Nenhum registro neste filtro.</td></tr>`;
     document.getElementById('hist-aviso').innerText = ordenados.length > 300
       ? 'Mostrando os 300 registros mais recentes. Use os filtros para refinar.' : '';
+  }
+
+  // ---------- Etapa 3: edição de registro com resumo antes × depois ----------
+  let registroEdicao = null;   // { id, semTopico, novo }
+  function abrirEdicaoRegistro(id) {
+    const r = registrosEstudo.find(x => String(x.id) === String(id));
+    if (!r) return;
+    if (versaoDados < VERSAO_DADOS) { alert('A edição de registros fica disponível depois que seus dados forem atualizados para a nova versão.'); return; }
+    registroEdicao = { id: r.id, semTopico: !r.topicoId, novo: null };
+    const origens = { cronometro: 'cronômetro', cronograma: 'sessão do cronograma', revisao: 'revisão', manual: 'registro manual', migracao: 'ajuste da migração' };
+    document.getElementById('reg-origem').innerText = `Origem: ${origens[r.origem] || r.origem || 'não informada'}${r.editadoEm ? ' · já editado antes' : ''}`;
+    document.getElementById('reg-data').value = r.data;
+    document.getElementById('reg-min').value = r.minutos;
+    document.getElementById('reg-disc').innerHTML = optionsDisciplinas(r.discId || '', registroEdicao.semTopico ? '— sem disciplina —' : '— disciplina —');
+    popularTopicosRegistro(r.topicoId || '');
+    const tipo = document.getElementById('reg-tipo');
+    tipo.value = r.tipo || 'Não informado';
+    if (tipo.value !== (r.tipo || 'Não informado')) tipo.value = 'Não informado';
+    mostrarPassoRegistro('form');
+    document.getElementById('modal-registro').classList.remove('hidden');
+  }
+  function popularTopicosRegistro(sel = '') {
+    const disc = document.getElementById('reg-disc').value;
+    document.getElementById('reg-topico').innerHTML = optionsTopicos(disc, sel, registroEdicao && registroEdicao.semTopico ? '— sem tópico —' : '— escolha o tópico —');
+  }
+  // passo: 'form' | 'resumo' (edição) | 'excluir' (exclusão)
+  function mostrarPassoRegistro(passo) {
+    const form = passo === 'form';
+    document.getElementById('reg-passo-form').classList.toggle('hidden', !form);
+    document.getElementById('reg-passo-resumo').classList.toggle('hidden', form);
+    document.getElementById('reg-btn-revisar').classList.toggle('hidden', !form);
+    document.getElementById('reg-btn-excluir').classList.toggle('hidden', !form);
+    document.getElementById('reg-btn-voltar').classList.toggle('hidden', form);
+    document.getElementById('reg-btn-confirmar').classList.toggle('hidden', passo !== 'resumo');
+    document.getElementById('reg-btn-confirmar-excluir').classList.toggle('hidden', passo !== 'excluir');
+    document.getElementById('reg-resumo-titulo').innerText = passo === 'excluir'
+      ? 'Este registro será excluído e os totais abaixo serão recalculados. Nada é apagado antes de você confirmar.'
+      : 'Confira o que vai mudar. Nada é gravado antes de você confirmar.';
+  }
+  // Auxiliares do resumo antes × depois (edição e exclusão)
+  const nomeDiscReg = id => { const d = meusDados.find(x => x.id === id); return d ? d.nome : '—'; };
+  const nomeTopReg = (dId, tId) => { const { node } = getNodeRef(dId, tId); return node ? node.nome : '—'; };
+  const somaNoReg = (lista, dId, tId) => lista.filter(x => x.discId === dId && x.topicoId === tId).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
+  const somaDiaReg = (lista, dia) => lista.filter(x => x.data === dia).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
+  function efeitosRegistro(nos, dias, depois) {
+    const ef = [];
+    [...new Map(nos.filter(([d, t]) => d && t).map(n => [n.join('|'), n])).values()].forEach(([d, t]) =>
+      ef.push([`Tempo do tópico "${nomeTopReg(d, t)}"`, formatarMinutos(somaNoReg(registrosEstudo, d, t)), formatarMinutos(somaNoReg(depois, d, t))]));
+    [...new Set(dias)].forEach(dia =>
+      ef.push([`Estudo do dia ${formatarDataBR(dia)}`, formatarMinutos(somaDiaReg(registrosEstudo, dia)), formatarMinutos(somaDiaReg(depois, dia))]));
+    return ef;
+  }
+  function tabelaResumoReg(titulo, linhas) {
+    return `
+      <p class="text-xs font-bold uppercase tracking-wider text-sec mb-2">${titulo}</p>
+      <div class="overflow-x-auto mb-4"><table class="w-full text-sm">
+        <thead><tr class="text-left text-[11px] text-sec uppercase"><th class="py-1 pr-3">Item</th><th class="py-1 pr-3">Antes</th><th class="py-1">Depois</th></tr></thead>
+        <tbody>${linhas.map(([c, a, d]) => `<tr class="border-t border-theme"><td class="py-1.5 pr-3 text-sec">${esc(c)}</td><td class="py-1.5 pr-3">${esc(a)}</td><td class="py-1.5 font-semibold ${a !== d ? 'text-brand' : ''}">${esc(d)}</td></tr>`).join('')}</tbody>
+      </table></div>`;
+  }
+  function fecharEdicaoRegistro() {
+    document.getElementById('modal-registro').classList.add('hidden');
+    registroEdicao = null;
+  }
+  function voltarEdicaoRegistro() { if (registroEdicao) registroEdicao.excluir = false; mostrarPassoRegistro('form'); }
+  function lerFormRegistro() {
+    const data = document.getElementById('reg-data').value;
+    const minutos = parseInt(document.getElementById('reg-min').value, 10);
+    const discId = document.getElementById('reg-disc').value || null;
+    const topicoId = document.getElementById('reg-topico').value || null;
+    const tipo = document.getElementById('reg-tipo').value;
+    if (!data) { alert('Informe a data do registro.'); return null; }
+    if (!(minutos >= 1 && minutos <= 1440)) { alert('O tempo precisa estar entre 1 e 1440 minutos.'); return null; }
+    if (topicoId && !getNodeRef(discId, topicoId).node) { alert('Escolha um tópico da disciplina selecionada.'); return null; }
+    if (!registroEdicao.semTopico && (!discId || !topicoId)) { alert('Escolha a disciplina e o tópico.'); return null; }
+    if (discId && !topicoId) { alert('Escolha o tópico da disciplina, ou deixe os dois em branco.'); return null; }
+    return { data, minutos, discId, topicoId, tipo };
+  }
+  function revisarEdicaoRegistro() {
+    const r = registrosEstudo.find(x => String(x.id) === String(registroEdicao.id));
+    const novo = r && lerFormRegistro();
+    if (!novo) return;
+    const campos = [
+      ['Data', formatarDataBR(r.data), formatarDataBR(novo.data)],
+      ['Tempo', formatarMinutos(r.minutos), formatarMinutos(novo.minutos)],
+      ['Disciplina', nomeDiscReg(r.discId), nomeDiscReg(novo.discId)],
+      ['Tópico', nomeTopReg(r.discId, r.topicoId), nomeTopReg(novo.discId, novo.topicoId)],
+      ['Modalidade', r.tipo || 'Não informado', novo.tipo]
+    ].filter(([, a, d]) => a !== d);
+    if (!campos.length) { alert('Nada foi alterado.'); return; }
+    // Simula os totais recalculados (tópicos e dias afetados)
+    const depois = registrosEstudo.map(x => x === r ? { ...x, ...novo } : x);
+    const efeitos = efeitosRegistro([[r.discId, r.topicoId], [novo.discId, novo.topicoId]], [r.data, novo.data], depois);
+    document.getElementById('reg-resumo').innerHTML = tabelaResumoReg('Registro', campos) + tabelaResumoReg('Totais que serão recalculados', efeitos);
+    registroEdicao.novo = novo;
+    mostrarPassoRegistro('resumo');
+  }
+  // Exclusão: mostra o registro e os totais antes × depois; só apaga depois de "Confirmar exclusão"
+  function revisarExclusaoRegistro() {
+    const r = registroEdicao && registrosEstudo.find(x => String(x.id) === String(registroEdicao.id));
+    if (!r) return;
+    const excluido = '— (excluído)';
+    const campos = [
+      ['Data', formatarDataBR(r.data), excluido],
+      ['Tempo', formatarMinutos(r.minutos), excluido],
+      ['Disciplina', nomeDiscReg(r.discId), excluido],
+      ['Tópico', nomeTopReg(r.discId, r.topicoId), excluido],
+      ['Modalidade', r.tipo || 'Não informado', excluido]
+    ];
+    const depois = registrosEstudo.filter(x => x !== r);
+    const efeitos = efeitosRegistro([[r.discId, r.topicoId]], [r.data], depois);
+    document.getElementById('reg-resumo').innerHTML = tabelaResumoReg('Registro que será excluído', campos) + tabelaResumoReg('Totais que serão recalculados', efeitos);
+    registroEdicao.novo = null;
+    registroEdicao.excluir = true;
+    mostrarPassoRegistro('excluir');
+  }
+  function confirmarExclusaoRegistro() {
+    if (!registroEdicao || !registroEdicao.excluir) return;
+    const id = registroEdicao.id;
+    registrosEstudo = registrosEstudo.filter(x => String(x.id) !== String(id));
+    recalcularTemposDosRegistros();   // só aqui, depois da confirmação
+    fecharEdicaoRegistro();
+    salvarTudo();
+  }
+  function confirmarEdicaoRegistro() {
+    if (!registroEdicao || !registroEdicao.novo) return;
+    const r = registrosEstudo.find(x => String(x.id) === String(registroEdicao.id));
+    if (!r) { fecharEdicaoRegistro(); return; }
+    const novo = registroEdicao.novo;
+    const segundos = novo.minutos !== r.minutos ? novo.minutos * 60 : r.segundos;
+    Object.assign(r, novo, { editadoEm: new Date().toISOString() });
+    if (segundos != null) r.segundos = segundos;
+    const { node } = getNodeRef(novo.discId, novo.topicoId);
+    if (node && (!node.ultimaData || novo.data > node.ultimaData)) node.ultimaData = novo.data;
+    recalcularTemposDosRegistros();   // só aqui, depois da confirmação
+    fecharEdicaoRegistro();
+    salvarTudo();
   }
 
   // =====================================================================
@@ -3290,7 +3707,11 @@
   // =====================================================================
   // 15. BACKUP
   // =====================================================================
-  function abrirModalBackup() { document.getElementById('modal-backup').classList.remove('hidden'); }
+  function abrirModalBackup() {
+    let temPre = false; try { temPre = !!localStorage.getItem(BACKUP_PRE_ETAPA3_KEY); } catch (e) {}
+    document.getElementById('backup-pre-etapa3').classList.toggle('hidden', !temPre);
+    document.getElementById('modal-backup').classList.remove('hidden');
+  }
   function fecharModalBackup() { document.getElementById('modal-backup').classList.add('hidden'); }
   async function exportarBackup(sufixo = '') {
     const imagens = {};
@@ -3331,6 +3752,8 @@
       gravacaoBloqueada = false;
       dadosBrutosIlegiveis = null;
       document.getElementById('aviso-dados-ilegiveis').classList.add('hidden');
+      // backup de versão antiga: converte para a Etapa 3 (sem as imagens no backup automático, que ficam no IndexedDB)
+      if (versaoDados < VERSAO_DADOS) migrarDadosEtapa3(JSON.stringify({ ...parsed, imagens: undefined }));
       salvarTudo();
       fecharModalBackup();
       alert('Backup restaurado com sucesso!');
@@ -3360,6 +3783,7 @@
       aplicarEstado({});
       document.getElementById('aviso-dados-ilegiveis').classList.remove('hidden');
     }
+    migrarDadosEtapa3(bruto);   // Etapa 3: roda uma única vez (backup em central_backup_pre_etapa3 antes)
     meusDados.forEach(d => expandedNodes.add('disc_' + d.id));
     document.getElementById('timer-duracao').value = preferencias.duracaoPadrao;
     popularSelects();
@@ -3370,6 +3794,7 @@
     navigate('dashboard');
     restaurarEstadoTimer();
     atualizarAvisoNotificacao();
+    avisarAbas({ tipo: 'ola' });   // se o cronômetro já estiver aberto em outra aba, ela responde
   }
 
   iniciarApp();
