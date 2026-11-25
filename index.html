@@ -67,8 +67,14 @@
     :root { --crono-topo: #222835; --c-foco: #10b981; --c-parar: #ef4444; --c-pausado: #f59e0b; --c-pausa: #38bdf8; --c-alarme: #f97316;
             --c-pausa-fg: #06222f;
             /* texto dos selos de estado: contraste mínimo 4,5:1 sobre o fundo do selo */
-            --t-foco: #10b981; --t-pausado: #f59e0b; --t-pausa: #38bdf8; --t-alarme: #fb923c; }
+            --t-foco: #10b981; --t-pausado: #f59e0b; --t-pausa: #38bdf8; --t-alarme: #fb923c;
+            /* botões verdes do cronômetro (texto 5,97:1) e traços das sessões do dia (3:1 ou mais) */
+            --btn-iniciar-bg: var(--brand); --btn-iniciar-fg: #022c22;
+            --traco-feito: var(--brand); --traco-prox: #cfd5dc; --traco-pend: var(--text-muted); }
     body.light-mode { --crono-topo: #eef2f7; --c-pausa: #0369a1; --c-pausa-fg: #ffffff;
+            --c-foco: #059669; --c-alarme: #c2410c;
+            --btn-iniciar-bg: var(--brand-hover); --btn-iniciar-fg: #ffffff;
+            --traco-feito: var(--brand); --traco-prox: #334155; --traco-pend: var(--text-muted);
             --t-foco: #065f46; --t-pausado: #92400e; --t-pausa: #0369a1; --t-alarme: #9a3412; }
     .crono { background: linear-gradient(180deg, var(--crono-topo) 0%, var(--bg-panel) 42%); border: 1px solid var(--border-color); border-radius: 28px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 48px rgba(0,0,0,.35); }
     .crono .hidden { display: none !important; }
@@ -87,7 +93,7 @@
     .crono-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 600; color: var(--text-secondary); transition: background .2s ease, color .2s ease; }
     .crono-chip > i { display: none; font-size: 9px; }
     .crono-chip small { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .75; }
-    .crono-chip.on { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .crono-chip.on { border-color: var(--btn-iniciar-bg); background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
     .crono-chip.on > i { display: inline; }
     .crono-custom { width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px; }
     .crono-custom input { width: 52px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 3px 6px; color: var(--text-primary); outline: none; }
@@ -98,14 +104,17 @@
     .crono-anel .arco { stroke-linecap: round; transition: stroke-dasharray .45s ease, stroke .3s ease; }
     .crono-centro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; }
     .crono-tempo { font-family: 'Inter', system-ui, sans-serif; font-size: 42px; font-weight: 600; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--text-primary); }
-    .crono-de { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    .crono-tempo.dia { font-size: 34px; }
+    .crono-mini { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-secondary); }
+    .crono-de { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
     .crono-fase { align-self: center; display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-top: -4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .crono-origem { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: -6px; }
+    .crono-origem { text-align: center; font-size: 11px; color: var(--text-secondary); margin-top: -6px; }
+    .crono-origem b { color: var(--text-primary); font-weight: 600; }
     .crono-banner { display: grid; gap: 8px; border-radius: 16px; padding: 10px 12px; font-size: 12px; color: var(--text-primary); }
     .crono-banner .acts { display: flex; gap: 8px; }
     .crono-banner .acts button { flex: 1; padding: 8px; border-radius: 12px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
     .crono-banner .b-pausa { background: var(--c-pausa); color: var(--c-pausa-fg); }
-    .crono-banner .b-foco { background: var(--c-foco); color: #fff; }
+    .crono-banner .b-foco { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
     .crono-banner .b-neutro { background: var(--bg-hover); color: var(--text-primary); }
     .crono-campos { display: grid; gap: 8px; }
     .crono-campo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); transition: border-color .2s ease; }
@@ -129,14 +138,32 @@
     .crono-bt { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-hover); color: var(--text-primary); font-size: 17px; transition: transform .15s ease, background .2s ease, box-shadow .2s ease; }
     .crono-bt:not(:disabled):hover { transform: scale(1.06); }
     .crono-bt:disabled { opacity: .35; cursor: default; }
-    .crono-bt.crono-pri { width: 72px; height: 72px; font-size: 24px; background: var(--c-foco); color: #fff; box-shadow: 0 0 0 8px rgba(16,185,129,.16); }
-    .crono-bt.crono-pri.parar { background: var(--c-parar); box-shadow: 0 0 0 8px rgba(239,68,68,.16); }
+    .crono-bt.crono-pri { width: 72px; height: 72px; font-size: 24px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); box-shadow: 0 0 0 8px rgba(16,185,129,.16); }
+    /* Estado zerado: pílula "Iniciar · N min" + ajuste rápido de minutos */
+    .crono-iniciar-linha { display: grid; grid-template-columns: 1fr 52px; gap: 8px; }
+    .crono-btn-iniciar { position: relative; height: 52px; border-radius: 999px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 0 6px rgba(16,185,129,.14); transition: transform .15s ease; }
+    .crono-btn-iniciar:hover { transform: scale(1.02); }
+    .crono-btn-iniciar .sep { font-weight: 600; opacity: .85; }
+    /* pulso: anel que cresce e some a cada 2 s, 5 vezes (~10 s); para ao iniciar */
+    .crono-btn-iniciar.pulso::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 2px solid var(--c-foco); opacity: 0; pointer-events: none; animation: crono-pulso 2s ease-out 5; }
+    @keyframes crono-pulso { 0% { opacity: .7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.07, 1.45); } }
+    .crono-btn-ajuste { height: 52px; border-radius: 50%; background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color); display: grid; place-items: center; font-size: 17px; }
+    .crono-btn-ajuste[aria-expanded="true"] { border-color: var(--brand); color: var(--t-foco); }
+    .crono-ajuste { display: grid; gap: 10px; padding: 12px; border-radius: 16px; background: var(--bg-card); border: 1px solid var(--border-color); }
+    .crono-ajuste .topo { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+    .crono-ajuste .valor { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
+    .crono-ajuste .valor button { height: 44px; border-radius: 12px; background: var(--bg-hover); color: var(--text-primary); font-size: 18px; font-weight: 700; }
+    .crono-ajuste output { text-align: center; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+    .crono-ajuste output small { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+    .crono-ajuste .atalhos { display: flex; justify-content: center; gap: 6px; font-size: 11px; }
+    .crono-ajuste .pronto { height: 40px; border-radius: 12px; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); font-weight: 700; }
+    .crono-bt.crono-pri.parar { background: var(--c-parar); color: #fff; box-shadow: 0 0 0 8px rgba(239,68,68,.16); }
     .crono-extra { display: flex; justify-content: center; gap: 18px; font-size: 12px; }
     .crono-extra button { color: var(--text-secondary); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
     .crono-extra button:hover { color: var(--text-primary); }
     .crono-extra .perigo { color: var(--c-parar); }
     .crono button:focus-visible, .crono select:focus-visible, .crono input:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-    @media (prefers-reduced-motion: reduce) { .crono.alarme { animation: none; } .crono-anel .arco { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .crono.alarme { animation: none; } .crono-anel .arco { transition: none; } .crono-btn-iniciar.pulso::after { animation: none; } }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -528,14 +555,17 @@
             <circle id="timer-anel-ciclo-trilha" class="trilha hidden" r="76" cx="100" cy="100" stroke-width="5"></circle>
             <circle id="timer-anel-meta" class="arco" r="90" cx="100" cy="100" stroke-width="12" stroke-dasharray="0 566" transform="rotate(-90 100 100)"></circle>
             <circle id="timer-anel-ciclo" class="arco hidden" r="76" cx="100" cy="100" stroke-width="5" stroke-dasharray="0 478" transform="rotate(-90 100 100)"></circle>
+            <g id="timer-anel-dia"></g>
           </svg>
           <div class="crono-centro">
+            <p id="timer-centro-rot" class="crono-mini hidden">Hoje</p>
             <p id="timer-display" class="crono-tempo">00:00</p>
             <p id="timer-meta-txt" class="crono-de">de 50:00 · 0%</p>
           </div>
         </div>
         <span id="timer-fase" class="crono-fase">Pronto para começar</span>
         <p id="timer-origem" class="crono-origem">Cronômetro livre (sem alarme)</p>
+        <p id="timer-dia-linha" class="crono-origem hidden"></p>
         <div id="timer-banner" class="crono-banner hidden" role="status"></div>
         <div class="crono-campos">
           <div class="crono-campo">
@@ -561,7 +591,26 @@
             </div>
           </div>
         </div>
-        <div class="crono-ctrl">
+        <div id="timer-iniciar-linha" class="crono-iniciar-linha hidden">
+          <button id="timer-btn-iniciar-meta" onclick="alternarIniciarParar()" class="crono-btn-iniciar"><i class="fa-solid fa-play"></i> Iniciar <span id="timer-meta-min" class="sep">· 50 min</span></button>
+          <button id="timer-btn-ajuste" onclick="abrirAjusteMinutos()" class="crono-btn-ajuste" title="Ajustar minutos" aria-label="Ajustar minutos" aria-expanded="false" aria-controls="timer-ajuste"><i class="fa-solid fa-sliders"></i></button>
+        </div>
+        <div id="timer-ajuste" class="crono-ajuste hidden" role="group" aria-label="Duração da sessão">
+          <div class="topo"><span>Duração da sessão</span><span>meta do alarme</span></div>
+          <div class="valor">
+            <button onclick="ajustarMinutos(-5)" aria-label="Menos 5 minutos">−</button>
+            <output id="timer-ajuste-valor" aria-live="polite">50 <small>min</small></output>
+            <button onclick="ajustarMinutos(5)" aria-label="Mais 5 minutos">+</button>
+          </div>
+          <div class="atalhos">
+            <button class="crono-chip" data-min="25" onclick="ajustarMinutos('=25')">25</button>
+            <button class="crono-chip" data-min="50" onclick="ajustarMinutos('=50')">50</button>
+            <button class="crono-chip" data-min="60" onclick="ajustarMinutos('=60')">60</button>
+            <button class="crono-chip" data-min="90" onclick="ajustarMinutos('=90')">90</button>
+          </div>
+          <button class="pronto" onclick="fecharAjusteMinutos()">Pronto</button>
+        </div>
+        <div id="timer-ctrl" class="crono-ctrl">
           <div class="crono-acao">
             <button id="timer-btn-pausar" onclick="pausarCronometro()" class="crono-bt" title="Pausar" aria-label="Pausar" disabled><i class="fa-solid fa-pause"></i></button>
             <span class="crono-rot" aria-hidden="true">Pausar</span>
@@ -1189,6 +1238,7 @@
     if (visivel('view-cronograma')) renderizarCronograma();
     if (visivel('view-revisoes')) renderizarRevisoes();
     if (visivel('view-historico')) renderizarHistorico();
+    atualizarDisplayCronometro();   // anel do dia no cronômetro zerado
   }
 
   // =====================================================================
@@ -1999,6 +2049,17 @@
     document.getElementById('timer-pomo-custom').classList.toggle('hidden', !custom);
     document.getElementById('timer-pomo-foco').value = +(pomoFocoSeg / 60).toFixed(2);
     document.getElementById('timer-pomo-pausa').value = +(pomoPausaSeg / 60).toFixed(2);
+    // Zerado: pílula "Iniciar · N min" + ajuste; os controles circulares só aparecem com a sessão em curso
+    const zeradoTimer = !emCurso;
+    const minMeta = lerDuracao();
+    document.getElementById('timer-iniciar-linha').classList.toggle('hidden', !zeradoTimer);
+    document.getElementById('timer-ctrl').classList.toggle('hidden', zeradoTimer);
+    document.getElementById('timer-meta-min').innerText = `· ${minMeta} min`;
+    if (!zeradoTimer) { ajusteMinutosAberto = false; document.getElementById('timer-btn-iniciar-meta').classList.remove('pulso'); }
+    document.getElementById('timer-ajuste').classList.toggle('hidden', !ajusteMinutosAberto);
+    document.getElementById('timer-btn-ajuste').setAttribute('aria-expanded', String(ajusteMinutosAberto));
+    document.getElementById('timer-ajuste-valor').innerHTML = `${minMeta} <small>min</small>`;
+    document.querySelectorAll('#timer-ajuste .atalhos .crono-chip').forEach(b => b.classList.toggle('on', Number(b.dataset.min) === minMeta));
     const est = estadoVisualTimer();
     document.getElementById('timer-card').classList.toggle('alarme', est === 'alarme');
     renderizarBannerTimer(est);
@@ -2076,11 +2137,105 @@
   function toggleFloatingTimer(expand) {
     document.getElementById('timer-fab').classList.toggle('hidden', expand);
     document.getElementById('timer-panel').classList.toggle('hidden', !expand);
+    if (expand) iniciarPulsoTimer();
   }
+  // ---------- Estado zerado: o anel mostra o dia (só leitura de dados que já existem) ----------
+  // Minutos de hoje (historicoDiario) e sessões do dia atual do cronograma; meta do dia = soma das sessões
+  function resumoDoDia() {
+    const minHoje = historicoDiario[hojeISO()] || 0;
+    const dia = diaAtualObj();
+    const sessoes = dia ? dia.sessoes : [];
+    const metaMin = sessoes.reduce((s, x) => s + (x.min || 0), 0);
+    return { minHoje, metaMin, sessoes, feitas: sessoes.filter(s => s.feita).length, prox: sessoes.find(s => !s.feita) || null };
+  }
+  function fmtHorasCurto(min) {
+    min = Math.max(0, Math.round(min));
+    const h = Math.floor(min / 60), m = min % 60;
+    return h ? (m ? `${h}h ${pad2(m)}` : `${h}h`) : `${m} min`;
+  }
+  function desenharDiaNoAnel() {
+    const r = resumoDoDia();
+    document.getElementById('timer-display').innerText = fmtHorasCurto(r.minHoje);
+    const pct = r.metaMin > 0 ? r.minHoje / r.metaMin : 0;
+    document.getElementById('timer-meta-txt').innerText = r.metaMin > 0 ? `de ${fmtHorasCurto(r.metaMin)} · ${Math.round(pct * 100)}%` : 'estudadas';
+    const anel = document.getElementById('timer-anel-meta'), C1 = 2 * Math.PI * 90;
+    anel.setAttribute('stroke-dasharray', `${Math.min(1, pct) * C1} ${C1}`);
+    anel.style.stroke = 'var(--c-foco)';
+    anel.style.opacity = pct > 0 ? 1 : 0;
+    document.getElementById('timer-anel-ciclo').classList.add('hidden');
+    document.getElementById('timer-anel-ciclo-trilha').classList.add('hidden');
+    // Traços internos: uma sessão do dia por traço, proporcional à duração (feitas, próxima, pendentes)
+    const total = r.sessoes.reduce((s, x) => s + (x.min || 0), 0);
+    const C2 = 2 * Math.PI * 76, folga = r.sessoes.length > 1 ? 0.018 : 0;
+    let html = '', acc = 0, proxMarcada = false;
+    if (total > 0) r.sessoes.forEach(s => {
+      const a = acc / total + folga, b = Math.max(a + 0.004, (acc + (s.min || 0)) / total - folga);
+      let cor = 'var(--traco-pend)', w = 3;
+      if (s.feita) { cor = 'var(--traco-feito)'; w = 5; }
+      else if (!proxMarcada) { cor = 'var(--traco-prox)'; w = 5; proxMarcada = true; }
+      html += `<circle r="76" cx="100" cy="100" fill="none" stroke="${cor}" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${(b - a) * C2} ${C2}" stroke-dashoffset="${-a * C2}" transform="rotate(-90 100 100)"></circle>`;
+      acc += s.min || 0;
+    });
+    document.getElementById('timer-anel-dia').innerHTML = html;
+    const fase = document.getElementById('timer-fase');
+    if (r.sessoes.length) {
+      fase.innerText = `Missão do dia · ${r.feitas} de ${r.sessoes.length}`;
+      fase.style.color = 'var(--t-foco)';
+      fase.style.background = 'color-mix(in srgb, var(--c-foco) 16%, transparent)';
+    } else {
+      fase.innerText = 'Sem cronograma para hoje';
+      fase.style.color = 'var(--text-secondary)';
+      fase.style.background = 'var(--bg-card)';
+    }
+    // Linha abaixo do selo: origem já preparada (revisão, bloco extra) tem prioridade; senão, a próxima sessão
+    const origem = document.getElementById('timer-origem'), linha = document.getElementById('timer-dia-linha');
+    const temOrigem = origem.innerText.trim() !== '' && origem.innerText.trim() !== 'Cronômetro livre (sem alarme)';
+    origem.classList.toggle('hidden', !temOrigem);
+    linha.classList.toggle('hidden', temOrigem);
+    if (!temOrigem) {
+      if (r.prox) {
+        const d = meusDados.find(x => x.id === r.prox.disc);
+        linha.innerHTML = `Próxima: <b>${esc(d ? d.nome : '—')}</b> · ${r.prox.min} min`;
+      } else linha.innerText = r.sessoes.length ? 'Todas as sessões de hoje feitas' : 'Monte o dia na aba Cronograma';
+    }
+  }
+  // Pulso do botão Iniciar: reinicia ao abrir o painel zerado; a animação para sozinha (~10 s) e ao iniciar
+  function iniciarPulsoTimer() {
+    const b = document.getElementById('timer-btn-iniciar-meta');
+    if (!b) return;
+    b.classList.remove('pulso');
+    if (sessaoTimerEmCurso()) return;
+    void b.offsetWidth;   // força o navegador a recomeçar a animação
+    b.classList.add('pulso');
+  }
+  // Edição rápida de minutos: escreve em timer-duracao e usa o "change" que já grava preferencias.duracaoPadrao
+  let ajusteMinutosAberto = false;
+  function abrirAjusteMinutos() {
+    if (sessaoTimerEmCurso()) return;
+    ajusteMinutosAberto = !ajusteMinutosAberto;
+    atualizarBotoesTimer();
+  }
+  function fecharAjusteMinutos() { ajusteMinutosAberto = false; atualizarBotoesTimer(); }
+  function ajustarMinutos(v) {
+    if (sessaoTimerEmCurso()) return;
+    const novo = typeof v === 'string' ? parseInt(v.slice(1), 10) : lerDuracao() + v;
+    const inp = document.getElementById('timer-duracao');
+    inp.value = Math.max(1, Math.min(240, novo || 1));
+    inp.dispatchEvent(new Event('change'));
+    atualizarBotoesTimer();
+  }
+
   // Tempo no centro do anel; anel externo = estudo até a meta; anel interno = ciclo do Pomodoro
   function atualizarDisplayCronometro() {
-    document.getElementById('timer-display').innerText = fmtRelogio(timerSeconds);
     const est = estadoVisualTimer();
+    const zerado = est === 'parado';
+    document.getElementById('timer-display').classList.toggle('dia', zerado);
+    document.getElementById('timer-centro-rot').classList.toggle('hidden', !zerado);
+    document.getElementById('timer-anel-dia').style.display = zerado ? '' : 'none';
+    if (zerado) { desenharDiaNoAnel(); return; }
+    document.getElementById('timer-origem').classList.remove('hidden');
+    document.getElementById('timer-dia-linha').classList.add('hidden');
+    document.getElementById('timer-display').innerText = fmtRelogio(timerSeconds);
     const cor = CORES_TIMER[est];
     const metaSeg = metaTimerSeg();
     const pct = metaSeg ? timerSeconds / metaSeg : 0;
@@ -2114,7 +2269,10 @@
   function popularTopicosTimer() {
     document.getElementById('timer-topico').innerHTML = optionsTopicos(document.getElementById('timer-disc').value, '', '— escolha o tópico —');
   }
-  function setOrigemTimer(texto) { document.getElementById('timer-origem').innerText = texto; }
+  function setOrigemTimer(texto) {
+    document.getElementById('timer-origem').innerText = texto;
+    if (!sessaoTimerEmCurso()) atualizarDisplayCronometro();   // zerado: a origem preparada substitui a linha "Próxima"
+  }
   function cronometroOcupado() {
     if (timerInterval) { alert('O cronômetro está rodando. Pause ou salve antes de iniciar outra sessão.'); return true; }
     return false;
@@ -2148,6 +2306,7 @@
     atualizarDisplayCronometro();
     atualizarBotoesTimer();
     salvarEstadoTimer();
+    if (!document.getElementById('timer-panel').classList.contains('hidden')) iniciarPulsoTimer();
   }
   // Zerar: descarta a contagem parada, sem gravar registro, após confirmação
   function zerarCronometro() {
@@ -2457,7 +2616,7 @@
   ['timer-disc', 'timer-topico', 'timer-tipo'].forEach(id =>
     document.getElementById(id).addEventListener('change', salvarEstadoTimer));
   // Meta (alarme padrão) e ciclos personalizados atualizam o anel na hora
-  document.getElementById('timer-duracao').addEventListener('input', () => { if (!sessaoTimerEmCurso()) atualizarDisplayCronometro(); });
+  document.getElementById('timer-duracao').addEventListener('input', () => { if (!sessaoTimerEmCurso()) atualizarBotoesTimer(); });
   ['timer-pomo-foco', 'timer-pomo-pausa'].forEach(id =>
     document.getElementById(id).addEventListener('change', lerCicloPersonalizado));
 
