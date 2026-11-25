@@ -35,6 +35,13 @@
     /* Botões e selos verdes com texto (bg-brand + text-white): mesmos tokens do cronômetro, contraste AA nos dois temas.
        Barras de progresso (só bg-brand, sem texto) continuam com var(--brand). */
     .bg-brand.text-white { background-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    /* Botões azuis com texto branco (Iniciar, Revisar agora, Estudar N min agora): blue-600, 5,17:1; hover blue-700, 6,7:1 */
+    .bg-blue-500.text-white { background-color: #2563eb; }
+    .bg-blue-500.text-white:hover { background-color: #1d4ed8; }
+    /* Tema claro: textos coloridos de botões e menu com 4,5:1 ou mais (no escuro eles já passam) */
+    body.light-mode .text-brand { color: var(--brand-hover); }
+    body.light-mode .text-blue-400 { color: #1d4ed8; }
+    body.light-mode .text-red-400 { color: #b91c1c; }
 
     ::-webkit-scrollbar { width: 7px; height: 7px; }
     ::-webkit-scrollbar-track { background: var(--bg-main); }
@@ -883,14 +890,16 @@
         </div>
       </div>
       <div id="reg-passo-resumo" class="hidden p-6 space-y-4 overflow-y-auto">
-        <p class="text-sm text-main font-semibold">Confira o que vai mudar. Nada é gravado antes de você confirmar.</p>
+        <p id="reg-resumo-titulo" class="text-sm text-main font-semibold">Confira o que vai mudar. Nada é gravado antes de você confirmar.</p>
         <div id="reg-resumo"></div>
       </div>
       <div class="p-5 border-t border-theme flex justify-end gap-3 bg-card">
+        <button id="reg-btn-excluir" onclick="revisarExclusaoRegistro()" class="mr-auto px-4 py-2 rounded-lg text-xs font-bold text-red-400 hover-bg"><i class="fa-solid fa-trash mr-1"></i> Excluir registro</button>
         <button id="reg-btn-cancelar" onclick="fecharEdicaoRegistro()" class="px-4 py-2 rounded-lg text-xs font-bold text-sec hover:text-main">Cancelar</button>
         <button id="reg-btn-voltar" onclick="voltarEdicaoRegistro()" class="hidden px-4 py-2 rounded-lg text-xs font-bold text-sec hover:text-main">Voltar e corrigir</button>
         <button id="reg-btn-revisar" onclick="revisarEdicaoRegistro()" class="px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white">Ver o que muda</button>
         <button id="reg-btn-confirmar" onclick="confirmarEdicaoRegistro()" class="hidden px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white">Confirmar e recalcular</button>
+        <button id="reg-btn-confirmar-excluir" onclick="confirmarExclusaoRegistro()" class="hidden px-6 py-2 rounded-lg text-xs font-bold bg-red-600 hover:bg-red-700 text-white">Confirmar exclusão</button>
       </div>
     </div>
   </div>
@@ -3266,19 +3275,46 @@
     const disc = document.getElementById('reg-disc').value;
     document.getElementById('reg-topico').innerHTML = optionsTopicos(disc, sel, registroEdicao && registroEdicao.semTopico ? '— sem tópico —' : '— escolha o tópico —');
   }
+  // passo: 'form' | 'resumo' (edição) | 'excluir' (exclusão)
   function mostrarPassoRegistro(passo) {
     const form = passo === 'form';
     document.getElementById('reg-passo-form').classList.toggle('hidden', !form);
     document.getElementById('reg-passo-resumo').classList.toggle('hidden', form);
     document.getElementById('reg-btn-revisar').classList.toggle('hidden', !form);
+    document.getElementById('reg-btn-excluir').classList.toggle('hidden', !form);
     document.getElementById('reg-btn-voltar').classList.toggle('hidden', form);
-    document.getElementById('reg-btn-confirmar').classList.toggle('hidden', form);
+    document.getElementById('reg-btn-confirmar').classList.toggle('hidden', passo !== 'resumo');
+    document.getElementById('reg-btn-confirmar-excluir').classList.toggle('hidden', passo !== 'excluir');
+    document.getElementById('reg-resumo-titulo').innerText = passo === 'excluir'
+      ? 'Este registro será excluído e os totais abaixo serão recalculados. Nada é apagado antes de você confirmar.'
+      : 'Confira o que vai mudar. Nada é gravado antes de você confirmar.';
+  }
+  // Auxiliares do resumo antes × depois (edição e exclusão)
+  const nomeDiscReg = id => { const d = meusDados.find(x => x.id === id); return d ? d.nome : '—'; };
+  const nomeTopReg = (dId, tId) => { const { node } = getNodeRef(dId, tId); return node ? node.nome : '—'; };
+  const somaNoReg = (lista, dId, tId) => lista.filter(x => x.discId === dId && x.topicoId === tId).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
+  const somaDiaReg = (lista, dia) => lista.filter(x => x.data === dia).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
+  function efeitosRegistro(nos, dias, depois) {
+    const ef = [];
+    [...new Map(nos.filter(([d, t]) => d && t).map(n => [n.join('|'), n])).values()].forEach(([d, t]) =>
+      ef.push([`Tempo do tópico "${nomeTopReg(d, t)}"`, formatarMinutos(somaNoReg(registrosEstudo, d, t)), formatarMinutos(somaNoReg(depois, d, t))]));
+    [...new Set(dias)].forEach(dia =>
+      ef.push([`Estudo do dia ${formatarDataBR(dia)}`, formatarMinutos(somaDiaReg(registrosEstudo, dia)), formatarMinutos(somaDiaReg(depois, dia))]));
+    return ef;
+  }
+  function tabelaResumoReg(titulo, linhas) {
+    return `
+      <p class="text-xs font-bold uppercase tracking-wider text-sec mb-2">${titulo}</p>
+      <div class="overflow-x-auto mb-4"><table class="w-full text-sm">
+        <thead><tr class="text-left text-[11px] text-sec uppercase"><th class="py-1 pr-3">Item</th><th class="py-1 pr-3">Antes</th><th class="py-1">Depois</th></tr></thead>
+        <tbody>${linhas.map(([c, a, d]) => `<tr class="border-t border-theme"><td class="py-1.5 pr-3 text-sec">${esc(c)}</td><td class="py-1.5 pr-3">${esc(a)}</td><td class="py-1.5 font-semibold ${a !== d ? 'text-brand' : ''}">${esc(d)}</td></tr>`).join('')}</tbody>
+      </table></div>`;
   }
   function fecharEdicaoRegistro() {
     document.getElementById('modal-registro').classList.add('hidden');
     registroEdicao = null;
   }
-  function voltarEdicaoRegistro() { mostrarPassoRegistro('form'); }
+  function voltarEdicaoRegistro() { if (registroEdicao) registroEdicao.excluir = false; mostrarPassoRegistro('form'); }
   function lerFormRegistro() {
     const data = document.getElementById('reg-data').value;
     const minutos = parseInt(document.getElementById('reg-min').value, 10);
@@ -3296,35 +3332,47 @@
     const r = registrosEstudo.find(x => String(x.id) === String(registroEdicao.id));
     const novo = r && lerFormRegistro();
     if (!novo) return;
-    const nomeDisc = id => { const d = meusDados.find(x => x.id === id); return d ? d.nome : '—'; };
-    const nomeTop = (dId, tId) => { const { node } = getNodeRef(dId, tId); return node ? node.nome : '—'; };
     const campos = [
       ['Data', formatarDataBR(r.data), formatarDataBR(novo.data)],
       ['Tempo', formatarMinutos(r.minutos), formatarMinutos(novo.minutos)],
-      ['Disciplina', nomeDisc(r.discId), nomeDisc(novo.discId)],
-      ['Tópico', nomeTop(r.discId, r.topicoId), nomeTop(novo.discId, novo.topicoId)],
+      ['Disciplina', nomeDiscReg(r.discId), nomeDiscReg(novo.discId)],
+      ['Tópico', nomeTopReg(r.discId, r.topicoId), nomeTopReg(novo.discId, novo.topicoId)],
       ['Modalidade', r.tipo || 'Não informado', novo.tipo]
     ].filter(([, a, d]) => a !== d);
     if (!campos.length) { alert('Nada foi alterado.'); return; }
     // Simula os totais recalculados (tópicos e dias afetados)
     const depois = registrosEstudo.map(x => x === r ? { ...x, ...novo } : x);
-    const somaNo = (lista, dId, tId) => lista.filter(x => x.discId === dId && x.topicoId === tId).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
-    const somaDia = (lista, dia) => lista.filter(x => x.data === dia).reduce((s, x) => s + (Number(x.minutos) || 0), 0);
-    const efeitos = [];
-    const nos = [[r.discId, r.topicoId], [novo.discId, novo.topicoId]].filter(([d, t]) => d && t);
-    [...new Map(nos.map(n => [n.join('|'), n])).values()].forEach(([d, t]) =>
-      efeitos.push([`Tempo do tópico "${nomeTop(d, t)}"`, formatarMinutos(somaNo(registrosEstudo, d, t)), formatarMinutos(somaNo(depois, d, t))]));
-    [...new Set([r.data, novo.data])].forEach(dia =>
-      efeitos.push([`Estudo do dia ${formatarDataBR(dia)}`, formatarMinutos(somaDia(registrosEstudo, dia)), formatarMinutos(somaDia(depois, dia))]));
-    const tabela = (titulo, linhas) => `
-      <p class="text-xs font-bold uppercase tracking-wider text-sec mb-2">${titulo}</p>
-      <div class="overflow-x-auto mb-4"><table class="w-full text-sm">
-        <thead><tr class="text-left text-[11px] text-sec uppercase"><th class="py-1 pr-3">Item</th><th class="py-1 pr-3">Antes</th><th class="py-1">Depois</th></tr></thead>
-        <tbody>${linhas.map(([c, a, d]) => `<tr class="border-t border-theme"><td class="py-1.5 pr-3 text-sec">${esc(c)}</td><td class="py-1.5 pr-3">${esc(a)}</td><td class="py-1.5 font-semibold ${a !== d ? 'text-brand' : ''}">${esc(d)}</td></tr>`).join('')}</tbody>
-      </table></div>`;
-    document.getElementById('reg-resumo').innerHTML = tabela('Registro', campos) + tabela('Totais que serão recalculados', efeitos);
+    const efeitos = efeitosRegistro([[r.discId, r.topicoId], [novo.discId, novo.topicoId]], [r.data, novo.data], depois);
+    document.getElementById('reg-resumo').innerHTML = tabelaResumoReg('Registro', campos) + tabelaResumoReg('Totais que serão recalculados', efeitos);
     registroEdicao.novo = novo;
     mostrarPassoRegistro('resumo');
+  }
+  // Exclusão: mostra o registro e os totais antes × depois; só apaga depois de "Confirmar exclusão"
+  function revisarExclusaoRegistro() {
+    const r = registroEdicao && registrosEstudo.find(x => String(x.id) === String(registroEdicao.id));
+    if (!r) return;
+    const excluido = '— (excluído)';
+    const campos = [
+      ['Data', formatarDataBR(r.data), excluido],
+      ['Tempo', formatarMinutos(r.minutos), excluido],
+      ['Disciplina', nomeDiscReg(r.discId), excluido],
+      ['Tópico', nomeTopReg(r.discId, r.topicoId), excluido],
+      ['Modalidade', r.tipo || 'Não informado', excluido]
+    ];
+    const depois = registrosEstudo.filter(x => x !== r);
+    const efeitos = efeitosRegistro([[r.discId, r.topicoId]], [r.data], depois);
+    document.getElementById('reg-resumo').innerHTML = tabelaResumoReg('Registro que será excluído', campos) + tabelaResumoReg('Totais que serão recalculados', efeitos);
+    registroEdicao.novo = null;
+    registroEdicao.excluir = true;
+    mostrarPassoRegistro('excluir');
+  }
+  function confirmarExclusaoRegistro() {
+    if (!registroEdicao || !registroEdicao.excluir) return;
+    const id = registroEdicao.id;
+    registrosEstudo = registrosEstudo.filter(x => String(x.id) !== String(id));
+    recalcularTemposDosRegistros();   // só aqui, depois da confirmação
+    fecharEdicaoRegistro();
+    salvarTudo();
   }
   function confirmarEdicaoRegistro() {
     if (!registroEdicao || !registroEdicao.novo) return;
