@@ -188,6 +188,9 @@
             --text-sub: #cbd5e1; --estudo: #60a5fa; --concluido: #10b981; --sel-fundo: rgba(16,185,129,.14); --anel-vazio: #3a3f52; }
     body.light-mode { --estrela: #a16207; --estrela-fundo: rgba(202,138,4,.14); --t-alto: #5b21b6; --t-medio: #6d28d9; --t-baixo: #7c3aed; --pf-borda: #6f7b8e;
             --text-sub: #334155; --estudo: #1d4ed8; --concluido: #047857; --sel-fundo: rgba(5,150,105,.12); --anel-vazio: #cbd5e1; }
+    /* cards de dia do cronograma: o mesmo contorno em todos (só a etiqueta "Hoje" marca o dia atual); contorno ≥ 3:1 nos dois temas */
+    :root { --contorno-dia: #e5e7eb; } body.light-mode { --contorno-dia: #64748b; }
+    .card-dia { border-color: var(--contorno-dia); }
     /* fotos: foto larga no cabeçalho, foto alta no bloco lateral, com véu escuro nos dois temas */
     .topo-foto { background: linear-gradient(90deg, rgba(19,22,28,.90) 0%, rgba(19,22,28,.84) 46%, rgba(19,22,28,.40) 100%), url(pmpe-fundo.jpg) center / cover, #13161c; }
     .topo-titulo { color: #f1f5f9; } .topo-sub { color: #cbd5e1; }
@@ -232,12 +235,14 @@
     .edt-nome { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
     .edt-t { line-height: 1.35; }
     .edt-n1 .edt-t { color: var(--text-primary); font-weight: 600; font-size: 14px; } .edt-n2 .edt-t { color: var(--text-sub); font-size: 13px; }
-    .edt-feito .edt-t { color: var(--text-secondary) !important; }
+    .edt-linha.edt-feito { background: color-mix(in srgb, var(--concluido) 9%, transparent); }
+    .edt-feito .edt-t { color: var(--text-primary) !important; font-weight: 500; }
+    .edt-n1.edt-feito .edt-t { font-weight: 600; }
     .edt-em { font-size: 11px; font-weight: 700; color: var(--estudo); }
     .edt-diag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-secondary); }
     .edt-diag i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
     .edt-foco-chip { font-size: 11px; font-weight: 700; color: var(--btn-iniciar-fg); background: var(--btn-iniciar-bg); padding: 2px 8px; border-radius: 7px; white-space: nowrap; }
-    .edt-linha.edt-foco { background: var(--sel-fundo); box-shadow: inset 0 0 0 1.5px var(--brand); }
+    .edt-linha.edt-foco, .edt-linha.edt-feito.edt-foco { background: var(--sel-fundo); box-shadow: inset 0 0 0 1.5px var(--brand); }
     .edt-dir { display: grid; grid-template-columns: 24px 92px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
     .edt-dir.g { grid-template-columns: auto 24px 92px 52px 28px; }
     .edt-dir.sd { grid-template-columns: 24px 92px 28px; } .edt-dir.g.sd { grid-template-columns: auto 24px 92px 28px; }
@@ -283,6 +288,8 @@
     .sel-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .sel-chip { height: 30px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
     .sel-chip[aria-pressed="true"] { background: var(--btn-iniciar-bg); border-color: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    .sel-chip:disabled { opacity: .6; cursor: not-allowed; }
+    .sel-ciclo-msg { margin: 6px 0 0; font-size: 12px; color: var(--text-secondary); }
     .sel-trilha { font-size: 12px; color: var(--text-secondary); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; } .sel-trilha b { color: var(--text-primary); }
     .sel-lista-caixa { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-panel); overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
     .sel-busca { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
@@ -1683,8 +1690,71 @@
   }
   function removerBlocoPlano(id) {
     const key = hojeISO();
+    if (blocoEdicao && blocoEdicao.id === id) blocoEdicao = null;
     planoDia[key] = (planoDia[key] || []).filter(x => x.id !== id);
     salvarTudo();
+  }
+  // Edição de um bloco extra: rascunho em memória; só vai para o bloco (texto, disciplina, tópico) ao salvar.
+  // Estado de feito, id e o tempo dos registros não são tocados.
+  let blocoEdicao = null;   // { id, texto, discId, topicoId }
+  function editarBlocoPlano(id) {
+    const b = planoDoDia().find(x => x.id === id);
+    if (!b) return;
+    blocoEdicao = { id, texto: b.texto, discId: b.discId || '', topicoId: b.topicoId || '' };
+    renderizarPlanoDia();
+    const campo = document.getElementById('bloco-edit-texto');
+    if (campo) { campo.focus(); campo.setSelectionRange(campo.value.length, campo.value.length); }
+  }
+  function cancelarEdicaoBloco() {
+    const id = blocoEdicao && blocoEdicao.id;
+    blocoEdicao = null;
+    renderizarPlanoDia();
+    const lapis = id && document.querySelector(`[data-bloco-lapis="${id}"]`);
+    if (lapis) lapis.focus();
+  }
+  function salvarEdicaoBloco() {
+    if (!blocoEdicao) return;
+    const b = planoDoDia().find(x => x.id === blocoEdicao.id);
+    const texto = blocoEdicao.texto.trim();
+    if (!b) { blocoEdicao = null; return renderizarPlanoDia(); }
+    if (!texto) { alert('Descreva o bloco extra.'); const c = document.getElementById('bloco-edit-texto'); if (c) c.focus(); return; }
+    const id = b.id;
+    b.texto = texto;
+    b.discId = blocoEdicao.discId || null;
+    b.topicoId = blocoEdicao.discId ? (blocoEdicao.topicoId || null) : null;
+    blocoEdicao = null;
+    salvarTudo();
+    const lapis = document.querySelector(`[data-bloco-lapis="${id}"]`);
+    if (lapis) lapis.focus();
+  }
+  function abrirSeletorBloco() {
+    if (!blocoEdicao) return;
+    abrirSeletorTopico({ lerDisc: () => blocoEdicao ? blocoEdicao.discId : '', lerTopico: () => blocoEdicao ? blocoEdicao.topicoId : '',
+      vazio: { valor: '', rotulo: 'Tópico (opcional)' }, discVazio: 'Sem disciplina',
+      aplicar: (d, t) => {
+        if (!blocoEdicao) return;
+        blocoEdicao.discId = d || ''; blocoEdicao.topicoId = d ? (t || '') : '';
+        renderizarPlanoDia();
+        const g = document.getElementById('bloco-edit-sel'); if (g) g.focus();
+      } });
+  }
+  function blocoEdicaoHTML() {
+    const e = blocoEdicao, { node } = getNodeRef(e.discId || null, e.topicoId || null);
+    return `
+        <div class="p-3 rounded-lg border border-brand bg-card space-y-2" data-bloco-edit="${e.id}">
+          <label for="bloco-edit-texto" class="block text-[11px] font-bold uppercase text-sec">Texto do bloco</label>
+          <input id="bloco-edit-texto" type="text" value="${esc(e.texto)}" maxlength="200" autocomplete="off"
+            oninput="blocoEdicao.texto = this.value"
+            onkeydown="if (event.key === 'Enter') { event.preventDefault(); salvarEdicaoBloco(); } else if (event.key === 'Escape') { event.preventDefault(); cancelarEdicaoBloco(); }"
+            class="w-full bg-panel border border-theme rounded-lg p-2 text-sm text-main outline-none">
+          <span class="block text-[11px] font-bold uppercase text-sec">Disciplina e tópico</span>
+          <button type="button" id="bloco-edit-sel" class="sel-gatilho" onclick="abrirSeletorBloco()" aria-haspopup="dialog">${rotuloSeletorHTML(e.discId, e.topicoId, { valor: '', rotulo: 'Tópico (opcional)' }, 'Sem disciplina')}<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i></button>
+          ${node ? `<div class="flex items-center gap-2 text-[11px] text-sec"><span>Prioridade do tópico:</span>${badgeAOCPHTML(node)}${pesoBadgeHTML(node) || '<span>sem peso</span>'}<span>(muda no Edital)</span></div>` : ''}
+          <div class="flex flex-wrap justify-end gap-2 pt-1">
+            <button type="button" onclick="cancelarEdicaoBloco()" class="h-9 px-4 rounded-md border border-theme bg-panel text-main text-xs font-bold hover-bg">Cancelar</button>
+            <button type="button" onclick="salvarEdicaoBloco()" class="h-9 px-4 rounded-md text-xs font-bold" style="background:var(--btn-iniciar-bg);color:var(--btn-iniciar-fg)"><i class="fa-solid fa-check mr-1"></i> Salvar</button>
+          </div>
+        </div>`;
   }
   function renderizarPlanoDia() {
     const dia = diaAtualObj();
@@ -1715,7 +1785,9 @@
         </div>`;
     }).join('');
 
+    if (blocoEdicao && !extras.some(b => b.id === blocoEdicao.id)) blocoEdicao = null;
     const blocoExtra = extras.map(b => {
+      if (blocoEdicao && blocoEdicao.id === b.id) return blocoEdicaoHTML();
       const { disc, node } = getNodeRef(b.discId, b.topicoId);
       return `
         <div class="flex items-center gap-3 p-3 rounded-lg border transition ${b.feito ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
@@ -1726,14 +1798,17 @@
             ${node ? `<div class="mt-1 flex items-center gap-2">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}</div>` : ''}
           </div>
           <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
+          <button type="button" onclick="editarBlocoPlano(${b.id})" data-bloco-lapis="${b.id}" class="w-8 h-8 rounded-md text-sec hover-bg shrink-0" title="Editar bloco" aria-label="Editar bloco: ${esc(b.texto)}"><i class="fa-solid fa-pen"></i></button>
           <button onclick="removerBlocoPlano(${b.id})" class="w-8 h-8 rounded-md text-red-400 hover-bg shrink-0" title="Remover"><i class="fa-solid fa-xmark"></i></button>
         </div>`;
     }).join('');
 
     const vazio = !total
       ? '<p class="text-xs text-mut italic">Nenhuma sessão para hoje. Monte seu cronograma na aba Cronograma.</p>' : '';
+    const foco = document.activeElement, refoco = foco && foco.id === 'bloco-edit-texto' ? [foco.selectionStart, foco.selectionEnd] : null;
     document.getElementById('plano-lista').innerHTML = vazio + blocoCron +
       (extras.length ? `<p class="text-[11px] font-bold uppercase text-sec pt-2">Extras de hoje</p>${blocoExtra}` : '');
+    if (refoco) { const c = document.getElementById('bloco-edit-texto'); if (c) { c.focus(); c.setSelectionRange(refoco[0], refoco[1]); } }
   }
   function iniciarBlocoNoCronometro(id) {
     const b = planoDoDia().find(x => x.id === id);
@@ -2168,7 +2243,7 @@
     }).join('');
 
     return `
-      <div class="rounded-xl border ${atual ? 'border-brand' : 'border-theme'} bg-panel p-4 space-y-3">
+      <div class="rounded-xl border card-dia bg-panel p-4 space-y-3">
         <div class="flex flex-wrap items-center gap-2">
           <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${atual ? 'bg-brand text-white' : 'bg-card border border-theme text-sec'}">${atual ? 'Hoje' : 'Dia ' + (i + 1)}</span>
           <input value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" class="flex-1 min-w-[140px] bg-card border border-theme rounded-lg p-1.5 text-sm font-bold text-main outline-none">
@@ -4040,13 +4115,13 @@
   function abrirSeletorTopico(cfg) {
     fecharSeletorTopico();
     spFoco = document.activeElement;
-    sp = { cfg, disc: cfg.lerDisc() || '', q: '', fE: false, fA: false };
+    sp = { cfg, disc: cfg.lerDisc() || '', q: '', fE: false, fA: false, ciclo: false };
     const el = document.createElement('div');
     el.className = 'sel-fundo'; el.id = 'sel-painel';
     el.innerHTML = `<div class="sel-caixa" role="dialog" aria-modal="true" aria-label="Escolher tópico">
         <div class="sel-cab"><b>Escolher tópico</b><button type="button" data-acao="fechar" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button></div>
         <div class="sel-corpo">
-          <div id="sel-etapa1"><p class="sel-rot" style="margin-bottom:6px">1 · Disciplina</p><div class="sel-chips" id="sel-chips"></div></div>
+          <div id="sel-etapa1"><p class="sel-rot" style="margin-bottom:6px">1 · Disciplina</p><div class="sel-chips" id="sel-chips"></div><p class="sel-ciclo-msg" id="sel-ciclo-msg" hidden>Nenhuma disciplina no ciclo de hoje</p></div>
           <div class="sel-trilha" id="sel-trilha"></div>
           <p class="sel-rot">2 · Tópico</p>
           <div class="sel-lista-caixa">
@@ -4058,9 +4133,10 @@
         </div></div>`;
     el.addEventListener('click', ev => {
       if (ev.target === el) return fecharSeletorTopico();
-      const b = ev.target.closest('[data-acao],[data-disc],[data-f],[data-topico]');
+      const b = ev.target.closest('[data-acao],[data-disc],[data-f],[data-topico],[data-ciclo]');
       if (!b || !sp) return;
       if (b.dataset.acao === 'fechar') return fecharSeletorTopico();
+      if (b.dataset.ciclo) { if (b.disabled) return; sp.ciclo = !sp.ciclo; return renderSeletorPainel(); }
       if (b.dataset.f) { if (b.dataset.f === 'e') sp.fE = !sp.fE; else sp.fA = !sp.fA; b.setAttribute('aria-pressed', String(b.dataset.f === 'e' ? sp.fE : sp.fA)); return renderItensSeletor(); }
       if (b.dataset.disc !== undefined) {
         if (b.dataset.disc === '') { const c = sp.cfg; fecharSeletorTopico(); return c.aplicar('', c.vazio ? c.vazio.valor : ''); }
@@ -4089,12 +4165,22 @@
     if (spFoco && document.body.contains(spFoco)) { try { spFoco.focus(); } catch (e) {} }
     spFoco = null;
   }
+  // Disciplinas do ciclo de hoje: sessões do dia atual do cronograma e blocos extras do dia (só leitura)
+  function discIdsDoCiclo() {
+    const dia = diaAtualObj(), ids = new Set();
+    (dia ? dia.sessoes : []).forEach(x => { if (x.disc) ids.add(x.disc); });
+    planoDoDia().forEach(b => { if (b.discId) ids.add(b.discId); });
+    return meusDados.map(d => d.id).filter(id => ids.has(id));
+  }
   function renderSeletorPainel() {
     const { cfg } = sp;
     document.getElementById('sel-etapa1').style.display = cfg.fixarDisc ? 'none' : '';
     if (!cfg.fixarDisc) {
+      const ciclo = discIdsDoCiclo(), filtrando = sp.ciclo && ciclo.length > 0;
+      document.getElementById('sel-ciclo-msg').hidden = ciclo.length > 0;
       document.getElementById('sel-chips').innerHTML = (cfg.discVazio ? `<button type="button" class="sel-chip" data-disc="" aria-pressed="false">${esc(cfg.discVazio)}</button>` : '')
-        + meusDados.map(d => `<button type="button" class="sel-chip" data-disc="${d.id}" aria-pressed="${d.id === sp.disc}">${esc(d.nome)}</button>`).join('');
+        + `<button type="button" class="sel-chip" data-ciclo="1" aria-pressed="${filtrando}" ${ciclo.length ? '' : 'disabled aria-disabled="true" aria-describedby="sel-ciclo-msg"'}>Ciclo de hoje</button>`
+        + meusDados.filter(d => !filtrando || ciclo.includes(d.id)).map(d => `<button type="button" class="sel-chip" data-disc="${d.id}" aria-pressed="${d.id === sp.disc}">${esc(d.nome)}</button>`).join('');
     }
     const disc = meusDados.find(d => d.id === sp.disc), atual = cfg.lerDisc() === sp.disc ? cfg.lerTopico() : '';
     const { node } = disc && atual ? getNodeRef(sp.disc, atual) : { node: null };
