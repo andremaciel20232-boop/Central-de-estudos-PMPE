@@ -192,8 +192,6 @@
     :root { --contorno-dia: #e5e7eb; } body.light-mode { --contorno-dia: #64748b; }
     .card-dia { border-color: var(--contorno-dia); }
     /* fotos: foto larga no cabeçalho, foto alta no bloco lateral, com véu escuro nos dois temas */
-    .topo-foto { background: linear-gradient(90deg, rgba(19,22,28,.90) 0%, rgba(19,22,28,.84) 46%, rgba(19,22,28,.40) 100%), url(pmpe-fundo.jpg) center / cover, #13161c; }
-    .topo-titulo { color: #f1f5f9; } .topo-sub { color: #cbd5e1; }
     .lat-foto { background: linear-gradient(180deg, rgba(19,22,28,.74) 0%, rgba(19,22,28,.84) 100%), url(pmpe-banner.jpg) center top / cover, #13161c; min-height: 220px; justify-content: center; }
     .lat-foto h1 { color: #f1f5f9; } .lat-foto p { color: #cbd5e1; }
     .lat-avatar { width: 84px; height: 84px; border-radius: 50%; border: 3px solid rgba(255,255,255,.85); background: #0f172a; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,.4); flex: none; }
@@ -314,7 +312,14 @@
     body.light-mode { --nav-ativo-fundo: rgba(5,150,105,.14); --nav-ativo-txt: #047857; }
     @supports (height: 100dvh) { body.h-screen { height: 100dvh; } }
     #main-content { min-width: 0; }
-    .nav-curto, .reg-curto, .topo-avatar, .bn-pag, .quebra-linha { display: none; }
+    .nav-curto, .bn-pag, .quebra-linha { display: none; }
+    /* Registrar Estudo: primeiro item da lateral, em verde */
+    .lat-reg { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); margin-bottom: 6px; } .lat-reg:hover { opacity: .92; }
+    .lat-barra nav > .lat-reg { min-height: 44px; }
+    /* "+" central da barra inferior (celular) */
+    .bn-reg { border: 0; background: none; display: grid; place-items: center; min-height: 56px; position: relative; padding: 0; cursor: pointer; }
+    .bn-reg i { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border: 4px solid var(--bg-panel); box-shadow: 0 6px 14px rgba(0,0,0,.35); font-size: 22px; margin-top: -26px; }
+    .bn-reg:focus-visible i { outline: 2px solid var(--brand); outline-offset: 2px; }
     .chk-toque { display: inline-flex; align-items: center; justify-content: center; flex: none; }
     .mais-movel { position: fixed; inset: 0; z-index: 45; } .mais-movel[hidden] { display: none; }
     .mais-veu { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
@@ -341,15 +346,6 @@
       #bilhete-wrapper { left: 96px; }
     }
     @media (max-width: 1023px) {
-      /* cabeçalho em uma linha: a frase encolhe com reticências; Backup só com o ícone */
-      header.cab-pag { flex-wrap: nowrap; }
-      header.cab-pag .cab-id { flex: 1; min-width: 0; }
-      header.cab-pag .topo-titulo, header.cab-pag .topo-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      header.cab-pag .cab-acoes { flex: none; }
-      .btn-backup-cab span { display: none; }
-      button.btn-backup-cab { width: 44px; height: 44px; padding: 0; justify-content: center; }
-      .cab-pag #btn-theme { height: 44px; width: 44px; }
-      button.btn-registrar { height: 44px; width: auto; padding: 0 16px; }
     }
     @media (max-width: 767px) {
       .lat-barra { display: none !important; }
@@ -365,18 +361,6 @@
       #view-dashboard > .grid:nth-child(2) > div > p:first-child { font-size: 10px; line-height: 1.25; }
       #view-dashboard > .grid:nth-child(2) .text-3xl { font-size: 20px; line-height: 1.2; }
       #view-dashboard > .grid:nth-child(2) .flex.items-baseline { flex-direction: column; align-items: flex-start; gap: 0; }
-      /* cabeçalho compacto */
-      header.cab-pag { flex-wrap: nowrap; gap: 8px; padding: 8px 12px; min-height: 62px; }
-      header.cab-pag .cab-id { flex: 1; min-width: 0; }
-      header.cab-pag .topo-titulo { font-size: 15px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      header.cab-pag .topo-sub { font-size: 11px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .topo-avatar { display: block; width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,255,255,.85); background: #0f172a; overflow: hidden; flex: none; }
-      .topo-avatar img { width: 100%; height: 100%; object-fit: cover; } .topo-avatar img.logo-fallback { object-fit: contain; padding: 3px; }
-      .topo-sobrenome { display: none; }
-      header.cab-pag .cab-acoes { flex: none; gap: 8px; }
-      .btn-backup-cab { display: none !important; }
-      .cab-pag #btn-theme { width: 44px; height: 44px; }
-      button.btn-registrar { height: 44px; padding: 0 14px; } .reg-longo { display: none; } .reg-curto { display: inline; }
       /* cronômetro e bilhete acima da barra inferior */
       #floating-timer-wrapper { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
       #bilhete-wrapper { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
@@ -424,7 +408,7 @@
     .erro-th img { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
     .erro-th .lupa { position: absolute; right: 4px; bottom: 4px; width: 28px; height: 28px; border-radius: 8px; background: rgba(15,23,42,.78); color: #fff; display: grid; place-items: center; font-size: 12px; }
     /* tela de edição */
-    .erro-ed-barra { position: sticky; top: var(--cab-h, 73px); z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 12px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); }
+    .erro-ed-barra { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 12px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); }
     .erro-ed-titulo { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .erro-ed-btn { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; justify-content: center; white-space: nowrap; cursor: pointer; }
     .erro-ed-btn:hover { background: var(--bg-hover); }
@@ -536,6 +520,8 @@
     .hr-dia.hoje .hr-nd::after { content: ""; position: absolute; inset: -4px; border: 2px solid #fff; border-radius: 50%; }
     .hr-leg { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #cbd5e1; } .hr-leg span { display: inline-flex; align-items: center; gap: 6px; } .hr-leg svg { width: 16px; height: 16px; }
     .hr-leg .v { color: var(--hr-vd); } .hr-leg .r { color: var(--hr-vm); } .hr-leg .l { color: var(--hr-acento); } .hr-leg .n { color: var(--hr-neutro); }
+    .hr-linha-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; } .hr-linha-topo .hr-data { margin: 0; }
+    .hr-tema { width: 44px; height: 44px; border-radius: 50%; background: rgba(8,11,16,.72); border: 1px solid rgba(255,255,255,.4); color: var(--hr-acento); display: grid; place-items: center; padding: 0; flex: none; cursor: pointer; } .hr-tema svg { width: 22px; height: 22px; } .hr-tema:hover { background: rgba(20,26,36,.92); border-color: rgba(255,255,255,.6); } .hr-tema:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
     @container (min-width: 440px) { .hr-dias { --hr-sz: 26px; --hr-gap: 3px; grid-template-columns: repeat(14, minmax(0, 1fr)); row-gap: 0; } }
     .hr-lado { display: grid; gap: 8px; min-width: 0; align-content: center; }
     .hr-vidro { background: rgba(8,11,16,.8); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; color: #f8fafc; min-width: 0; }
@@ -556,7 +542,6 @@
       .hr-cont { display: grid; grid-template-columns: 1fr; padding: 12px 16px; } .hr-cont .hr-n { grid-row: auto; font-size: 64px; } .hr-cont .hr-prova { grid-column: auto; }
       .hr-duo { grid-template-columns: 1fr; } .hr-ico2 { display: grid; } .hr-mini { padding: 10px 14px; }
     }
-    header.cab-pag .cab-dash-t { display: none; } header.cab-pag.cab-dash .cab-saud, header.cab-pag.cab-dash .topo-sub { display: none; } header.cab-pag.cab-dash .cab-dash-t { display: inline; }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -573,6 +558,9 @@
       </div>
     </div>
     <nav class="flex-1 p-3.5 space-y-1.5 overflow-y-auto">
+      <button type="button" onclick="openModalEstudo()" id="nav-registrar" class="lat-reg w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg transition text-left font-bold text-sm">
+        <i class="fa-solid fa-plus w-5 text-center"></i> <span class="nav-longo">Registrar Estudo</span><span class="nav-curto">Registrar</span>
+      </button>
       <button onclick="navigate('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-brand bg-emerald-500/10 font-semibold text-sm">
         <i class="fa-solid fa-chart-pie w-5 text-center"></i> <span class="nav-longo">Dashboard</span><span class="nav-curto">Dashboard</span>
       </button>
@@ -601,27 +589,6 @@
 
   <!-- ================= MAIN ================= -->
   <main class="flex-1 overflow-y-auto relative" id="main-content">
-    <header class="cab-pag cab-dash sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
-      <div class="cab-id flex items-center gap-3 min-w-0">
-        <span class="topo-avatar" aria-hidden="true"><img src="perfil.jpg" alt="" onerror="if(!this.dataset.f){this.dataset.f='1';this.classList.add('logo-fallback');this.src='logo.png';}else{this.removeAttribute('src');}"></span>
-        <div class="min-w-0">
-          <h2 class="text-xl md:text-2xl font-bold topo-titulo"><span class="cab-saud">Olá, Jéssica<span class="topo-sobrenome"> Dayane</span></span><span class="cab-dash-t">Dashboard</span></h2>
-          <p class="topo-sub text-xs md:text-sm">Constância vence a pressa: um passo por dia até a prova.</p>
-        </div>
-      </div>
-      <div class="cab-acoes flex items-center gap-2.5">
-        <button onclick="toggleTheme()" id="btn-theme" title="Alternar tema" class="w-10 h-10 rounded-lg bg-panel border border-theme hover-bg flex items-center justify-center text-amber-400 transition shadow-sm">
-          <i class="fa-solid fa-sun text-lg" id="icon-theme"></i>
-        </button>
-        <button onclick="abrirModalBackup()" title="Backup de Segurança" class="btn-backup-cab h-10 px-3.5 rounded-lg bg-panel border border-theme hover-bg flex items-center gap-2 text-xs font-semibold text-sec transition shadow-sm">
-          <i class="fa-solid fa-cloud-arrow-down text-blue-400"></i> <span class="hidden sm:inline">Backup</span>
-        </button>
-        <button onclick="openModalEstudo()" class="btn-registrar h-10 bg-brand hover:opacity-90 text-white font-bold px-5 rounded-lg transition shadow-md flex items-center gap-2 text-sm">
-          <i class="fa-solid fa-plus"></i> <span class="reg-longo">Registrar Estudo</span><span class="reg-curto">Registrar</span>
-        </button>
-      </div>
-    </header>
-
     <div class="conteudo-pag p-6 md:p-8">
 
       <!-- ================= DASHBOARD ================= -->
@@ -633,7 +600,9 @@
             <symbol id="hr-hoje" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 6.5V12l3.6 2.2" fill="none" stroke="#0e1116" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
             <symbol id="hr-vazio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3.2 3.2"/><path d="M8.5 12h7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
             <symbol id="hr-chama" viewBox="0 0 24 24"><path d="M12 3c.6 3.2 4.5 5 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-1.8.9-3 1.8-4 .3 1.2.9 1.8 1.6 2C11 8.8 11 6 12 3z" fill="currentColor"/><path d="M12 21c-3 0-5.5-1.7-5.5-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></symbol>
-            <symbol id="hr-aviso" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+            <symbol id="hr-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+          <symbol id="hr-lua" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></symbol>
+          <symbol id="hr-aviso" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
             <symbol id="hr-cumpriu" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12.5l3 3 5-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
             <symbol id="hr-relogio" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5V13l3 2M9.5 3h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
             <symbol id="hr-edital" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
@@ -641,7 +610,7 @@
           <div class="hr-in">
             <div class="hr-esq">
               <div>
-                <span class="hr-data" id="hr-data"></span>
+                <div class="hr-linha-topo"><span class="hr-data" id="hr-data"></span><button type="button" class="hr-tema" id="hr-tema" onclick="toggleTheme()" aria-label="Alternar tema (claro e escuro)"><svg aria-hidden="true"><use href="#hr-sol" id="hr-tema-uso"/></svg></button></div>
                 <h2 class="hr-ola">Olá, Jéssica.</h2>
                 <p class="hr-frase">Constância vence a pressa: um passo por dia até a prova.</p>
               </div>
@@ -732,7 +701,7 @@
           </div>
           <div id="edital-diag-resumo" class="flex flex-wrap gap-2 mt-3"></div>
         </div>
-        <div class="sticky top-[73px] z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center justify-between gap-3">
+        <div class="sticky top-0 z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center justify-between gap-3">
           <div class="relative flex-1 min-w-[220px]">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-mut text-sm"></i>
             <input type="text" id="busca-edital" oninput="renderizarEdital()" placeholder="Filtrar tópico ou subtópico..." class="w-full bg-panel border border-theme rounded-lg pl-10 pr-4 py-2 text-sm text-main focus:border-emerald-500 outline-none">
@@ -811,7 +780,7 @@
           <div id="erros-capas" class="grid grid-cols-2 sm:grid-cols-3 gap-5"></div>
         </div>
         <div id="erros-disc" class="hidden">
-          <div class="sticky top-[73px] z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center gap-3 mb-4">
+          <div class="sticky top-0 z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center gap-3 mb-4">
             <button onclick="voltarVitrineErros()" class="px-3 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i> Vitrine</button>
             <h2 id="erros-disc-titulo" class="font-bold text-lg flex-1 min-w-[150px]"></h2>
             <select id="erros-filtro" onchange="mudarFiltroErros()" class="bg-panel border border-theme rounded-lg p-2 text-xs text-main outline-none max-w-xs"></select>
@@ -957,6 +926,7 @@
   <nav id="barra-inferior" class="bn-pag" aria-label="Navegação principal">
     <button type="button" class="bn-it" data-tela="dashboard" onclick="navigate('dashboard')"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Dashboard</span></button>
     <button type="button" class="bn-it" data-tela="edital" onclick="navigate('edital')"><i class="fa-solid fa-sitemap" aria-hidden="true"></i><span>Edital</span></button>
+    <button type="button" class="bn-reg" id="bn-reg" onclick="openModalEstudo()" aria-label="Registrar estudo"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
     <button type="button" class="bn-it" data-tela="cronograma" onclick="navigate('cronograma')"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span>Cronograma</span></button>
     <button type="button" class="bn-it" data-tela="revisoes" onclick="navigate('revisoes')"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Revisões</span></button>
     <button type="button" class="bn-it" id="bn-mais" data-tela="mais" onclick="abrirMaisMovel()" aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i><span>Mais</span></button>
@@ -1388,7 +1358,12 @@
   function toggleTheme() {
     const isLight = document.body.classList.toggle('light-mode');
     localStorage.setItem('central_tema', isLight ? 'light' : 'dark');
-    document.getElementById('icon-theme').className = isLight ? 'fa-solid fa-moon text-lg' : 'fa-solid fa-sun text-lg';
+    atualizarIconeTema();
+  }
+  // Sol no tema escuro (leva ao claro) e lua no claro (leva ao escuro), no botão do herói
+  function atualizarIconeTema() {
+    const uso = document.getElementById('hr-tema-uso');
+    if (uso) uso.setAttribute('href', document.body.classList.contains('light-mode') ? '#hr-lua' : '#hr-sol');
   }
 
   // =====================================================================
@@ -1942,7 +1917,6 @@
       btn.classList.add('text-sec', 'font-medium');
     });
     document.getElementById(`view-${tela}`).classList.remove('hidden');
-    document.querySelector('header.cab-pag').classList.toggle('cab-dash', tela === 'dashboard');
     const ativo = document.getElementById(`nav-${tela}`);
     ativo.classList.remove('text-sec', 'font-medium');
     ativo.classList.add('text-brand', 'bg-emerald-500/10', 'font-semibold');
@@ -1975,12 +1949,6 @@
   }
   function irPeloMais(tela) { fecharMaisMovel(); navigate(tela); }
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharMaisMovel(); });
-  function medirCabecalho() {
-    const h = document.querySelector('header.cab-pag');
-    if (h) document.documentElement.style.setProperty('--cab-h', h.offsetHeight + 'px');
-  }
-  window.addEventListener('resize', medirCabecalho);
-  if (window.ResizeObserver) new ResizeObserver(medirCabecalho).observe(document.querySelector('header.cab-pag'));
   function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
     atualizarDashboard();
@@ -4978,7 +4946,7 @@
   function iniciarApp() {
     if (localStorage.getItem('central_tema') === 'light') {
       document.body.classList.add('light-mode');
-      document.getElementById('icon-theme').className = 'fa-solid fa-moon text-lg';
+      atualizarIconeTema();
     }
     atualizarVersiculo();
     atualizarCountdown();
@@ -5003,7 +4971,6 @@
     restaurarBilhete();
     atualizarTudoUI();
     navigate('dashboard');
-    medirCabecalho();
     restaurarEstadoTimer();
     atualizarAvisoNotificacao();
     avisarAbas({ tipo: 'ola' });   // se o cronômetro já estiver aberto em outra aba, ela responde
