@@ -75,8 +75,6 @@
       border: 1px solid var(--c-pausado); box-shadow: 0 16px 36px rgba(0,0,0,.35); font-size: 13px; }
     .aviso-outra-aba i { color: var(--t-pausado); margin-top: 2px; }
     .aviso-outra-aba button { margin-left: auto; font-weight: 700; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
-    .bilhete-fixo { transition: all .25s ease; }
-    .bilhete-mini { width: 44px; height: 44px; }
     .capa-caderno { transition: transform .3s ease, box-shadow .3s ease; }
     .capa-caderno:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 30px rgba(0,0,0,.35); }
 
@@ -134,7 +132,8 @@
     .crono-banner .b-foco { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
     .crono-banner .b-neutro { background: var(--bg-hover); color: var(--text-primary); }
     .crono-campos { display: grid; gap: 8px; }
-    .crono-campo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); transition: border-color .2s ease; }
+    .crono-campo { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); transition: border-color .2s ease; min-width: 0; }
+    #timer-panel { overflow-x: hidden; } .crono-campo .sel-gatilho { min-width: 0; max-width: 100%; }
     .crono-campo:focus-within { border-color: var(--brand); }
     .crono-campo > i { color: var(--brand); font-size: 14px; width: 16px; text-align: center; }
     .crono-campo .crono-chev { color: var(--text-muted); font-size: 11px; }
@@ -289,6 +288,82 @@
     .edt-menu .m-opcoes { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 6px 4px; }
     .edt-menu .m-opcoes button { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 12px; font-weight: 600; cursor: pointer; }
     .edt-menu .m-opcoes button[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    /* ---------- Montar ciclo (Cronograma) ---------- */
+    :root { --mc-ok-bg: rgba(16,185,129,.12); --mc-ok-bd: #0f9d70; --mc-ok-t: #34d399; --mc-ruim-bg: rgba(248,113,113,.14); --mc-ruim-bd: #f87171; --mc-ruim-t: #fca5a5; --mc-av-bg: rgba(245,158,11,.10); --mc-av-bd: #d98a0b; --mc-rev-t: #fbbf24; --mc-ini-fg: #1a1208; --mc-trilho: #2a3242; --mc-acento-t: #fb923c; }
+    body.light-mode { --mc-ok-bg: rgba(5,150,105,.10); --mc-ok-bd: #059669; --mc-ok-t: #065f46; --mc-ruim-bg: rgba(220,38,38,.08); --mc-ruim-bd: #b91c1c; --mc-ruim-t: #991b1b; --mc-av-bg: rgba(217,119,6,.10); --mc-av-bd: #b45309; --mc-rev-t: #92400e; --mc-ini-fg: #ffffff; --mc-trilho: #e2e8f0; --mc-acento-t: #9a3412; }
+    .mc-btn { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; }
+    .mc-btn:hover { background: var(--bg-hover); } .mc-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .mc-btn.pri { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    .mc-btn.ini { background: var(--edt-agora); color: var(--mc-ini-fg); border-color: var(--edt-agora); } .mc-btn.pri:hover, .mc-btn.ini:hover { filter: brightness(1.06); }
+    #cron-montar { container: mc / inline-size; display: grid; gap: 16px; color: var(--text-primary); }
+    #cron-montar.hidden { display: none; }
+    .mc-topo { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; justify-content: space-between; }
+    .mc-migalha { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+    .mc-grade { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; } .mc-col { display: grid; gap: 16px; min-width: 0; }
+    @container mc (min-width: 860px) { .mc-grade { grid-template-columns: minmax(0, 1fr) 290px; } .mc-aside { position: sticky; top: 12px; } }
+    @container mc (max-width: 859px) { .mc-aside { order: -1; } }
+    .mc-cartao { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+    .mc-sec > header { display: flex; gap: 10px; align-items: center; } .mc-sec h3 { font-size: 16px; font-weight: 800; } .mc-sec header p { font-size: 12.5px; color: var(--text-secondary); }
+    .mc-num { width: 28px; height: 28px; border-radius: 50%; background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); display: grid; place-items: center; font-weight: 800; font-size: 13px; flex: none; }
+    .mc-rot { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); }
+    .mc-passo { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); display: grid; place-items: center; font-size: 20px; font-weight: 800; line-height: 1; padding: 0; cursor: pointer; flex: none; }
+    .mc-passo:hover { background: var(--bg-hover); } .mc-passo:disabled { opacity: .4; cursor: not-allowed; }
+    .mc-stp { display: inline-flex; align-items: center; gap: 4px; } .mc-stp b { min-width: 44px; text-align: center; font-size: 15px; font-variant-numeric: tabular-nums; }
+    .mc-cor { width: 12px; height: 12px; border-radius: 4px; flex: none; background: var(--c); }
+    .mc-tab { display: grid; gap: 6px; }
+    .mc-lin { display: grid; grid-template-columns: minmax(0, 1fr) auto auto 64px 56px; gap: 8px; align-items: center; padding: 4px 8px 4px 12px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); }
+    .mc-lin.cab { background: none; border: 0; padding: 0 8px 0 12px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+    .mc-lin .n { display: flex; align-items: center; gap: 4px 8px; font-weight: 700; min-width: 0; flex-wrap: wrap; } .mc-lin .n .nm { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; } .mc-lin .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; } .mc-lin .v small { color: var(--text-secondary); font-weight: 600; }
+    .mc-lin .det { font-size: 12px; color: var(--text-secondary); font-weight: 600; flex-basis: 100%; padding-left: 20px; }
+    .mc-lin.hd { grid-template-columns: minmax(0, 1fr) 64px 72px auto; }
+    .mc-rm { display: none; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+    @container mc (max-width: 600px) {
+      .mc-lin, .mc-lin.hd { grid-template-columns: minmax(0, 1fr) auto; } .mc-lin .n { grid-column: 1 / -1; } .mc-lin.cab { display: none; } .mc-rm { display: block; } .mc-lin .v { text-align: left; }
+      .mc-lin .v.so-g { display: none; }
+    }
+    .mc-tot { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); padding: 0 10px; } .mc-tot b { color: var(--text-primary); }
+    .mc-semana { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); }
+    .mc-dsem { display: grid; gap: 6px; justify-items: center; padding: 8px 4px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); } .mc-dsem > span { font-size: 12px; font-weight: 800; color: var(--text-secondary); }
+    .mc-dsem.zero { border-style: dashed; border-color: var(--pf-borda); } .mc-dsem.zero b { color: var(--text-secondary); }
+    .mc-datas { display: flex; gap: 10px; flex-wrap: wrap; } .mc-datas label { display: grid; gap: 4px; font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+    .mc-datas input { min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); padding: 0 10px; color: var(--text-primary); color-scheme: dark; } body.light-mode .mc-datas input { color-scheme: light; }
+    .mc-chk { display: flex; gap: 10px; align-items: center; min-height: 44px; font-size: 13.5px; cursor: pointer; } .mc-chk input { width: 22px; height: 22px; accent-color: #10b981; flex: none; } .mc-chk small { display: block; color: var(--text-secondary); font-size: 12px; }
+    .mc-cal { display: grid; gap: 8px; justify-items: start; } .mc-cal-cab { display: flex; align-items: center; gap: 8px; } .mc-cal-cab b { min-width: 140px; text-align: center; }
+    .mc-cal-g { display: grid; grid-template-columns: repeat(7, 44px); gap: 4px; } .mc-cal-g .ds { font-size: 11px; font-weight: 800; color: var(--text-secondary); text-align: center; }
+    .mc-dia { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; padding: 0; cursor: pointer; }
+    .mc-dia.fora { background: none; border-color: transparent; color: var(--text-muted); cursor: default; } .mc-dia.folga { border-style: dashed; border-color: var(--pf-borda); color: var(--text-secondary); background: none; cursor: default; }
+    .mc-dia.desc { background: var(--mc-ruim-bg); border-color: var(--mc-ruim-bd); color: var(--mc-ruim-t); text-decoration: line-through; }
+    .mc-dia.rev { background: var(--mc-av-bg); border-color: var(--mc-av-bd); color: var(--mc-rev-t); cursor: default; } .mc-dia.prova { background: var(--edt-agora); border-color: var(--edt-agora); color: var(--mc-ini-fg); cursor: default; }
+    .mc-dia.hoje { box-shadow: 0 0 0 2px var(--brand); }
+    .mc-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--text-secondary); } .mc-leg span { display: inline-flex; gap: 6px; align-items: center; }
+    .mc-leg i { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--border-color); display: inline-block; background: var(--bg-card); } .mc-leg i.desc { background: var(--mc-ruim-bg); border-color: var(--mc-ruim-bd); } .mc-leg i.rev { background: var(--mc-av-bg); border-color: var(--mc-av-bd); } .mc-leg i.folga { border-style: dashed; border-color: var(--pf-borda); background: none; } .mc-leg i.prova { background: var(--edt-agora); border-color: var(--edt-agora); }
+    .mc-pilulas { display: flex; gap: 8px; flex-wrap: wrap; } .mc-pil { display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border-radius: 99px; background: var(--bg-card); border: 1px solid var(--border-color); font-size: 13px; color: var(--text-secondary); } .mc-pil b { color: var(--text-primary); }
+    .mc-aj { font-size: 10.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 1px 7px; border-radius: 6px; border: 1px solid var(--edt-agora); color: var(--mc-acento-t); }
+    .mc-linha { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .mc-aviso { border-radius: 12px; padding: 10px 12px; font-size: 13px; border: 1px solid var(--mc-av-bd); background: var(--mc-av-bg); color: var(--text-primary); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .mc-aviso.ok { border-color: var(--mc-ok-bd); background: var(--mc-ok-bg); } .mc-aviso.ruim { border-color: var(--mc-ruim-bd); background: var(--mc-ruim-bg); }
+    .mc-opcs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .mc-opc { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+    .mc-opc[aria-pressed="true"] { background: var(--sel-fundo); border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+    .mc-opc .sug { font-size: 10.5px; font-weight: 800; color: var(--mc-acento-t); }
+    .mc-outro { width: 76px; min-height: 44px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: center; font-weight: 700; }
+    .mc-op { display: grid; gap: 6px; }
+    .mc-fita { display: grid; gap: 8px; } .mc-letra { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+    .mc-letra > b { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--edt-agora) 12%, transparent); color: var(--mc-acento-t); border: 1.5px solid var(--edt-agora); font-size: 17px; }
+    .mc-blocos { display: flex; gap: 4px; flex-wrap: wrap; min-width: 0; } .mc-bl { flex: 1 1 84px; min-width: 84px; min-height: 44px; border-radius: 10px; background: var(--c); color: #fff; display: grid; align-content: center; padding: 4px 8px; font-size: 12px; font-weight: 800; line-height: 1.2; } .mc-bl small { font-weight: 600; opacity: .92; }
+    .mc-letra > span { font-size: 12px; color: var(--text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    @container mc (max-width: 600px) { .mc-letra { grid-template-columns: 44px minmax(0, 1fr); } .mc-letra > span { grid-column: 2; } }
+    .mc-rt { display: grid; gap: 6px; } .mc-rt-l { display: grid; grid-template-columns: minmax(0, 1fr) 56px 76px 84px 60px; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); font-size: 13px; }
+    .mc-rt-l.cab { background: none; border: 0; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--text-secondary); padding: 0 10px; } .mc-rt-l .v { text-align: right; font-variant-numeric: tabular-nums; }
+    @container mc (max-width: 600px) { .mc-rt-l { grid-template-columns: minmax(0, 1fr) auto auto; } .mc-rt-l .so-g { display: none; } }
+    .mc-vt { font-weight: 800; } .mc-vt.ok { color: var(--mc-ok-t); } .mc-vt.ruim { color: var(--mc-ruim-t); }
+    details.mc-ajuda { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 0 12px; } details.mc-ajuda summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 700; font-size: 13px; } details.mc-ajuda > div { padding: 0 0 12px; }
+    .mc-kpis { display: grid; gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); } .mc-kpi { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; align-content: start; }
+    .mc-kpi span { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); } .mc-kpi b { font-size: 18px; } .mc-kpi small { font-size: 12px; color: var(--text-secondary); }
+    .mc-confirma { display: grid; gap: 10px; border: 1.5px solid var(--edt-agora); border-radius: 14px; padding: 12px; background: color-mix(in srgb, var(--edt-agora) 8%, transparent); font-size: 13px; }
+    .mc-confirma .ad { display: grid; grid-template-columns: 1fr; gap: 8px; } .mc-confirma .ad div { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; } .mc-confirma .ad b { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+    .mc-acoes { display: flex; gap: 8px; flex-wrap: wrap; } .mc-acoes .mc-btn { flex: 1 1 auto; }
+    @container mc (max-width: 400px) { .mc-cartao { padding: 14px 8px; } .mc-cal-g { gap: 2px; } }
     /* seletor de tópicos em duas etapas */
     .sel-gatilho { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; cursor: pointer; font-size: 13px; }
     .sel-gatilho:hover:not(:disabled) { border-color: var(--brand); } .sel-gatilho:disabled { opacity: .55; cursor: not-allowed; }
@@ -359,9 +434,6 @@
       .lat-barra > div:last-child { padding: 8px 6px; }
       .lat-barra > div:last-child button { flex-direction: column; gap: 3px; min-height: 56px; font-size: 11px; padding: 6px 2px; }
     }
-    @media (min-width: 768px) and (max-width: 1023px) {
-      #bilhete-wrapper { left: 96px; }
-    }
     @media (max-width: 1023px) {
     }
     @media (max-width: 767px) {
@@ -373,10 +445,8 @@
       .bn-it:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
       #main-content { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       #main-content .conteudo-pag { padding: 12px; }
-      /* cronômetro e bilhete acima da barra inferior */
+      /* cronômetro acima da barra inferior */
       #floating-timer-wrapper { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
-      #bilhete-wrapper { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
-      #bilhete-card { width: min(18rem, calc(100vw - 96px)); }
       #timer-panel { max-height: calc(100vh - 112px); max-height: calc(100dvh - 112px); }
       /* alvos de toque de 44 px */
       .chk-toque { min-width: 44px; min-height: 44px; }
@@ -812,9 +882,13 @@
 
       <!-- ================= CRONOGRAMA ================= -->
       <div id="view-cronograma" class="hidden max-w-5xl mx-auto space-y-6">
-        <header>
-          <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2"></i> Meu Cronograma</h2>
-          <p class="text-sec text-sm">Monte seus dias do jeito que preferir: quantas sessões, em que disciplina, por quantos minutos. A rodada repete os dias em sequência.</p>
+        <div id="cron-principal" class="space-y-6">
+        <header class="flex flex-wrap items-start justify-between gap-3">
+          <div class="flex-1" style="min-width:220px">
+            <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2"></i> Meu Cronograma</h2>
+            <p class="text-sec text-sm">Monte seus dias do jeito que preferir: quantas sessões, em que disciplina, por quantos minutos. A rodada repete os dias em sequência. Ou use <b>Montar ciclo</b> para o sistema sugerir pelo peso da prova e pelas suas lacunas.</p>
+          </div>
+          <button type="button" id="cron-btn-montar" onclick="abrirMontarCiclo()" class="mc-btn ini"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Montar ciclo</button>
         </header>
 
         <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -823,7 +897,7 @@
             <p class="text-3xl font-bold text-brand" id="cron-rodada">1</p>
           </div>
           <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Dia atual</p>
+            <p class="text-xs text-sec font-bold uppercase mb-1" id="cron-dia-rot">Dia atual</p>
             <p class="text-2xl font-bold text-main truncate" id="cron-dia">—</p>
           </div>
           <div class="bg-card p-4 rounded-lg border border-theme">
@@ -837,10 +911,10 @@
 
         <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
           <div class="flex flex-wrap justify-between items-center gap-3">
-            <h3 class="font-bold text-main text-lg">Dias do ciclo</h3>
+            <h3 class="font-bold text-main text-lg" id="cron-dias-tit">Dias do ciclo</h3>
             <div class="flex gap-2">
-              <button onclick="pularDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-forward-step mr-1"></i> Pular dia atual</button>
-              <button onclick="adicionarDia()" class="px-3 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> Novo dia</button>
+              <button onclick="pularDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-forward-step mr-1"></i> <span id="cron-btn-pular">Pular dia atual</span></button>
+              <button onclick="adicionarDia()" class="px-3 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> <span id="cron-btn-novo">Novo dia</span></button>
             </div>
           </div>
           <div id="cron-dias" class="space-y-4"></div>
@@ -850,6 +924,8 @@
           <h3 class="font-bold text-main text-lg mb-3"><i class="fa-solid fa-clock-rotate-left text-blue-400 mr-2"></i> Rodadas concluídas</h3>
           <div id="cron-historico" class="space-y-2 text-sm"></div>
         </section>
+        </div>
+        <div id="cron-montar" class="hidden" aria-labelledby="mc-titulo"></div>
       </div>
 
       <!-- ================= MURAL DE REVISÕES ================= -->
@@ -1036,32 +1112,6 @@
       <button type="button" class="mais-lk" onclick="fecharMaisMovel(); abrirModalBackup()"><i class="fa-solid fa-shield-halved text-brand" aria-hidden="true"></i> Backup &amp; Segurança</button>
       <button type="button" class="mais-lk" onclick="fecharMaisMovel(); toggleTheme()"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> Alternar tema</button>
     </div>
-  </div>
-
-  <!-- ================= BILHETE FIXO ================= -->
-  <div id="bilhete-wrapper" class="fixed bottom-6 left-6 z-30">
-    <div id="bilhete-card" class="bilhete-fixo w-72 bg-panel border border-theme rounded-2xl shadow-2xl overflow-hidden">
-      <div class="px-4 py-2.5 bg-card border-b border-theme flex justify-between items-center">
-        <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-thumbtack"></i> Norte do Ciclo</span>
-        <button onclick="toggleBilhete(false)" class="text-sec hover:text-main p-1" title="Recolher"><i class="fa-solid fa-compress"></i></button>
-      </div>
-      <div class="p-4 space-y-3 text-sm">
-        <div class="flex justify-between items-baseline">
-          <span class="text-xs text-sec font-bold uppercase">Rodada <span id="bil-rodada" class="text-brand text-base">1</span></span>
-          <span class="text-xs text-sec font-bold uppercase truncate ml-2" id="bil-dia">—</span>
-        </div>
-        <div class="w-full bg-card rounded-full h-2 border border-theme overflow-hidden">
-          <div id="bil-barra" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
-        </div>
-        <div class="p-3 rounded-lg bg-card border border-theme">
-          <p class="text-[11px] text-sec font-bold uppercase mb-0.5">Próxima sessão</p>
-          <p id="bil-proxima" class="font-semibold text-main text-sm">—</p>
-        </div>
-      </div>
-    </div>
-    <button id="bilhete-pin" onclick="toggleBilhete(true)" class="hidden bilhete-mini rounded-full bg-amber-500 text-slate-900 shadow-xl items-center justify-center text-lg hover:scale-105 transition" title="Mostrar Norte do Ciclo">
-      <i class="fa-solid fa-thumbtack"></i>
-    </button>
   </div>
 
   <!-- ================= CRONÔMETRO ================= -->
@@ -2047,7 +2097,7 @@
       if (ativoBn) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
     if (tela === 'erros') voltarVitrineErros();
-    if (tela === 'cronograma') renderizarCronograma();
+    if (tela === 'cronograma') { mostrarCronogramaPrincipal(); renderizarCronograma(); }
     if (tela === 'revisoes') renderizarRevisoes();
     if (tela === 'historico') { popularFiltrosHist(); renderizarHistorico(); }
     if (tela === 'edital') renderizarEdital();
@@ -2077,10 +2127,9 @@
     renderizarEdital();
     renderizarLembretes();
     renderizarPlanoDia();
-    renderizarBilhete();
     renderizarVitrineErros();
     if (visivel('erros-disc')) renderizarMuralErros();
-    if (visivel('view-cronograma')) renderizarCronograma();
+    if (visivel('view-cronograma')) { renderizarCronograma(); renderizarMontarCiclo(); }
     if (visivel('view-revisoes')) renderizarRevisoes();
     if (visivel('view-historico')) renderizarHistorico();
     atualizarDisplayCronometro();   // anel do dia no cronômetro zerado
@@ -2839,18 +2888,18 @@
   }
   function pularDia() {
     if (!cronograma.dias.length) return;
-    if (!confirm('Pular o dia atual e seguir para o próximo?')) return;
+    if (!confirm(cicloEmLetras() ? 'Pular a letra atual e seguir para a próxima?' : 'Pular o dia atual e seguir para o próximo?')) return;
     avancarDia();
     salvarTudo();
   }
   function adicionarDia() {
-    cronograma.dias.push({ id: novoId(), nome: `Dia ${cronograma.dias.length + 1}`, sessoes: [] });
+    cronograma.dias.push({ id: novoId(), nome: cicloEmLetras() ? `Letra ${letraDoIndice(cronograma.dias.length)}` : `Dia ${cronograma.dias.length + 1}`, sessoes: [] });
     salvarTudo();
   }
   function renomearDia(i, valor) {
     const dia = cronograma.dias[i];
     if (!dia) return;
-    dia.nome = valor.trim() || `Dia ${i + 1}`;
+    dia.nome = valor.trim() || (cicloEmLetras() ? `Letra ${letraDoIndice(i)}` : `Dia ${i + 1}`);
     salvarTudo();
   }
   function removerDia(i) {
@@ -2929,14 +2978,14 @@
     return `
       <div class="rounded-xl border card-dia bg-panel p-4 space-y-3">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${atual ? 'bg-brand text-white' : 'bg-card border border-theme text-sec'}">${atual ? 'Hoje' : 'Dia ' + (i + 1)}</span>
+          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${atual ? 'bg-brand text-white' : 'bg-card border border-theme text-sec'}">${atual ? (cicloEmLetras() ? 'Agora' : 'Hoje') : (cicloEmLetras() ? 'Letra ' + letraDoIndice(i) : 'Dia ' + (i + 1))}</span>
           <input value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" class="flex-1 min-w-[140px] bg-card border border-theme rounded-lg p-1.5 text-sm font-bold text-main outline-none">
           <span class="text-xs text-sec">${dia.sessoes.length} sessão(ões) · ${formatarMinutos(totalMin)}</span>
           <button onclick="moverDia(${i}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir dia"><i class="fa-solid fa-arrow-up"></i></button>
           <button onclick="moverDia(${i}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer dia"><i class="fa-solid fa-arrow-down"></i></button>
           <button onclick="removerDia(${i})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover dia"><i class="fa-solid fa-trash"></i></button>
         </div>
-        <div class="space-y-2">${sessoes || '<p class="text-xs text-mut italic">Nenhuma sessão neste dia ainda.</p>'}</div>
+        <div class="space-y-2">${sessoes || `<p class="text-xs text-mut italic">Nenhuma sessão ${cicloEmLetras() ? 'nesta letra' : 'neste dia'} ainda.</p>`}</div>
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-2 border-t border-theme">
           <select id="sd-disc-${dia.id}" onchange="popularTopicoDia(${dia.id})" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">${optionsDisciplinas()}</select>
           <select id="sd-top-${dia.id}" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"><option value="">— disciplina inteira —</option></select>
@@ -2951,12 +3000,17 @@
     const dia = diaAtualObj();
     document.getElementById('cron-rodada').innerText = cronograma.rodada;
     document.getElementById('cron-dia').innerText = dia ? dia.nome : '—';
+    const letras = cicloEmLetras();
+    document.getElementById('cron-dia-rot').innerText = letras ? 'Letra atual' : 'Dia atual';
+    document.getElementById('cron-dias-tit').innerText = letras ? 'Letras do ciclo' : 'Dias do ciclo';
+    document.getElementById('cron-btn-pular').innerText = letras ? 'Pular letra atual' : 'Pular dia atual';
+    document.getElementById('cron-btn-novo').innerText = letras ? 'Nova letra' : 'Novo dia';
     document.getElementById('cron-progresso').innerText = `${prog.pct}%`;
     document.getElementById('cron-barra').style.width = `${prog.pct}%`;
 
     document.getElementById('cron-dias').innerHTML = cronograma.dias.length
       ? cronograma.dias.map((d, i) => diaHTML(d, i)).join('')
-      : '<p class="text-sm text-mut italic">Seu cronograma está vazio. Clique em "Novo dia" para começar.</p>';
+      : '<p class="text-sm text-mut italic">Seu cronograma está vazio. Use "Montar ciclo" ou "Novo dia" para começar.</p>';
 
     document.getElementById('cron-historico').innerHTML = cronograma.historico.length
       ? cronograma.historico.slice().reverse().map(h =>
@@ -2966,42 +3020,315 @@
   }
 
   // =====================================================================
-  // 10. BILHETE FIXO
+  // 10. MONTAR CICLO (Fase 1): ciclo em letras pelo peso da prova e pelas lacunas
+  // A configuração fica em cronograma.plano (mesma chave de dados; vai no Backup).
+  // O calendário serve só para a conta das horas: a fila de blocos não depende do dia da semana.
   // =====================================================================
-  function sessaoDaVez() {
-    const dia = diaAtualObj();
-    if (!dia) return null;
-    const s = dia.sessoes.find(x => !x.feita);
-    return s ? { ...s } : null;
+  const MC_DATA_PROVA = '2027-02-21';
+  const MC_F_PESO = { alto: 1.5, medio: 1.0, baixo: 0.6 };
+  const MC_F_DIAG = { nao_estudado: 1.5, revisar: 1.3, dominio: 0.6, menor: 0.4 };
+  const MC_CORES = { portugues: '#7c3aed', historia_pe: '#b45309', raciocinio: '#2563eb', informatica: '#0f766e', constitucional: '#be123c', direitos_humanos: '#a21caf' };
+  const MC_PALETA = ['#4f46e5', '#c2410c', '#047857', '#9333ea', '#0369a1', '#b91c1c', '#4d7c0f', '#be185d'];
+  const MC_CURTO = { portugues: 'Português', historia_pe: 'História PE', raciocinio: 'Rac. Lógico', informatica: 'Informática', constitucional: 'Constitucional', direitos_humanos: 'Dir. Humanos' };
+  const MC_DSEM = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const MC_MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  const MC_BLOCOS = [30, 40, 45, 50, 60, 90];
+  let mcUI = { mes: null, confirma: false, feito: false };
+
+  function cicloEmLetras() { return cronograma.modo === 'ciclo'; }
+  function letraDoIndice(i) { return i < 26 ? String.fromCharCode(65 + i) : String(i + 1); }
+  const mcS2d = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const mcAdd = (s, n) => { const d = mcS2d(s); d.setDate(d.getDate() + n); return isoLocal(d); };
+  const mcBR = s => s ? s.split('-').reverse().join('/') : '—';
+  const mcBRc = s => s ? mcBR(s).slice(0, 5) : '—';
+  const mcH = h => (Math.round(h * 2) / 2).toLocaleString('pt-BR');
+  const mcMin = m => { m = Math.round(m); const h = Math.floor(m / 60), r = m % 60; return h ? `${h}h${r ? String(r).padStart(2, '0') : ''}` : `${r} min`; };
+
+  function planoPadrao() {
+    return { questoes: {}, horasSemana: [0, 3, 3, 3, 3, 3, 3], inicio: null, fim: MC_DATA_PROVA, revisaoFinal: true, descanso: [], garantir: true, tempoTopico: 60,
+      ajustes: {}, letrasModo: 'auto', letrasFixo: 3, bloco: null, outro: 50 };
   }
-  function toggleBilhete(mostrar) {
-    document.getElementById('bilhete-card').classList.toggle('hidden', !mostrar);
-    const pin = document.getElementById('bilhete-pin');
-    pin.classList.toggle('hidden', mostrar);
-    pin.classList.toggle('flex', !mostrar);
-    localStorage.setItem('central_bilhete', mostrar ? 'aberto' : 'fechado');
+  // completa o rascunho no próprio objeto (sem trocar a referência)
+  function planoAtual() {
+    if (!cronograma.plano || typeof cronograma.plano !== 'object') cronograma.plano = planoPadrao();
+    const p = cronograma.plano, pad = planoPadrao();
+    for (const k of Object.keys(pad)) if (!(k in p)) p[k] = pad[k];
+    if (!Array.isArray(p.horasSemana) || p.horasSemana.length !== 7) p.horasSemana = pad.horasSemana;
+    if (!Array.isArray(p.descanso)) p.descanso = [];
+    if (!p.questoes || typeof p.questoes !== 'object') p.questoes = {};
+    if (!p.ajustes || typeof p.ajustes !== 'object') p.ajustes = {};
+    if (!p.fim) p.fim = MC_DATA_PROVA;
+    return p;
   }
-  function restaurarBilhete() {
-    const salvo = localStorage.getItem('central_bilhete');
-    const celular = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-    toggleBilhete(salvo ? salvo !== 'fechado' : !celular);   // no celular, sem escolha salva, começa recolhido (o cartão cobriria o conteúdo)
+  // rascunho: grava sem redesenhar a plataforma inteira
+  function salvarPlano() { if (!gravacaoBloqueada) localStorage.setItem(STORAGE_KEY, JSON.stringify(estadoAtual())); }
+  function mcInicio(p) { const h = hojeISO(); return p.inicio && p.inicio > h ? p.inicio : h; }
+  function mcDisciplinas(p) {
+    return meusDados.map((d, i) => {
+      const folhas = []; percorrerNos(d.topicos, n => { if (!(n.children && n.children.length)) folhas.push(n); });
+      const q = p.questoes[d.id] || {};
+      return { id: d.id, nome: d.nome, curto: MC_CURTO[d.id] || (d.nome.length > 16 ? d.nome.slice(0, 15) + '…' : d.nome), cor: MC_CORES[d.id] || MC_PALETA[i % MC_PALETA.length],
+        q: Number.isFinite(q.q) ? q.q : 10, p: Number.isFinite(q.p) ? q.p : 1, folhas };
+    });
   }
-  function renderizarBilhete() {
-    const prog = progressoRodada();
-    const dia = diaAtualObj();
-    document.getElementById('bil-rodada').innerText = cronograma.rodada;
-    document.getElementById('bil-dia').innerText = dia ? dia.nome : 'Sem dias';
-    document.getElementById('bil-barra').style.width = `${prog.pct}%`;
-    const prox = sessaoDaVez();
-    if (!dia) {
-      document.getElementById('bil-proxima').innerText = 'Monte seu cronograma';
-    } else if (!prox) {
-      document.getElementById('bil-proxima').innerText = dia.sessoes.length ? 'Dia concluído. Bom descanso!' : 'Este dia não tem sessões';
-    } else {
-      const d = meusDados.find(x => x.id === prox.disc);
-      document.getElementById('bil-proxima').innerText = `${d ? d.nome : '—'} · ${prox.min} min`;
+  function mcNecessidade(d) {
+    const pend = d.folhas.filter(n => !n.concluido);
+    if (!pend.length) return { nec: 0.5, pend: 0 };
+    const soma = pend.reduce((a, n) => a + (MC_F_PESO[n.peso] || 1) * (MC_F_DIAG[n.diagnostico] || 1) * (n.aocp ? 1.2 : 1), 0);
+    return { nec: Math.min(2, Math.max(0.5, soma / pend.length)), pend: pend.length };   // limitada entre 0,5 e 2
+  }
+  function mcDiasDeEstudo(p) {
+    const ini = mcInicio(p), fim = p.fim || MC_DATA_PROVA, revIni = p.revisaoFinal ? mcAdd(fim, -7) : fim, desc = new Set(p.descanso), dias = [];
+    for (let s = ini; s < fim; s = mcAdd(s, 1)) {
+      if (s >= revIni || desc.has(s)) continue;
+      const h = p.horasSemana[mcS2d(s).getDay()] || 0;
+      if (h > 0) dias.push({ s, h });
     }
+    return { dias, revIni, ini, fim };
   }
+  // divide um total inteiro em partes proporcionais (maior resto), com mínimo por parte
+  function mcMaiorResto(total, pesos, minimo = 0) {
+    const S = pesos.reduce((a, b) => a + b, 0) || 1, q = pesos.map(x => total * x / S);
+    const base = q.map(x => Math.max(minimo, Math.floor(x)));
+    let falta = total - base.reduce((a, b) => a + b, 0);
+    const ordem = q.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0]);
+    for (let k = 0; falta > 0 && ordem.length; k++) { base[ordem[k % ordem.length][1]]++; falta--; }
+    while (falta < 0) { const i = base.indexOf(Math.max(...base)); base[i]--; falta++; }
+    return base;
+  }
+  function mcHorasSugeridas(discs, H, p) {
+    const info = discs.map(d => { const n = mcNecessidade(d); return { ...n, pontos: d.q * d.p, w: d.q * d.p * n.nec, need: n.pend * p.tempoTopico / 60 }; });
+    const sw = info.reduce((a, x) => a + x.w, 0), sn = info.reduce((a, x) => a + x.need, 0);
+    let alvo;
+    if (p.garantir && sn <= H) alvo = info.map(x => x.need + (H - sn) * (sw ? x.w / sw : 1 / info.length));
+    else if (p.garantir) alvo = info.map(x => H * (sn ? x.need / sn : 1 / info.length));
+    else alvo = info.map(x => H * (sw ? x.w / sw : 1 / info.length));
+    const meias = mcMaiorResto(Math.round(H * 2), alvo);
+    return { info: info.map((x, i) => ({ ...x, sug: meias[i] / 2 })), falta: p.garantir && sn > H ? sn - H : 0 };
+  }
+  function mcAlocar(T, horas) { return mcMaiorResto(T, horas.map(h => Math.max(h, 0.0001)), T >= horas.length ? 1 : 0); }
+  function mcErro(slots, horas) { const T = slots.reduce((a, b) => a + b, 0) || 1, H = horas.reduce((a, b) => a + b, 0) || 1; return slots.reduce((a, x, i) => a + Math.abs(x / T - horas[i] / H), 0) / 2; }
+  function mcMontar(horas, H, nDias, bloco, modo, fixo) {
+    const D = nDias ? H / nDias : 0, s = Math.max(1, Math.round(D * 60 / bloco));   // blocos por letra = um dia médio de estudo
+    let L = fixo;
+    if (modo !== 'fixo') {
+      let melhor = null;
+      for (let l = 2; l <= 8; l++) {
+        const sl = mcAlocar(l * s, horas), c = { l, e: mcErro(sl, horas), todas: sl.every(x => x > 0) };
+        if (!melhor || (c.todas && !melhor.todas) || (c.todas === melhor.todas && c.e < melhor.e - 0.015)) melhor = c;
+        if (c.todas && c.e <= 0.06) { melhor = c; break; }
+      }
+      L = melhor.l;
+    }
+    const T = L * s, slots = mcAlocar(T, horas), cicloMin = T * bloco, nCiclos = cicloMin ? Math.floor(H * 60 / cicloMin) : 0;
+    const seq = [], cur = slots.map(() => 0);   // intercalação: round-robin ponderado suave
+    for (let k = 0; k < T; k++) { let b = -1; slots.forEach((w, i) => { if (!w) return; cur[i] += w; if (b < 0 || cur[i] > cur[b]) b = i; }); if (b < 0) break; cur[b] -= T; seq.push(b); }
+    const letras = []; for (let i = 0; i < L; i++) letras.push(seq.slice(i * s, (i + 1) * s));
+    return { D, s, L, T, slots, cicloMin, nCiclos, letras, erro: mcErro(slots, horas), todas: slots.every(x => x > 0) };
+  }
+  function mcFecha(needs, c, bloco) { return Math.max(0, ...needs.map((n, i) => !n ? 0 : c.slots[i] ? Math.ceil(n * 60 / (c.slots[i] * bloco)) : Infinity)); }
+  function mcDataDoMinuto(dias, min) { let acc = 0; for (const d of dias) { acc += d.h * 60; if (acc >= min - 0.001) return d.s; } return null; }
+  function mcBlocoSugerido(horas, H, nDias, needs) {
+    let best = null;
+    for (const b of [30, 40, 45, 50, 60, 75, 90]) {
+      const c = mcMontar(horas, H, nDias, b, 'auto', 3), ok = c.todas && c.s >= 2 && c.L <= 6 && mcFecha(needs, c, b) <= c.nCiclos;
+      const nota = (ok ? 0 : 10) + c.erro * 5 + Math.abs(b - 50) / 50;
+      if (!best || nota < best.nota) best = { b, nota, ok };
+    }
+    return best;
+  }
+  function mcCalcular() {
+    const p = planoAtual(), discs = mcDisciplinas(p), per = mcDiasDeEstudo(p), H = per.dias.reduce((a, d) => a + d.h, 0);
+    const hs = mcHorasSugeridas(discs, H, p);
+    const horas = discs.map((d, i) => Number.isFinite(p.ajustes[d.id]) ? p.ajustes[d.id] : hs.info[i].sug);
+    const dist = horas.reduce((a, b) => a + b, 0), needs = hs.info.map(x => x.need);
+    const bs = mcBlocoSugerido(horas, H, per.dias.length, needs);
+    const bloco = p.bloco === 'outro' ? Math.max(15, Math.min(180, parseInt(p.outro, 10) || bs.b)) : (p.bloco || bs.b);
+    const c = mcMontar(horas, H, per.dias.length, bloco, p.letrasModo, p.letrasFixo);
+    const fecha = mcFecha(needs, c, bloco), cabe = H > 0 && c.todas && fecha <= c.nCiclos;
+    return { p, discs, ...per, H, hs, horas, dist, bs, bloco, c, fecha, cabe, dataFecha: cabe ? mcDataDoMinuto(per.dias, fecha * c.cicloMin) : null, dataUlt: mcDataDoMinuto(per.dias, c.nCiclos * c.cicloMin),
+      pontos: discs.map(d => d.q * d.p), totP: discs.reduce((a, d) => a + d.q * d.p, 0) };
+  }
+
+  // ---------- tela ----------
+  function mostrarCronogramaPrincipal() {
+    document.getElementById('cron-montar').classList.add('hidden');
+    document.getElementById('cron-principal').classList.remove('hidden');
+  }
+  function abrirMontarCiclo() {
+    const p = planoAtual();
+    mcUI = { mes: mcInicio(p).slice(0, 7), confirma: false, feito: false };
+    document.getElementById('cron-principal').classList.add('hidden');
+    document.getElementById('cron-montar').classList.remove('hidden');
+    renderizarMontarCiclo();
+    document.getElementById('cron-montar').scrollIntoView({ block: 'start' });
+    document.getElementById('mc-titulo').focus({ preventScroll: true });
+  }
+  function fecharMontarCiclo() {
+    mostrarCronogramaPrincipal();
+    renderizarCronograma();
+    const b = document.getElementById('cron-btn-montar'); if (b) b.focus({ preventScroll: true });
+  }
+  function mcStp(acao, chave, valor, rotulo, desligaMenos) {
+    return `<span class="mc-stp"><button type="button" class="mc-passo" data-mc="${acao}" data-k="${chave}" data-d="-1" aria-label="Diminuir ${rotulo}" ${desligaMenos ? 'disabled' : ''}>−</button><b>${valor}</b><button type="button" class="mc-passo" data-mc="${acao}" data-k="${chave}" data-d="1" aria-label="Aumentar ${rotulo}">+</button></span>`;
+  }
+  function mcSec(n, titulo, sub, corpo) { return `<section class="mc-cartao mc-sec" aria-labelledby="mc-s${n}"><header><span class="mc-num" aria-hidden="true">${n}</span><div><h3 id="mc-s${n}">${titulo}</h3><p>${sub}</p></div></header>${corpo}</section>`; }
+  function mcSecPeso(R) {
+    const linhas = R.discs.map((d, i) => `<div class="mc-lin"><span class="n"><i class="mc-cor" style="--c:${d.cor}" aria-hidden="true"></i><span class="nm">${esc(d.nome)}</span></span>
+      <span class="mc-rm">Questões</span>${mcStp('q', d.id, d.q, 'questões de ' + esc(d.curto), d.q <= 0)}<span class="mc-rm">Peso</span>${mcStp('p', d.id, d.p, 'peso de ' + esc(d.curto), d.p <= 1)}
+      <span class="v">${R.pontos[i]} <small>pts</small></span><span class="v">${R.totP ? (Math.round(R.pontos[i] / R.totP * 1000) / 10).toLocaleString('pt-BR') : 0}%</span></div>`).join('');
+    const padrao = !Object.keys(R.p.questoes).length;
+    return `${padrao ? '<div class="mc-aviso">Os números de questões estão no valor inicial (10 por disciplina). Troque pelos do edital para a sugestão valer.</div>' : ''}
+      <div class="mc-tab"><div class="mc-lin cab" aria-hidden="true"><span>Disciplina</span><span style="text-align:center">Questões</span><span style="text-align:center">Peso</span><span class="v">Pontos</span><span class="v">%</span></div>${linhas}</div>
+      <div class="mc-tot"><span>Pontos = questões × peso da questão.</span><span>Total de pontos: <b>${R.totP}</b></span></div>`;
+  }
+  function mcSecHoras(R) {
+    const cel = [1, 2, 3, 4, 5, 6, 0].map(k => `<div class="mc-dsem ${R.p.horasSemana[k] ? '' : 'zero'}"><span>${MC_DSEM[k]}</span>${mcStp('h', k, mcH(R.p.horasSemana[k]) + ' h', 'horas de ' + MC_DSEM[k], R.p.horasSemana[k] <= 0)}</div>`).join('');
+    return `<div class="mc-semana">${cel}</div><div class="mc-tot"><span>Dia com 0 h vira folga fixa.</span><span>Total por semana: <b>${mcH(R.p.horasSemana.reduce((a, b) => a + b, 0))} h</b></span></div>`;
+  }
+  function mcCalendario(R) {
+    const [y, m] = mcUI.mes.split('-').map(Number), pri = new Date(y, m - 1, 1), ult = new Date(y, m, 0).getDate(), desc = new Set(R.p.descanso), hoje = hojeISO();
+    const cel = []; for (let k = 0; k < pri.getDay(); k++) cel.push('<span></span>');
+    for (let d = 1; d <= ult; d++) {
+      const s = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`, dentro = s >= R.ini && s <= R.fim;
+      let cls = 'mc-dia', rot = '', clic = false;
+      if (!dentro) cls += ' fora';
+      else if (s === R.fim) { cls += ' prova'; rot = ', dia da prova'; }
+      else if (R.p.revisaoFinal && s >= R.revIni) { cls += ' rev'; rot = ', revisão final'; }
+      else if (desc.has(s)) { cls += ' desc'; rot = ', descanso (toque para tirar)'; clic = true; }
+      else if (!R.p.horasSemana[new Date(y, m - 1, d).getDay()]) { cls += ' folga'; rot = ', folga fixa'; }
+      else { rot = ', estudo (toque para marcar descanso)'; clic = true; }
+      if (s === hoje) cls += ' hoje';
+      cel.push(`<button type="button" class="${cls}" ${clic ? `data-mc="desc" data-k="${s}" aria-pressed="${desc.has(s)}"` : 'aria-disabled="true" tabindex="-1"'} aria-label="${d} de ${MC_MESES[m - 1]}${rot}">${d}</button>`);
+    }
+    const ant = mcUI.mes > R.ini.slice(0, 7), prox = mcUI.mes < R.fim.slice(0, 7);
+    return `<div class="mc-cal"><div class="mc-cal-cab"><button type="button" class="mc-passo" data-mc="mes" data-k="m" data-d="-1" aria-label="Mês anterior" ${ant ? '' : 'disabled'}>‹</button><b aria-live="polite">${MC_MESES[m - 1]} ${y}</b><button type="button" class="mc-passo" data-mc="mes" data-k="m" data-d="1" aria-label="Próximo mês" ${prox ? '' : 'disabled'}>›</button></div>
+      <div class="mc-cal-g" role="group" aria-label="Dias de ${MC_MESES[m - 1]}">${MC_DSEM.map(x => `<span class="ds" aria-hidden="true">${x[0]}</span>`).join('')}${cel.join('')}</div>
+      <div class="mc-leg"><span><i></i>Estudo</span><span><i class="folga"></i>Folga fixa</span><span><i class="desc"></i>Descanso marcado</span>${R.p.revisaoFinal ? '<span><i class="rev"></i>Revisão final</span>' : ''}<span><i class="prova"></i>Prova</span></div></div>`;
+  }
+  function mcSecPeriodo(R) {
+    return `<div class="mc-datas"><label>Começa em<input type="date" value="${R.ini}" min="${hojeISO()}" data-mcch="inicio"></label><label>Prova em<input type="date" value="${R.fim}" min="${R.ini}" data-mcch="fim"></label></div>
+      <label class="mc-chk"><input type="checkbox" ${R.p.revisaoFinal ? 'checked' : ''} data-mcch="rev"><span>Reservar a última semana para revisão geral<small>${R.p.revisaoFinal ? `De ${mcBRc(R.revIni)} a ${mcBRc(mcAdd(R.fim, -1))}, fora do ciclo.` : 'Desligado: o ciclo vai até a véspera da prova.'}</small></span></label>
+      ${mcCalendario(R)}
+      <div class="mc-pilulas"><span class="mc-pil"><b>${R.dias.length}</b> dias de estudo</span><span class="mc-pil"><b>${mcH(R.H)} h</b> disponíveis</span><span class="mc-pil"><b>${R.p.descanso.filter(s => s >= R.ini && s < R.fim).length}</b> descansos marcados</span></div>`;
+  }
+  function mcSecDisc(R) {
+    const linhas = R.discs.map((d, i) => { const x = R.hs.info[i], aj = Number.isFinite(R.p.ajustes[d.id]);
+      return `<div class="mc-lin hd"><span class="n"><i class="mc-cor" style="--c:${d.cor}" aria-hidden="true"></i><span class="nm" style="flex:0 1 auto">${esc(d.curto)}</span>${aj ? '<span class="mc-aj">ajustado</span>' : ''}<span class="det">${x.pend} ${x.pend === 1 ? 'tópico pendente' : 'tópicos pendentes'} · necessidade ${x.nec.toFixed(2).replace('.', ',')}</span></span>
+        <span class="v so-g">${x.pontos} <small>pts</small></span><span class="v"><span class="mc-rm">Sugerido</span>${mcH(x.sug)} h</span>${mcStp('d', d.id, mcH(R.horas[i]) + ' h', 'horas de ' + esc(d.curto), R.horas[i] <= 0)}</div>`; }).join('');
+    const dif = Math.round((R.H - R.dist) * 2) / 2;
+    return `<label class="mc-chk"><input type="checkbox" ${R.p.garantir ? 'checked' : ''} data-mcch="gar"><span>Garantir uma passada completa no edital<small>Primeiro reserva o tempo para ver todos os tópicos pendentes; o resto vai para o que mais cai e para as suas lacunas.</small></span></label>
+      <div class="mc-linha"><span class="mc-pil">Tempo médio por tópico</span>${mcStp('tt', 't', R.p.tempoTopico + ' min', 'tempo médio por tópico', R.p.tempoTopico <= 15)}${Object.keys(R.p.ajustes).length ? '<button type="button" class="mc-btn" data-mc="restaurar" data-k="r">Restaurar sugestão</button>' : ''}</div>
+      ${R.hs.falta ? `<div class="mc-aviso ruim">Faltam <b>${mcH(R.hs.falta)} h</b> para ver o edital inteiro até a prova. Aumente as horas por dia, o período ou diminua o tempo por tópico.</div>` : ''}
+      <div class="mc-tab"><div class="mc-lin hd cab" aria-hidden="true"><span>Disciplina</span><span class="v so-g">Pontos</span><span class="v">Sugerido</span><span style="text-align:center">Horas</span></div>${linhas}</div>
+      <div class="mc-tot"><span>Necessidade: peso dos tópicos, diagnóstico e estrela.</span><span>Distribuídas: <b>${mcH(R.dist)} h</b> de ${mcH(R.H)} h</span></div>
+      ${dif ? `<div class="mc-aviso">${dif > 0 ? `Sobram <b>${mcH(dif)} h</b> sem disciplina.` : `Passou <b>${mcH(-dif)} h</b> do que você tem.`}<button type="button" class="mc-btn" data-mc="redist" data-k="r">Redistribuir o restante</button></div>` : ''}`;
+  }
+  function mcSecCiclo(R) {
+    const c = R.c, sug = R.bs.b, outro = R.p.bloco === 'outro';
+    const letrasTxt = n => Array.from({ length: n }, (_, i) => letraDoIndice(i)).join('/');
+    const fixos = R.p.letrasModo === 'fixo' ? `<div class="mc-opcs" role="group" aria-label="Quantidade de letras">${[2, 3, 4, 5, 6].map(n => `<button type="button" class="mc-opc" data-mc="lf" data-k="${n}" aria-pressed="${R.p.letrasFixo === n}">${letrasTxt(n)}</button>`).join('')}</div>` : '';
+    const blocos = MC_BLOCOS.map(b => `<button type="button" class="mc-opc" data-mc="bloco" data-k="${b}" aria-pressed="${!outro && R.bloco === b}">${b} min${b === sug ? ' <span class="sug">sugerido</span>' : ''}</button>`).join('')
+      + (MC_BLOCOS.includes(sug) ? '' : `<button type="button" class="mc-opc" data-mc="bloco" data-k="${sug}" aria-pressed="${!outro && R.bloco === sug}">${sug} min <span class="sug">sugerido</span></button>`)
+      + `<button type="button" class="mc-opc" data-mc="bloco" data-k="outro" aria-pressed="${outro}">Outro</button>${outro ? `<input class="mc-outro" type="number" min="15" max="180" step="5" value="${R.bloco}" data-mcch="outro" aria-label="Minutos do bloco"> <span>min</span>` : ''}`;
+    const aviso = !R.H ? '<div class="mc-aviso ruim">Sem horas de estudo no período. Ajuste as horas por dia ou as datas.</div>'
+      : !c.todas ? `<div class="mc-aviso ruim">Com ${R.bloco} min e ${c.L} letras, nem todas as disciplinas entram em cada ciclo. Use um bloco menor ou mais letras.</div>`
+      : R.cabe ? `<div class="mc-aviso ok">Fecha o edital no <b>ciclo ${R.fecha}</b> (≈ ${mcBR(R.dataFecha)}) e ainda sobram <b>${c.nCiclos - R.fecha} ciclos</b> para revisar${R.p.revisaoFinal ? ` antes de ${mcBRc(R.revIni)}` : ''}.</div>`
+      : `<div class="mc-aviso ruim">Com bloco de ${R.bloco} min o edital <b>não fecha</b> até a prova: precisaria de ${R.fecha} ciclos e cabem ${c.nCiclos}.${R.bs.ok && R.bs.b !== R.bloco ? ` O bloco sugerido (${sug} min) fecha.` : ' Aumente as horas ou o período.'}</div>`;
+    const fita = `<div class="mc-fita" aria-label="Fila de blocos por letra">${c.letras.map((l, i) => `<div class="mc-letra"><b aria-label="Letra ${letraDoIndice(i)}">${letraDoIndice(i)}</b><div class="mc-blocos">${l.map(k => `<span class="mc-bl" style="--c:${R.discs[k].cor}">${esc(R.discs[k].curto)}<small>${R.bloco} min</small></span>`).join('')}</div><span>${mcMin(l.length * R.bloco)}</span></div>`).join('')}</div>`;
+    const tab = `<div class="mc-rt"><div class="mc-rt-l cab" aria-hidden="true"><span>Disciplina</span><span class="v">Blocos</span><span class="v so-g">Por ciclo</span><span class="v">Até a prova</span><span class="v so-g">Voltas</span></div>${R.discs.map((d, i) => { const tot = c.slots[i] * R.bloco * c.nCiclos / 60, need = R.hs.info[i].need, v = need ? tot / need : 0;
+      return `<div class="mc-rt-l"><span style="display:flex;gap:8px;align-items:center;font-weight:700"><i class="mc-cor" style="--c:${d.cor}" aria-hidden="true"></i>${esc(d.curto)}</span><span class="v">${c.slots[i]}</span><span class="v so-g">${mcMin(c.slots[i] * R.bloco)}</span><span class="v">${mcH(tot)} h</span><span class="v so-g mc-vt ${!need || v >= 1 ? 'ok' : 'ruim'}">${need ? v.toFixed(1).replace('.', ',') + '×' : '—'}</span></div>`; }).join('')}</div>`;
+    return `<div class="mc-op"><span class="mc-rot">Letras do ciclo</span><div class="mc-opcs" role="group" aria-label="Como definir as letras"><button type="button" class="mc-opc" data-mc="lm" data-k="auto" aria-pressed="${R.p.letrasModo !== 'fixo'}">Automático${R.p.letrasModo !== 'fixo' ? ` <span class="sug">${letrasTxt(c.L)}</span>` : ''}</button><button type="button" class="mc-opc" data-mc="lm" data-k="fixo" aria-pressed="${R.p.letrasModo === 'fixo'}">Fixo</button></div>${fixos}</div>
+      <div class="mc-op"><span class="mc-rot">Tamanho do bloco</span><div class="mc-opcs" role="group" aria-label="Tamanho do bloco">${blocos}</div></div>
+      ${aviso}${fita}<details class="mc-ajuda"><summary>Ver por disciplina</summary><div>${tab}</div></details>`;
+  }
+  function mcResultado(R) {
+    const c = R.c, ok = R.cabe;
+    const kpis = `<div class="mc-kpis" aria-live="polite"><div class="mc-kpi"><span>Horas até a prova</span><b>${mcH(R.H)} h</b><small>${R.dias.length} dias de estudo</small></div><div class="mc-kpi"><span>Um ciclo</span><b>${c.L} letras · ${mcMin(c.cicloMin)}</b><small>${c.T} blocos de ${R.bloco} min</small></div>
+      <div class="mc-kpi"><span>Ciclos até ${mcBRc(R.revIni)}</span><b>${c.nCiclos}</b><small>${R.dataUlt ? 'último termina ≈ ' + mcBRc(R.dataUlt) : '—'}</small></div><div class="mc-kpi"><span>Edital fecha</span><b class="mc-vt ${ok ? 'ok' : 'ruim'}">${ok ? 'ciclo ' + R.fecha : 'não fecha'}</b><small>${ok ? '≈ ' + mcBR(R.dataFecha) : 'veja o aviso no passo 5'}</small></div></div>`;
+    let acao;
+    if (mcUI.feito) acao = `<div class="mc-aviso ok">Ciclo aplicado. O Cronograma agora tem as letras ${c.letras.map((_, i) => letraDoIndice(i)).join(', ')} e começa pelo primeiro bloco da Letra A.</div><button type="button" class="mc-btn pri" data-mc="voltar" data-k="v">Ver o Cronograma</button>`;
+    else if (mcUI.confirma) {
+      const sess = cronograma.dias.reduce((a, d) => a + d.sessoes.length, 0), un = cicloEmLetras() ? (cronograma.dias.length === 1 ? 'letra' : 'letras') : (cronograma.dias.length === 1 ? 'dia' : 'dias');
+      acao = `<div class="mc-confirma" role="group" aria-labelledby="mc-conf-t"><b id="mc-conf-t">Antes de trocar, confira:</b><div class="ad"><div><b>Hoje</b>${cronograma.dias.length} ${un} · ${sess} ${sess === 1 ? 'sessão' : 'sessões'} · rodada ${cronograma.rodada}</div><div><b>Depois</b>${c.L} letras · ${c.T} blocos de ${R.bloco} min · rodada ${cronograma.rodada}</div></div>
+        <span>O histórico de rodadas, os registros de estudo e as pendências do Mural não mudam. Faça um <b>Backup</b> antes.</span>
+        <div class="mc-acoes"><button type="button" class="mc-btn" data-mc="backup" data-k="b"><i class="fa-solid fa-download" aria-hidden="true"></i> Fazer backup</button><button type="button" class="mc-btn pri" data-mc="ok" data-k="o">Trocar o cronograma</button><button type="button" class="mc-btn" data-mc="cancel" data-k="c">Cancelar</button></div></div>`;
+    } else acao = `<button type="button" class="mc-btn ini" data-mc="imp" data-k="i" style="width:100%" ${R.H && R.discs.length ? '' : 'disabled'}>Usar este ciclo no Cronograma</button>`;
+    return `<aside class="mc-cartao mc-aside" aria-label="Resultado ao vivo"><span class="mc-rot">Resultado ao vivo</span>${kpis}${acao}</aside>`;
+  }
+  function renderizarMontarCiclo() {
+    const el = document.getElementById('cron-montar');
+    if (!el || el.classList.contains('hidden')) return;
+    const at = document.activeElement, foco = at && at.closest && at.closest('#cron-montar') ? (at.dataset.mc ? `[data-mc="${at.dataset.mc}"][data-k="${at.dataset.k}"]${at.dataset.d ? `[data-d="${at.dataset.d}"]` : ''}` : at.dataset.mcch ? `[data-mcch="${at.dataset.mcch}"]` : null) : null;
+    const R = mcCalcular();
+    el.innerHTML = `<div class="mc-topo"><div><span class="mc-migalha">Cronograma › Montar ciclo</span><h2 id="mc-titulo" class="text-2xl font-bold" tabindex="-1">Montar ciclo</h2><p class="text-sec text-sm">O sistema sugere pelo peso da prova e pelas suas lacunas; você ajusta o que quiser. Tudo fica guardado como rascunho.</p></div><button type="button" class="mc-btn" data-mc="voltar" data-k="v"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Voltar ao Cronograma</button></div>
+      <div class="mc-grade"><div class="mc-col">
+        ${mcSec(1, 'Peso da prova', 'Questões e peso de cada disciplina', mcSecPeso(R))}
+        ${mcSec(2, 'Horas por dia', 'Quanto você estuda em cada dia da semana', mcSecHoras(R))}
+        ${mcSec(3, 'Período e descanso', 'Até a prova, com os dias de folga', mcSecPeriodo(R))}
+        ${mcSec(4, 'Horas por disciplina', 'Sugestão do sistema; ajuste à mão se quiser', mcSecDisc(R))}
+        ${mcSec(5, 'Ciclo', 'Letras, bloco e a fila de estudo', mcSecCiclo(R))}
+      </div>${mcResultado(R)}</div>`;
+    if (foco) { const f = el.querySelector(foco); if (f && !f.disabled) f.focus({ preventScroll: true }); }
+  }
+  function mcAplicar(R) {
+    if (timerSessao && sessaoTimerEmCurso()) { alert('Há uma sessão do cronograma no cronômetro. Salve ou descarte a sessão antes de trocar o cronograma.'); return false; }
+    const base = novoId(); let n = 0;
+    cronograma.dias = R.c.letras.map((l, i) => ({ id: base + (n++), nome: `Letra ${letraDoIndice(i)}`, sessoes: l.map(k => ({ id: base + (n++), disc: R.discs[k].id, min: R.bloco, topicoId: '', feita: false })) }));
+    cronograma.diaAtual = 0;
+    cronograma.modo = 'ciclo';
+    R.p.ultimoUso = { data: hojeISO(), bloco: R.bloco, letras: R.c.L, ciclos: R.c.nCiclos, fechaNoCiclo: R.cabe ? R.fecha : null };
+    salvarTudo();
+    return true;
+  }
+  function mcClique(ev) {
+    const b = ev.target.closest('[data-mc]');
+    if (!b || b.disabled || b.getAttribute('aria-disabled') === 'true') return;
+    const a = b.dataset.mc, k = b.dataset.k, d = Number(b.dataset.d || 0), p = planoAtual();
+    const R0 = () => mcCalcular();
+    if (a === 'voltar') return fecharMontarCiclo();
+    if (a === 'imp') { mcUI.confirma = true; renderizarMontarCiclo(); const f = document.querySelector('#cron-montar [data-mc="ok"]'); if (f) f.focus({ preventScroll: true }); return; }
+    if (a === 'cancel') { mcUI.confirma = false; renderizarMontarCiclo(); return; }
+    if (a === 'backup') { exportarBackup('_antes_do_ciclo'); return; }
+    if (a === 'ok') { if (mcAplicar(R0())) { mcUI.confirma = false; mcUI.feito = true; renderizarMontarCiclo(); const f = document.querySelector('#cron-montar [data-mc="voltar"].pri'); if (f) f.focus({ preventScroll: true }); } return; }
+    if (a === 'mes') { const [y, m] = mcUI.mes.split('-').map(Number), x = new Date(y, m - 1 + d, 1); mcUI.mes = `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}`; renderizarMontarCiclo(); return; }
+    if (a === 'q' || a === 'p') { const ds = mcDisciplinas(p), di = ds.find(x => x.id === k); if (!di) return; const q = { q: di.q, p: di.p }; if (a === 'q') q.q = Math.max(0, Math.min(200, q.q + d)); else q.p = Math.max(1, Math.min(10, q.p + d)); p.questoes[k] = q; }
+    else if (a === 'h') p.horasSemana[+k] = Math.max(0, Math.min(16, (p.horasSemana[+k] || 0) + d * 0.5));
+    else if (a === 'tt') p.tempoTopico = Math.max(15, Math.min(240, p.tempoTopico + d * 15));
+    else if (a === 'd') { const R = R0(), i = R.discs.findIndex(x => x.id === k); if (i < 0) return; p.ajustes[k] = Math.max(0, R.horas[i] + d * 0.5); }
+    else if (a === 'restaurar') p.ajustes = {};
+    else if (a === 'redist') {
+      const R = R0(), livres = R.discs.map(x => !Number.isFinite(p.ajustes[x.id])), dif = R.H - R.dist;
+      const base = R.horas.map((h, i) => livres[i] ? h : 0), sb = base.reduce((x, y) => x + y, 0);
+      R.discs.forEach((x, i) => { if (livres[i]) p.ajustes[x.id] = Math.max(0, Math.round((R.horas[i] + dif * (sb ? R.horas[i] / sb : 1 / livres.filter(Boolean).length)) * 2) / 2); });
+      const R2 = R0(), resto = Math.round((R2.H - R2.dist) * 2) / 2;
+      if (resto) { const i = R2.horas.indexOf(Math.max(...R2.horas)); p.ajustes[R2.discs[i].id] = Math.max(0, R2.horas[i] + resto); }
+    }
+    else if (a === 'desc') { const i = p.descanso.indexOf(k); if (i >= 0) p.descanso.splice(i, 1); else p.descanso.push(k); }
+    else if (a === 'lm') p.letrasModo = k === 'fixo' ? 'fixo' : 'auto';
+    else if (a === 'lf') p.letrasFixo = Math.max(2, Math.min(6, +k));
+    else if (a === 'bloco') { if (k === 'outro') { p.bloco = 'outro'; p.outro = R0().bloco; } else p.bloco = +k; }
+    else return;
+    mcUI.feito = false; mcUI.confirma = false;
+    salvarPlano(); renderizarMontarCiclo();
+  }
+  function mcMudanca(ev) {
+    const i = ev.target.closest('[data-mcch]'); if (!i) return;
+    const a = i.dataset.mcch, p = planoAtual();
+    if (a === 'inicio') { if (i.value) { p.inicio = i.value; if (p.fim <= p.inicio) p.fim = mcAdd(p.inicio, 1); mcUI.mes = mcInicio(p).slice(0, 7); } }
+    else if (a === 'fim') { if (i.value && i.value > mcInicio(p)) p.fim = i.value; }
+    else if (a === 'rev') p.revisaoFinal = i.checked;
+    else if (a === 'gar') { p.garantir = i.checked; p.ajustes = {}; }
+    else if (a === 'outro') { const n = parseInt(i.value, 10); if (n > 0) p.outro = Math.max(15, Math.min(180, n)); }
+    else return;
+    mcUI.feito = false; mcUI.confirma = false;
+    salvarPlano(); renderizarMontarCiclo();
+  }
+  (function ligarMontarCiclo() {
+    const el = document.getElementById('cron-montar');
+    if (!el) { document.addEventListener('DOMContentLoaded', ligarMontarCiclo, { once: true }); return; }
+    el.addEventListener('click', mcClique); el.addEventListener('change', mcMudanca);
+  })();
 
   // =====================================================================
   // 11. CRONÔMETRO
@@ -5188,7 +5515,6 @@
     popularFiltrosHist();
     iniciarSeletoresDeTopico();
     setOrigemTimer('Cronômetro livre (sem alarme)');
-    restaurarBilhete();
     atualizarTudoUI();
     navigate('dashboard');
     restaurarEstadoTimer();
