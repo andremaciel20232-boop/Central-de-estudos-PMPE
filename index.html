@@ -246,10 +246,11 @@
     .edt-dir { display: grid; grid-template-columns: 24px 92px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
     .edt-dir.g { grid-template-columns: auto 24px 92px 52px 28px; }
     .edt-dir.sd { grid-template-columns: 24px 92px 28px; } .edt-dir.g.sd { grid-template-columns: auto 24px 92px 28px; }
-    .edt-dir > .edt-peso { justify-self: start; }
+    .edt-marcas > .edt-peso { justify-self: start; }
     .edt-det { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
     .edt-det span { display: inline-flex; align-items: center; gap: 5px; } .edt-det i { font-size: 11px; }
     .sel-det { display: block; font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-top: 1px; } .sel-det i { font-size: 10px; margin: 0 2px 0 0; } .sel-det i + i, .sel-det span + span { margin-left: 8px; }
+    .edt-marcas { display: contents; }
     .edt-tempo { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
     .edt-anel { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 4px; }
     .edt-mais { width: 28px; height: 28px; border-radius: 8px; color: var(--text-secondary); background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
@@ -307,12 +308,114 @@
     .sel-vazio-msg { padding: 14px 12px; font-size: 13px; color: var(--text-secondary); }
     .sel-pe { padding: 8px 12px; border-top: 1px solid var(--border-color); font-size: 11px; color: var(--text-secondary); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     @media (max-width: 640px) { .sel-fundo { align-items: flex-end; padding: 0; } .sel-caixa { max-width: none; border-radius: 18px 18px 0 0; max-height: 90vh; } }
+
+    /* ===== Etapa 5: celular (menos de 768 px) e tablet (768 a 1023 px). Computador (1024 px ou mais) não muda. ===== */
+    :root { --nav-ativo-fundo: rgba(16,185,129,.16); --nav-ativo-txt: #34d399; }
+    body.light-mode { --nav-ativo-fundo: rgba(5,150,105,.14); --nav-ativo-txt: #047857; }
+    @supports (height: 100dvh) { body.h-screen { height: 100dvh; } }
+    #main-content { min-width: 0; }
+    .nav-curto, .reg-curto, .topo-avatar, .bn-pag, .quebra-linha { display: none; }
+    .chk-toque { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+    .mais-movel { position: fixed; inset: 0; z-index: 45; } .mais-movel[hidden] { display: none; }
+    .mais-veu { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+    .mais-folha { position: absolute; left: 0; right: 0; bottom: 0; background: var(--bg-panel); border-top: 1px solid var(--border-color); border-radius: 20px 20px 0 0; padding: 8px 10px calc(14px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 2px; box-shadow: 0 -12px 30px rgba(0,0,0,.4); }
+    .mais-alca { width: 40px; height: 4px; border-radius: 99px; background: var(--text-muted); margin: 2px auto 8px; }
+    .mais-lk { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 0 14px; border: 0; background: none; border-radius: 12px; color: var(--text-primary); font-size: 15px; font-weight: 600; text-align: left; cursor: pointer; }
+    .mais-lk i { width: 22px; text-align: center; font-size: 17px; } .mais-lk:hover, .mais-lk:focus-visible { background: var(--bg-hover); outline: none; }
+    @media (min-width: 768px) { .mais-movel { display: none !important; } }
+    /* tablet e celular: a barra lateral vira uma barra compacta (ícone + rótulo curto) */
+    @media (max-width: 1023px) {
+      .lat-barra { width: 84px !important; }
+      .lat-barra .lat-foto { min-height: 0; padding: 12px 6px; background: var(--bg-panel); }
+      .lat-barra .lat-foto > div:last-child { display: none; }
+      .lat-barra .lat-avatar { width: 46px; height: 46px; border-width: 2px; }
+      .lat-barra nav { padding: 8px 6px; }
+      .lat-barra nav > button { flex-direction: column; justify-content: center; gap: 3px; padding: 8px 2px; min-height: 60px; text-align: center; font-size: 11px; line-height: 1.15; }
+      .lat-barra nav > button i { width: auto; font-size: 19px; }
+      .lat-barra .nav-longo { display: none; } .lat-barra .nav-curto { display: inline; }
+      .lat-barra > div:last-child { padding: 8px 6px; }
+      .lat-barra > div:last-child button { flex-direction: column; gap: 3px; min-height: 56px; font-size: 11px; padding: 6px 2px; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #view-dashboard > .grid:nth-child(2) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+      #bilhete-wrapper { left: 96px; }
+    }
+    @media (max-width: 1023px) {
+      /* cabeçalho em uma linha: a frase encolhe com reticências; Backup só com o ícone */
+      header.cab-pag { flex-wrap: nowrap; }
+      header.cab-pag .cab-id { flex: 1; min-width: 0; }
+      header.cab-pag .topo-titulo, header.cab-pag .topo-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      header.cab-pag .cab-acoes { flex: none; }
+      .btn-backup-cab span { display: none; }
+      button.btn-backup-cab { width: 44px; height: 44px; padding: 0; justify-content: center; }
+      .cab-pag #btn-theme { height: 44px; width: 44px; }
+      button.btn-registrar { height: 44px; width: auto; padding: 0 16px; }
+    }
+    @media (max-width: 767px) {
+      .lat-barra { display: none !important; }
+      .bn-pag { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; background: var(--bg-panel); border-top: 1px solid var(--border-color); padding: 4px 6px; gap: 2px; }
+      .bn-it { min-height: 56px; border: 0; background: none; border-radius: 12px; display: grid; place-items: center; align-content: center; gap: 2px; color: var(--text-secondary); font-size: 11px; font-weight: 600; cursor: pointer; }
+      .bn-it i { font-size: 19px; } .bn-it span { line-height: 1.1; }
+      .bn-it[aria-current="page"] { background: var(--nav-ativo-fundo); color: var(--nav-ativo-txt); font-weight: 800; }
+      .bn-it:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+      #main-content { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+      #main-content .conteudo-pag { padding: 12px; }
+      #view-dashboard > .grid:first-child { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      #view-dashboard > .grid:first-child > div { padding: 10px; }
+      #view-dashboard > .grid:first-child > div > p:first-child { font-size: 10px; line-height: 1.25; }
+      #view-dashboard > .grid:first-child .text-3xl { font-size: 20px; line-height: 1.2; }
+      #view-dashboard > .grid:first-child .flex.items-baseline { flex-direction: column; align-items: flex-start; gap: 0; }
+      /* cabeçalho compacto */
+      header.cab-pag { flex-wrap: nowrap; gap: 8px; padding: 8px 12px; min-height: 62px; }
+      header.cab-pag .cab-id { flex: 1; min-width: 0; }
+      header.cab-pag .topo-titulo { font-size: 15px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      header.cab-pag .topo-sub { font-size: 11px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .topo-avatar { display: block; width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,255,255,.85); background: #0f172a; overflow: hidden; flex: none; }
+      .topo-avatar img { width: 100%; height: 100%; object-fit: cover; } .topo-avatar img.logo-fallback { object-fit: contain; padding: 3px; }
+      .topo-sobrenome { display: none; }
+      header.cab-pag .cab-acoes { flex: none; gap: 8px; }
+      .btn-backup-cab { display: none !important; }
+      .cab-pag #btn-theme { width: 44px; height: 44px; }
+      button.btn-registrar { height: 44px; padding: 0 14px; } .reg-longo { display: none; } .reg-curto { display: inline; }
+      /* cronômetro e bilhete acima da barra inferior */
+      #floating-timer-wrapper { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+      #bilhete-wrapper { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+      #bilhete-card { width: min(18rem, calc(100vw - 96px)); }
+      #timer-panel { max-height: calc(100vh - 112px); max-height: calc(100dvh - 112px); }
+      /* alvos de toque de 44 px */
+      .chk-toque { min-width: 44px; min-height: 44px; }
+      #plano-lista button { min-height: 44px; } #plano-lista button.w-8 { width: 44px; }
+      #view-cronograma > section.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 10px; }
+      #view-cronograma > section.grid > div { padding: 8px; }
+      #view-cronograma > section.grid .text-3xl, #view-cronograma > section.grid .text-2xl { font-size: 18px; line-height: 1.25; }
+      #view-cronograma > section.grid p.text-xs { font-size: 10px; line-height: 1.25; }
+      #cron-dias p.truncate { flex: 1 1 calc(100% - 60px); }
+      #view-erros .capa-caderno h3 { font-size: 17px; line-height: 1.2; overflow-wrap: anywhere; }
+      .plano-extra { flex-wrap: wrap; row-gap: 0; } .plano-extra .quebra-linha { display: block; flex-basis: 100%; height: 0; }
+      .plano-extra [data-bloco-lapis] { margin-left: 56px; }
+      #main-content .grid > *, #main-content section { min-width: 0; }
+      #main-content .overflow-x-auto { position: relative; }   /* o .sr-only da tabela não escapa do recorte */
+      #cron-dias button.w-7 { width: 44px; height: 44px; } #cron-dias input, #cron-dias select { min-height: 44px; }
+      .edt-linha, .edt-grupo > .edt-linha { grid-template-columns: 44px 30px minmax(0,1fr) 44px; column-gap: 8px; row-gap: 0; }
+      .edt-dir, .edt-dir.g, .edt-dir.sd, .edt-dir.g.sd { display: contents; }
+      .edt-marcas { grid-column: 3 / 5; grid-row: 2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+      .edt-mais { grid-column: 4; grid-row: 1; justify-self: end; }
+      .edt-lista:not(.edt-classificando) .edt-ghost { display: none; }
+      .edt-chkw { width: 44px; height: 44px; } .edt-seta { width: 44px; height: 44px; background: none; border: 0; }
+      .edt-mais { width: 44px; height: 44px; }
+      button.edt-estrela { position: relative; width: 44px; height: 44px; background: none; }
+      button.edt-estrela::before { content: ""; position: absolute; inset: 10px; border-radius: 7px; background: var(--estrela-fundo); }
+      button.edt-estrela svg { position: relative; }
+      button.edt-peso { min-height: 44px; padding: 0 4px; }
+      .edt-classificar { height: 44px; padding: 0 14px; }
+      .sel-chip, .sel-filtro, .sel-item, .sel-gatilho { min-height: 44px; }
+    }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
   <!-- ================= SIDEBAR ================= -->
-  <aside class="w-64 bg-panel flex flex-col border-r border-theme shrink-0 z-20">
+  <aside id="barra-lateral" class="lat-barra w-64 bg-panel flex flex-col border-r border-theme shrink-0 z-20">
     <div class="lat-foto p-5 border-b border-theme flex flex-col items-center gap-2.5 text-center">
       <div class="lat-avatar">
         <img src="perfil.jpg" alt="Foto de perfil" onerror="if(!this.dataset.f){this.dataset.f='1';this.classList.add('logo-fallback');this.src='logo.png';}else{this.src='https://placehold.co/100x100/1e232d/10b981?text=PMPE';}">
@@ -324,52 +427,55 @@
     </div>
     <nav class="flex-1 p-3.5 space-y-1.5 overflow-y-auto">
       <button onclick="navigate('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-brand bg-emerald-500/10 font-semibold text-sm">
-        <i class="fa-solid fa-chart-pie w-5 text-center"></i> Dashboard
+        <i class="fa-solid fa-chart-pie w-5 text-center"></i> <span class="nav-longo">Dashboard</span><span class="nav-curto">Dashboard</span>
       </button>
       <button onclick="navigate('edital')" id="nav-edital" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-sitemap w-5 text-center text-blue-400"></i> <span>Edital Verticalizado</span>
+        <i class="fa-solid fa-sitemap w-5 text-center text-blue-400"></i> <span class="nav-longo">Edital Verticalizado</span><span class="nav-curto">Edital</span>
       </button>
       <button onclick="navigate('cronograma')" id="nav-cronograma" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-diagram-project w-5 text-center text-emerald-400"></i> <span>Cronograma</span>
+        <i class="fa-solid fa-diagram-project w-5 text-center text-emerald-400"></i> <span class="nav-longo">Cronograma</span><span class="nav-curto">Cronograma</span>
       </button>
       <button onclick="navigate('revisoes')" id="nav-revisoes" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i> <span>Pendências e Revisões</span>
+        <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i> <span class="nav-longo">Pendências e Revisões</span><span class="nav-curto">Revisões</span>
       </button>
       <button onclick="navigate('erros')" id="nav-erros" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-book-bookmark w-5 text-center text-rose-400"></i> <span>Caderno de Erros</span>
+        <i class="fa-solid fa-book-bookmark w-5 text-center text-rose-400"></i> <span class="nav-longo">Caderno de Erros</span><span class="nav-curto">Erros</span>
       </button>
       <button onclick="navigate('historico')" id="nav-historico" class="w-full flex items-center gap-3 py-2.5 px-3.5 rounded-lg hover-bg transition text-left text-sec font-medium text-sm">
-        <i class="fa-solid fa-chart-column w-5 text-center text-blue-400"></i> <span>Histórico</span>
+        <i class="fa-solid fa-chart-column w-5 text-center text-blue-400"></i> <span class="nav-longo">Histórico</span><span class="nav-curto">Histórico</span>
       </button>
     </nav>
     <div class="p-3.5 border-t border-theme">
       <button onclick="abrirModalBackup()" class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-card hover-bg border border-theme text-xs font-semibold text-sec transition">
-        <i class="fa-solid fa-shield-halved text-brand"></i> Backup & Segurança
+        <i class="fa-solid fa-shield-halved text-brand"></i> <span class="nav-longo">Backup & Segurança</span><span class="nav-curto">Backup</span>
       </button>
     </div>
   </aside>
 
   <!-- ================= MAIN ================= -->
   <main class="flex-1 overflow-y-auto relative" id="main-content">
-    <header class="sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
-      <div>
-        <h2 class="text-xl md:text-2xl font-bold topo-titulo">Olá, Jéssica Dayane</h2>
-        <p class="topo-sub text-xs md:text-sm">Constância vence a pressa: um passo por dia até a prova.</p>
+    <header class="cab-pag sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
+      <div class="cab-id flex items-center gap-3 min-w-0">
+        <span class="topo-avatar" aria-hidden="true"><img src="perfil.jpg" alt="" onerror="if(!this.dataset.f){this.dataset.f='1';this.classList.add('logo-fallback');this.src='logo.png';}else{this.removeAttribute('src');}"></span>
+        <div class="min-w-0">
+          <h2 class="text-xl md:text-2xl font-bold topo-titulo">Olá, Jéssica<span class="topo-sobrenome"> Dayane</span></h2>
+          <p class="topo-sub text-xs md:text-sm">Constância vence a pressa: um passo por dia até a prova.</p>
+        </div>
       </div>
-      <div class="flex items-center gap-2.5">
+      <div class="cab-acoes flex items-center gap-2.5">
         <button onclick="toggleTheme()" id="btn-theme" title="Alternar tema" class="w-10 h-10 rounded-lg bg-panel border border-theme hover-bg flex items-center justify-center text-amber-400 transition shadow-sm">
           <i class="fa-solid fa-sun text-lg" id="icon-theme"></i>
         </button>
-        <button onclick="abrirModalBackup()" title="Backup de Segurança" class="h-10 px-3.5 rounded-lg bg-panel border border-theme hover-bg flex items-center gap-2 text-xs font-semibold text-sec transition shadow-sm">
+        <button onclick="abrirModalBackup()" title="Backup de Segurança" class="btn-backup-cab h-10 px-3.5 rounded-lg bg-panel border border-theme hover-bg flex items-center gap-2 text-xs font-semibold text-sec transition shadow-sm">
           <i class="fa-solid fa-cloud-arrow-down text-blue-400"></i> <span class="hidden sm:inline">Backup</span>
         </button>
-        <button onclick="openModalEstudo()" class="h-10 bg-brand hover:opacity-90 text-white font-bold px-5 rounded-lg transition shadow-md flex items-center gap-2 text-sm">
-          <i class="fa-solid fa-plus"></i> Registrar Estudo
+        <button onclick="openModalEstudo()" class="btn-registrar h-10 bg-brand hover:opacity-90 text-white font-bold px-5 rounded-lg transition shadow-md flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-plus"></i> <span class="reg-longo">Registrar Estudo</span><span class="reg-curto">Registrar</span>
         </button>
       </div>
     </header>
 
-    <div class="p-6 md:p-8">
+    <div class="conteudo-pag p-6 md:p-8">
 
       <!-- ================= DASHBOARD ================= -->
       <div id="view-dashboard" class="block max-w-6xl mx-auto space-y-6">
@@ -411,8 +517,8 @@
             <div id="lem-alerta" class="hidden space-y-3"></div>
             <div class="space-y-2">
               <input id="lem-texto" type="text" placeholder="Ex: Pagar inscrição / Prova 21/02" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
-              <div class="flex gap-2">
-                <input id="lem-data" type="date" class="flex-1 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
+              <div class="flex flex-wrap gap-2">
+                <input id="lem-data" type="date" class="min-w-[9rem] flex-1 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
                 <button onclick="adicionarLembrete()" class="px-4 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition">+ Lembrete</button>
               </div>
             </div>
@@ -640,6 +746,25 @@
 
     </div>
   </main>
+
+  <!-- ================= NAVEGAÇÃO DO CELULAR (menos de 768 px) ================= -->
+  <nav id="barra-inferior" class="bn-pag" aria-label="Navegação principal">
+    <button type="button" class="bn-it" data-tela="dashboard" onclick="navigate('dashboard')"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Dashboard</span></button>
+    <button type="button" class="bn-it" data-tela="edital" onclick="navigate('edital')"><i class="fa-solid fa-sitemap" aria-hidden="true"></i><span>Edital</span></button>
+    <button type="button" class="bn-it" data-tela="cronograma" onclick="navigate('cronograma')"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i><span>Cronograma</span></button>
+    <button type="button" class="bn-it" data-tela="revisoes" onclick="navigate('revisoes')"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Revisões</span></button>
+    <button type="button" class="bn-it" id="bn-mais" data-tela="mais" onclick="abrirMaisMovel()" aria-haspopup="dialog" aria-expanded="false"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i><span>Mais</span></button>
+  </nav>
+  <div id="mais-movel" class="mais-movel" hidden>
+    <div class="mais-veu" onclick="fecharMaisMovel()"></div>
+    <div class="mais-folha" role="dialog" aria-modal="true" aria-label="Mais opções">
+      <div class="mais-alca" aria-hidden="true"></div>
+      <button type="button" class="mais-lk" data-tela="erros" onclick="irPeloMais('erros')"><i class="fa-solid fa-book-bookmark text-rose-400" aria-hidden="true"></i> Caderno de Erros</button>
+      <button type="button" class="mais-lk" data-tela="historico" onclick="irPeloMais('historico')"><i class="fa-solid fa-chart-column text-blue-400" aria-hidden="true"></i> Histórico</button>
+      <button type="button" class="mais-lk" onclick="fecharMaisMovel(); abrirModalBackup()"><i class="fa-solid fa-shield-halved text-brand" aria-hidden="true"></i> Backup &amp; Segurança</button>
+      <button type="button" class="mais-lk" onclick="fecharMaisMovel(); toggleTheme()"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> Alternar tema</button>
+    </div>
+  </div>
 
   <!-- ================= BILHETE FIXO ================= -->
   <div id="bilhete-wrapper" class="fixed bottom-6 left-6 z-30">
@@ -1532,12 +1657,35 @@
     const ativo = document.getElementById(`nav-${tela}`);
     ativo.classList.remove('text-sec', 'font-medium');
     ativo.classList.add('text-brand', 'bg-emerald-500/10', 'font-semibold');
+    document.querySelectorAll('#barra-inferior .bn-it').forEach(b => {
+      const ativoBn = b.dataset.tela === tela || (b.dataset.tela === 'mais' && (tela === 'erros' || tela === 'historico'));
+      if (ativoBn) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
     if (tela === 'erros') voltarVitrineErros();
     if (tela === 'cronograma') renderizarCronograma();
     if (tela === 'revisoes') renderizarRevisoes();
     if (tela === 'historico') { popularFiltrosHist(); renderizarHistorico(); }
     if (tela === 'edital') renderizarEdital();
   }
+  // Folha "Mais" do celular: Caderno de Erros, Histórico, Backup e tema
+  let maisFoco = null;
+  function abrirMaisMovel() {
+    const el = document.getElementById('mais-movel');
+    maisFoco = document.activeElement;
+    el.hidden = false;
+    document.getElementById('bn-mais').setAttribute('aria-expanded', 'true');
+    const primeiro = el.querySelector('.mais-lk'); if (primeiro) primeiro.focus();
+  }
+  function fecharMaisMovel() {
+    const el = document.getElementById('mais-movel');
+    if (el.hidden) return;
+    el.hidden = true;
+    document.getElementById('bn-mais').setAttribute('aria-expanded', 'false');
+    if (maisFoco && document.body.contains(maisFoco)) { try { maisFoco.focus(); } catch (e) {} }
+    maisFoco = null;
+  }
+  function irPeloMais(tela) { fecharMaisMovel(); navigate(tela); }
+  document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharMaisMovel(); });
   function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
     atualizarDashboard();
@@ -1774,7 +1922,7 @@
       const parcial = s.feita && s.parcial;
       return `
         <div class="flex items-center gap-3 p-3 rounded-lg border transition ${parcial ? 'sessao-parcial' : s.feita ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
-          <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="w-4 h-4 accent-emerald-500 shrink-0">
+          <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="w-4 h-4 accent-emerald-500 shrink-0" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${s.feita && !parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
             <p class="text-[11px] text-sec truncate">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
@@ -1790,14 +1938,15 @@
       if (blocoEdicao && blocoEdicao.id === b.id) return blocoEdicaoHTML();
       const { disc, node } = getNodeRef(b.discId, b.topicoId);
       return `
-        <div class="flex items-center gap-3 p-3 rounded-lg border transition ${b.feito ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
-          <input type="checkbox" ${b.feito ? 'checked' : ''} onchange="alternarBlocoPlano(${b.id})" class="w-4 h-4 accent-emerald-500 shrink-0">
+        <div class="plano-extra flex items-center gap-3 p-3 rounded-lg border transition ${b.feito ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
+          <label class="chk-toque"><input type="checkbox" ${b.feito ? 'checked' : ''} onchange="alternarBlocoPlano(${b.id})" class="w-4 h-4 accent-emerald-500 shrink-0" aria-label="Bloco concluído: ${esc(b.texto)}"></label>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${b.feito ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
             ${disc ? `<p class="text-[11px] text-sec truncate">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
             ${node ? `<div class="mt-1 flex items-center gap-2">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}</div>` : ''}
           </div>
           <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
+          <span class="quebra-linha" aria-hidden="true"></span>
           <button type="button" onclick="editarBlocoPlano(${b.id})" data-bloco-lapis="${b.id}" class="w-8 h-8 rounded-md text-sec hover-bg shrink-0" title="Editar bloco" aria-label="Editar bloco: ${esc(b.texto)}"><i class="fa-solid fa-pen"></i></button>
           <button onclick="removerBlocoPlano(${b.id})" class="w-8 h-8 rounded-md text-red-400 hover-bg shrink-0" title="Remover"><i class="fa-solid fa-xmark"></i></button>
         </div>`;
@@ -1953,9 +2102,9 @@
       + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '')
       + (det && (tempo > 0 || ultima) ? `<span class="edt-det">${tempo > 0 ? `<span><i class="fa-regular fa-clock" aria-hidden="true"></i>${formatarMinutos(tempo)} de estudo</span>` : ''}${ultima ? `<span><i class="fa-regular fa-calendar" aria-hidden="true"></i>último estudo ${ultimoEstudoTexto(ultima)}</span>` : ''}</span>` : '')
       + '</span>';
-    const lado = `<span class="edt-dir${grupo ? ' g' : ''}${det ? ' sd' : ''}">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
+    const lado = `<span class="edt-dir${grupo ? ' g' : ''}${det ? ' sd' : ''}"><span class="edt-marcas">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
       + (det ? '' : `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}">${tempo ? formatarMinutos(tempo) : ''}</span>`)
-      + `<button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button></span>`;
+      + `</span><button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button></span>`;
     const numTxt = `<span class="edt-num">${num ? esc(num) + '.' : ''}</span>`;
     const classes = `edt-linha edt-n${nivel >= 2 ? 2 : 1}${feito ? ' edt-feito' : ''}${emFoco ? ' edt-foco' : ''}`;
     if (grupo) {
@@ -2229,7 +2378,7 @@
       return `
         <div class="p-2.5 rounded-lg border border-theme bg-card ${s.feita && s.parcial ? 'sessao-parcial' : s.feita ? 'sessao-concluida' : ''}">
           <div class="flex flex-wrap items-center gap-2">
-            <input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500">
+            <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
             <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita && !s.parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
             ${s.feita && s.parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : ''}
             <input type="number" min="5" value="${s.min}" onchange="editarMinSessao(${i}, ${s.id}, this.value)" class="w-20 bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none" title="Minutos">
@@ -2297,7 +2446,11 @@
     pin.classList.toggle('flex', !mostrar);
     localStorage.setItem('central_bilhete', mostrar ? 'aberto' : 'fechado');
   }
-  function restaurarBilhete() { toggleBilhete(localStorage.getItem('central_bilhete') !== 'fechado'); }
+  function restaurarBilhete() {
+    const salvo = localStorage.getItem('central_bilhete');
+    const celular = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+    toggleBilhete(salvo ? salvo !== 'fechado' : !celular);   // no celular, sem escolha salva, começa recolhido (o cartão cobriria o conteúdo)
+  }
   function renderizarBilhete() {
     const prog = progressoRodada();
     const dia = diaAtualObj();
