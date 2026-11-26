@@ -473,6 +473,42 @@
     .vz-dados small { display: block; color: var(--text-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
     .vz-dados .vz-enun { font-weight: 700; font-size: 14px; }
     .vz-dados .vz-anot { color: var(--text-sub); white-space: pre-line; }
+
+    /* ===== Etapa 7: marcas (estrela, peso, diagnóstico), filtros e ordem em Revisões e Histórico ===== */
+    :root { --d-dominio: #10b981; --d-revisar: #f59e0b; --d-nao_estudado: #8b95a5; --d-menor: #818cf8; --dt-dominio: #34d399; --dt-revisar: #fbbf24; --dt-nao_estudado: #aab4c3; --dt-menor: #a5b4fc; }
+    body.light-mode { --d-dominio: #047857; --d-revisar: #b45309; --d-nao_estudado: #5b6678; --d-menor: #4f46e5; --dt-dominio: #047857; --dt-revisar: #92400e; --dt-nao_estudado: #475569; --dt-menor: #4338ca; }
+    .marcas { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; margin-top: 6px; }
+    .dg { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; white-space: nowrap; } .dg i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .dg-dominio { color: var(--dt-dominio); } .dg-dominio i { background: var(--d-dominio); } .dg-revisar { color: var(--dt-revisar); } .dg-revisar i { background: var(--d-revisar); }
+    .dg-nao_estudado { color: var(--dt-nao_estudado); } .dg-nao_estudado i { background: var(--d-nao_estudado); } .dg-menor { color: var(--dt-menor); } .dg-menor i { background: var(--d-menor); }
+    .resumo-disc { font-size: 12px; color: var(--text-secondary); margin: 4px 0 0; }
+    .ses-cron .sel-gatilho .sel-marcas { display: none; }
+    .mk-barra { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .mk-btn, .mk-limpar, .mk-seg button { min-height: 44px; cursor: pointer; }
+    .mk-btn { padding: 0 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
+    .mk-btn:hover { background: var(--bg-hover); } .mk-btn[aria-expanded="true"] { border-color: var(--brand); }
+    .mk-limpar { background: none; border: 0; padding: 0 8px; color: var(--text-secondary); font-size: 12px; font-weight: 700; text-decoration: underline; }
+    .mk-conta { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .mk-ordem { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-left: auto; }
+    .mk-seg { display: inline-flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 11px; padding: 2px; gap: 2px; }
+    .mk-seg button { border: 0; background: none; color: var(--text-secondary); font-size: 12px; font-weight: 700; padding: 0 12px; border-radius: 8px; }
+    .mk-seg button[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); }
+    .mk-vazio { grid-column: 1 / -1; text-align: center; padding: 22px 12px; border: 1px dashed var(--text-muted); border-radius: 12px; color: var(--text-secondary); font-size: 13px; display: grid; gap: 8px; justify-items: center; }
+    .mk-vazio button { min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); font-weight: 700; font-size: 12px; cursor: pointer; }
+    .mk-veu { position: fixed; inset: 0; z-index: 71; background: rgba(0,0,0,.55); }
+    .mk-painel { position: fixed; z-index: 72; background: var(--bg-panel); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.35); padding: 14px; display: grid; gap: 14px; width: min(440px, calc(100vw - 16px)); max-height: calc(100vh - 24px); overflow: auto; }
+    .mk-painel h4 { margin: 0 0 6px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); }
+    .mk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mk-chip { min-height: 44px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-secondary); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .mk-chip[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    .mk-chip .mk-est { color: var(--estrela); display: inline-grid; } .mk-chip[aria-pressed="true"] .mk-est { color: var(--btn-iniciar-fg); }
+    .mk-rodape { display: flex; gap: 8px; } .mk-rodape button { flex: 1; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; cursor: pointer; }
+    .mk-rodape .mk-ver { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    @media (max-width: 767px) { .mk-painel { left: 0 !important; right: 0; top: auto !important; bottom: 0; width: auto; max-height: 85vh; border-radius: 20px 20px 0 0; padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); } .mk-ordem { margin-left: 0; } }
+    /* Histórico: a coluna do lápis fica fixa à direita enquanto a tabela rola */
+    #view-historico table th:last-child, #view-historico table td:last-child:not([colspan]) { position: sticky; right: 0; background: var(--bg-panel); box-shadow: -8px 0 8px -8px rgba(0,0,0,.35); }
+    #hist-tabela tr:hover td:last-child:not([colspan]) { background: var(--bg-hover); }
+    @media (hover: none), (pointer: coarse), (max-width: 767px) { #hist-tabela button { width: 44px; height: 44px; } }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -707,6 +743,7 @@
           <button onclick="abrirNovaRevisao()" class="bg-brand hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition text-sm"><i class="fa-solid fa-calendar-plus mr-2"></i> Nova revisão</button>
         </div>
         <div id="rev-filtros" class="flex flex-wrap gap-2 mb-5"></div>
+        <div id="rev-marcas-barra" class="mb-4" data-mk-tela="rev"></div>
         <div id="rev-lista" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
       </div>
 
@@ -844,11 +881,12 @@
           <p class="text-[11px] text-mut mt-3">A meta usa as sessões do seu cronograma. Sem cronograma montado, a meta fica zerada.</p>
         </section>
         <section class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
+          <div id="hist-marcas-barra" class="mb-3" data-mk-tela="hist"></div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
                 <tr class="text-left text-xs text-sec uppercase border-b border-theme">
-                  <th class="py-2 pr-3">Data</th><th class="py-2 pr-3">Disciplina</th><th class="py-2 pr-3">Tópico</th><th class="py-2 pr-3">Tempo</th><th class="py-2 pr-3">Modalidade</th><th class="py-2"><span class="sr-only">Editar</span></th>
+                  <th class="py-2 pr-3">Data</th><th class="py-2 pr-3">Disciplina</th><th class="py-2 pr-3">Tópico</th><th class="py-2 pr-3">Tempo</th><th class="py-2 pr-3">Modalidade</th><th class="py-2 pr-3">Marcas</th><th class="py-2"><span class="sr-only">Editar</span></th>
                 </tr>
               </thead>
               <tbody id="hist-tabela"></tbody>
@@ -1526,6 +1564,143 @@
   }
 
   // =====================================================================
+  // Etapa 7: marcas (estrela, peso, diagnóstico) em todas as telas, filtros e ordem em Revisões e Histórico
+  // Só leitura: usa os campos aocp, peso e diagnostico do tópico. O estado de filtro e ordem fica só na memória.
+  // =====================================================================
+  function diagnosticoBadgeHTML(node) {
+    const d = node && DIAGNOSTICOS[node.diagnostico];
+    return d ? `<span class="dg dg-${node.diagnostico}" title="Diagnóstico: ${d.rotulo}"><i aria-hidden="true"></i>${d.rotulo}</span>` : '';
+  }
+  function marcasHTML(node) {
+    if (!node) return '';
+    const h = badgeAOCPHTML(node) + pesoBadgeHTML(node) + diagnosticoBadgeHTML(node);
+    return h ? `<div class="marcas">${h}</div>` : '';
+  }
+  // Sessão ou bloco sem tópico: quantos tópicos de peso alto e com estrela da disciplina ainda não foram concluídos
+  function resumoDisciplinaHTML(discId) {
+    const disc = meusDados.find(d => d.id === discId);
+    if (!disc) return '';
+    let alto = 0, estrela = 0;
+    percorrerNos(disc.topicos, n => { if (!n.concluido) { if (n.peso === 'alto') alto++; if (n.aocp) estrela++; } });
+    return `<p class="resumo-disc">${alto || estrela ? `${alto} de peso alto e ${estrela} com estrela ainda sem concluir` : 'Nenhum tópico de peso alto ou com estrela pendente'}</p>`;
+  }
+  const PESO_ORDEM = { alto: 0, medio: 1, baixo: 2 };
+  const novoFiltroMarcas = () => ({ estrela: false, peso: [], diag: [], ordem: 'data', aberto: false, qtd: 0, total: 0 });
+  const filtrosMarcas = { rev: novoFiltroMarcas(), hist: novoFiltroMarcas() };
+  const nFiltrosMarcas = f => (f.estrela ? 1 : 0) + f.peso.length + f.diag.length;
+  // dentro de um grupo as escolhas somam (ou); entre os grupos se combinam (e). Sem tópico = sem marcas.
+  function marcaPassa(node, f) {
+    if (f.estrela && !(node && node.aocp)) return false;
+    if (f.peso.length && !f.peso.includes(node && PESOS[node.peso] ? node.peso : 'sem')) return false;
+    if (f.diag.length && !f.diag.includes(node && DIAGNOSTICOS[node.diagnostico] ? node.diagnostico : 'sem')) return false;
+    return true;
+  }
+  function aplicarMarcasNaLista(lista, f, noDe) {
+    f.total = lista.length;
+    let r = lista.filter(x => marcaPassa(noDe(x), f));
+    if (f.ordem === 'peso') {
+      const rank = n => (n && PESO_ORDEM[n.peso] !== undefined) ? PESO_ORDEM[n.peso] : 3;
+      r = r.map((x, i) => [x, i]).sort((a, b) => rank(noDe(a[0])) - rank(noDe(b[0])) || a[1] - b[1]).map(a => a[0]);   // desempate: a ordem de hoje
+    }
+    f.qtd = r.length;
+    return r;
+  }
+  function desenharBarraMarcas(tela) {
+    const f = filtrosMarcas[tela], el = document.getElementById(tela === 'rev' ? 'rev-marcas-barra' : 'hist-marcas-barra');
+    if (!el) return;
+    if (!f.total) { el.innerHTML = ''; return; }
+    const n = nFiltrosMarcas(f);
+    el.innerHTML = `<div class="mk-barra"><button type="button" class="mk-btn" data-mk="abrir" aria-haspopup="dialog" aria-expanded="${f.aberto}"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Filtros${n ? ` (${n})` : ''}</button>`
+      + (n ? `<button type="button" class="mk-limpar" data-mk="limpar">Limpar</button>` : '')
+      + `<span class="mk-conta" role="status">${f.qtd} de ${f.total} ${tela === 'rev' ? 'revisões' : 'registros'}</span>`
+      + `<span class="mk-ordem" role="group" aria-label="Ordenar por">Ordenar por <span class="mk-seg"><button type="button" data-mk="ordem:data" aria-pressed="${f.ordem === 'data'}">Data</button><button type="button" data-mk="ordem:peso" aria-pressed="${f.ordem === 'peso'}">Peso</button></span></span></div>`;
+  }
+  function marcasVazioHTML(tela) {
+    return `<div class="mk-vazio" data-mk-tela="${tela}"><span>Nenhum${tela === 'rev' ? 'a revisão' : ' registro'} com esses filtros.</span><button type="button" data-mk="limpar">Limpar filtros</button></div>`;
+  }
+  function chipMarca(tela, chave, texto, ligado, extra = '') {
+    return `<button type="button" class="mk-chip" data-mk="${chave}" aria-pressed="${ligado}">${extra}${texto}</button>`;
+  }
+  function conteudoPainelMarcas(tela) {
+    const f = filtrosMarcas[tela];
+    return `<div><h4>Prioridade</h4><div class="mk-chips">${chipMarca(tela, 'estrela', 'Só com estrela', f.estrela, `<span class="mk-est">${SVG_ESTRELA}</span>`)}</div></div>`
+      + `<div><h4>Peso</h4><div class="mk-chips">${['alto', 'medio', 'baixo'].map(k => chipMarca(tela, 'peso:' + k, PESOS[k].nome, f.peso.includes(k))).join('')}${chipMarca(tela, 'peso:sem', 'Sem peso', f.peso.includes('sem'))}</div></div>`
+      + `<div><h4>Diagnóstico</h4><div class="mk-chips">${Object.keys(DIAGNOSTICOS).map(k => chipMarca(tela, 'diag:' + k, DIAGNOSTICOS[k].rotulo, f.diag.includes(k))).join('')}${chipMarca(tela, 'diag:sem', 'Sem diagnóstico', f.diag.includes('sem'))}</div></div>`
+      + `<div class="mk-rodape"><button type="button" data-mk="limpar">Limpar</button><button type="button" class="mk-ver" data-mk="fechar">Ver ${f.qtd} de ${f.total}</button></div>`;
+  }
+  let mkGatilho = null;
+  function telaDoPainelMarcas() { const p = document.getElementById('mk-painel'); return p ? p.dataset.mkTela : null; }
+  function posicionarPainelMarcas() {
+    const p = document.getElementById('mk-painel');
+    if (!p || !mkGatilho || window.innerWidth < 768) return;
+    const r = mkGatilho.getBoundingClientRect(), h = p.offsetHeight, abaixo = window.innerHeight - r.bottom - 12, acima = r.top - 12;
+    // abaixo do botão; se não couber, acima; se também não couber, encosta na parte de baixo da tela
+    const topo = h <= abaixo ? r.bottom + 6 : h <= acima ? r.top - h - 6 : Math.max(8, window.innerHeight - h - 8);
+    p.style.top = topo + 'px';
+    p.style.left = Math.max(8, Math.min(r.left, window.innerWidth - 8 - p.offsetWidth)) + 'px';
+  }
+  function abrirPainelMarcas(tela, gatilho) {
+    fecharPainelMarcas(false);
+    mkGatilho = gatilho;
+    filtrosMarcas[tela].aberto = true;
+    const celular = window.innerWidth < 768;
+    if (celular) { const v = document.createElement('div'); v.id = 'mk-veu'; v.className = 'mk-veu'; document.body.appendChild(v); }
+    const p = document.createElement('div');
+    p.id = 'mk-painel'; p.className = 'mk-painel'; p.dataset.mkTela = tela; p.setAttribute('role', 'dialog'); p.setAttribute('aria-label', 'Filtros'); if (celular) p.setAttribute('aria-modal', 'true');
+    p.innerHTML = conteudoPainelMarcas(tela);
+    document.body.appendChild(p);
+    gatilho.setAttribute('aria-expanded', 'true');
+    posicionarPainelMarcas();
+    const primeiro = p.querySelector('.mk-chip'); if (primeiro) primeiro.focus();
+  }
+  function fecharPainelMarcas(devolverFoco = true) {
+    const tela = telaDoPainelMarcas();
+    ['mk-painel', 'mk-veu'].forEach(id => { const e = document.getElementById(id); if (e) e.remove(); });
+    Object.values(filtrosMarcas).forEach(f => { f.aberto = false; });
+    document.querySelectorAll('[data-mk="abrir"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    if (devolverFoco && tela) { const g = document.querySelector(`[data-mk-tela="${tela}"] [data-mk="abrir"]`); if (g) g.focus(); }
+    mkGatilho = null;
+  }
+  // chamado depois de cada redesenho da lista: mantém o painel aberto, com os números novos e o foco no mesmo chip
+  function atualizarPainelMarcas() {
+    const p = document.getElementById('mk-painel');
+    if (!p) return;
+    const chave = document.activeElement && p.contains(document.activeElement) ? document.activeElement.dataset.mk : null;
+    p.innerHTML = conteudoPainelMarcas(p.dataset.mkTela);
+    mkGatilho = document.querySelector(`[data-mk-tela="${p.dataset.mkTela}"] [data-mk="abrir"]`) || mkGatilho;
+    if (mkGatilho) mkGatilho.setAttribute('aria-expanded', 'true');
+    if (chave) { const novo = [...p.querySelectorAll('[data-mk]')].find(b => b.dataset.mk === chave); if (novo) novo.focus(); }
+    posicionarPainelMarcas();
+  }
+  function redesenharTelaMarcas(tela) { if (tela === 'rev') renderizarRevisoes(); else renderizarHistorico(); }
+  function acaoMarcas(tela, acao, gatilho) {
+    const f = filtrosMarcas[tela];
+    if (acao === 'abrir') { if (f.aberto) return fecharPainelMarcas(); return abrirPainelMarcas(tela, gatilho); }
+    if (acao === 'fechar') return fecharPainelMarcas();
+    if (acao === 'limpar') { f.estrela = false; f.peso = []; f.diag = []; }
+    else if (acao === 'estrela') f.estrela = !f.estrela;
+    else if (acao.startsWith('ordem:')) f.ordem = acao.split(':')[1];
+    else { const [g, v] = acao.split(':'), a = f[g], i = a.indexOf(v); if (i >= 0) a.splice(i, 1); else a.push(v); }
+    redesenharTelaMarcas(tela);
+  }
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-mk]');
+    if (b) { const t = b.closest('[data-mk-tela]'); if (t) { acaoMarcas(t.dataset.mkTela, b.dataset.mk, b); return; } }
+    if (document.getElementById('mk-painel') && !ev.target.closest('#mk-painel')) fecharPainelMarcas(false);
+  });
+  document.addEventListener('keydown', ev => {
+    if (ev.key === 'Escape' && document.getElementById('mk-painel')) { ev.preventDefault(); fecharPainelMarcas(); return; }
+    if (ev.key === 'Tab' && document.getElementById('mk-painel') && window.innerWidth < 768) {   // folha do celular: foco preso
+      const foc = [...document.querySelectorAll('#mk-painel button')];
+      const i = foc.indexOf(document.activeElement);
+      if (ev.shiftKey && i <= 0) { ev.preventDefault(); foc[foc.length - 1].focus(); }
+      else if (!ev.shiftKey && i === foc.length - 1) { ev.preventDefault(); foc[0].focus(); }
+    }
+  });
+  window.addEventListener('resize', () => { if (document.getElementById('mk-painel')) fecharPainelMarcas(false); });
+  function resetarFiltrosMarcas(tela) { filtrosMarcas[tela] = novoFiltroMarcas(); }
+
+  // =====================================================================
   // 5. ESTADO E PERSISTÊNCIA
   // =====================================================================
   const STORAGE_KEY = 'central_estudos_jessica_v1';
@@ -1702,6 +1877,9 @@
   const TELAS = ['dashboard', 'edital', 'cronograma', 'revisoes', 'erros', 'historico'];
   function navigate(tela) {
     if (!liberarEdicaoErro()) return;
+    fecharPainelMarcas(false);
+    if (tela === 'revisoes') resetarFiltrosMarcas('rev');
+    if (tela === 'historico') resetarFiltrosMarcas('hist');
     TELAS.forEach(t => {
       document.getElementById(`view-${t}`).classList.add('hidden');
       const btn = document.getElementById(`nav-${t}`);
@@ -1987,6 +2165,7 @@
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${s.feita && !parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
             <p class="text-[11px] text-sec truncate">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
+            ${node ? marcasHTML(node) : resumoDisciplinaHTML(s.disc)}
           </div>
           ${parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>`
             : s.feita ? '<span class="text-xs font-bold text-brand">Feita</span>'
@@ -2004,7 +2183,7 @@
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate ${b.feito ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
             ${disc ? `<p class="text-[11px] text-sec truncate">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
-            ${node ? `<div class="mt-1 flex items-center gap-2">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}</div>` : ''}
+            ${node ? marcasHTML(node) : (disc ? resumoDisciplinaHTML(b.discId) : '')}
           </div>
           <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
           <span class="quebra-linha" aria-hidden="true"></span>
@@ -2437,7 +2616,7 @@
     const sessoes = dia.sessoes.map((s, k) => {
       const d = meusDados.find(x => x.id === s.disc);
       return `
-        <div class="p-2.5 rounded-lg border border-theme bg-card ${s.feita && s.parcial ? 'sessao-parcial' : s.feita ? 'sessao-concluida' : ''}">
+        <div class="ses-cron p-2.5 rounded-lg border border-theme bg-card ${s.feita && s.parcial ? 'sessao-parcial' : s.feita ? 'sessao-concluida' : ''}">
           <div class="flex flex-wrap items-center gap-2">
             <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
             <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita && !s.parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
@@ -2449,6 +2628,7 @@
             <button onclick="removerSessao(${i}, ${s.id})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover"><i class="fa-solid fa-xmark"></i></button>
           </div>
           <button type="button" class="sel-gatilho mt-2" onclick="abrirSeletorSessao(${i}, ${s.id})" aria-haspopup="dialog">${rotuloSeletorHTML(s.disc, s.topicoId || '', { valor: '', rotulo: 'Disciplina inteira' }, null)}<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i></button>
+          ${(() => { const { node } = getNodeRef(s.disc, s.topicoId); return node ? marcasHTML(node) : resumoDisciplinaHTML(s.disc); })()}
         </div>`;
     }).join('');
 
@@ -3462,8 +3642,14 @@
     let lista = minhasRevisoes.filter(naAba[revFiltro] || naAba.programadas)
       .sort((a, b) => (a.dataAgendada || '').localeCompare(b.dataAgendada || ''));
     if (revFiltro === 'concluidas') lista.reverse();
+    lista = aplicarMarcasNaLista(lista, filtrosMarcas.rev, r => getNodeRef(r.discId, r.nodeId).node);
+    desenharBarraMarcas('rev');
     const el = document.getElementById('rev-lista');
-    if (!lista.length) { el.innerHTML = `<p class="text-sm text-mut italic py-6 text-center col-span-full">Nada aqui no momento.</p>`; return; }
+    if (!lista.length) {
+      el.innerHTML = filtrosMarcas.rev.total ? marcasVazioHTML('rev') : `<p class="text-sm text-mut italic py-6 text-center col-span-full">Nada aqui no momento.</p>`;
+      atualizarPainelMarcas();
+      return;
+    }
     el.innerHTML = lista.map(r => {
       const disc = meusDados.find(d => d.id === r.discId);
       const { node } = getNodeRef(r.discId, r.nodeId);
@@ -3500,6 +3686,7 @@
               <p class="text-xs font-bold text-main">${txt}</p>
               <p class="text-[11px] text-sec font-bold uppercase mt-1">${esc(disc ? disc.nome : '—')}</p>
               <p class="text-sm font-medium text-main mt-0.5">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${esc(node ? node.nome : 'Tópico removido')}</p>
+              ${marcasHTML(node)}
               ${detalhe}
             </div>
             ${p ? `<span class="selo-pendencia shrink-0">Pendência · faltam ${p.faltamMin} min</span>`
@@ -3508,6 +3695,7 @@
           ${acoes}
         </div>`;
     }).join('');
+    atualizarPainelMarcas();
   }
   function concluirRev(id, dias) {
     const r = minhasRevisoes.find(x => String(x.id) === String(id));
@@ -3735,7 +3923,9 @@
         <span class="text-xs text-sec whitespace-nowrap">${formatarMinutos(porDisc[d.id] || 0)} / ${formatarMinutos(metaPeriodo(d.id, dias))}</span>
       </div>`).join('');
 
-    const ordenados = regs.slice().sort((a, b) => b.data.localeCompare(a.data) || b.id - a.id);
+    let ordenados = regs.slice().sort((a, b) => b.data.localeCompare(a.data) || b.id - a.id);
+    ordenados = aplicarMarcasNaLista(ordenados, filtrosMarcas.hist, r => getNodeRef(r.discId, r.topicoId).node);   // só a tabela; o resumo acima segue os filtros de período
+    desenharBarraMarcas('hist');
     const mostrados = ordenados.slice(0, 300);
     document.getElementById('hist-tabela').innerHTML = mostrados.length
       ? mostrados.map(r => {
@@ -3749,10 +3939,12 @@
               <td class="py-2 pr-3">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${node ? esc(node.nome) : '—'}</td>
               <td class="py-2 pr-3 whitespace-nowrap">${formatarMinutos(r.minutos)}</td>
               <td class="py-2 pr-3">${esc(r.tipo || 'Não informado')}${r.origem === 'migracao' ? '<span class="block text-[11px] text-sec">ajuste da migração</span>' : ''}${r.editadoEm ? '<span class="block text-[11px] text-sec">editado</span>' : ''}</td>
+              <td class="py-2 pr-3">${marcasHTML(node).replace('class="marcas"', 'class="marcas" style="margin-top:0"')}</td>
               <td class="py-2 text-right"><button onclick="abrirEdicaoRegistro('${r.id}')" class="w-8 h-8 rounded-md text-sec hover:text-brand hover-bg" title="Editar registro" aria-label="Editar registro de ${formatarDataBR(r.data)}"><i class="fa-solid fa-pen"></i></button></td>
             </tr>`;
         }).join('')
-      : `<tr><td colspan="6" class="py-6 text-center text-mut italic">Nenhum registro neste filtro.</td></tr>`;
+      : (filtrosMarcas.hist.total ? `<tr><td colspan="7" class="py-2">${marcasVazioHTML('hist')}</td></tr>` : `<tr><td colspan="7" class="py-6 text-center text-mut italic">Nenhum registro neste filtro.</td></tr>`);
+    atualizarPainelMarcas();
     document.getElementById('hist-aviso').innerText = ordenados.length > 300
       ? 'Mostrando os 300 registros mais recentes. Use os filtros para refinar.' : '';
   }
