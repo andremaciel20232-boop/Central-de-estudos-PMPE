@@ -184,9 +184,9 @@
 
     /* ===== Etapa 4: estrela AOCP, peso, árvore do Edital, seletor de tópicos e topo com fotos ===== */
     :root { --estrela: #facc15; --estrela-fundo: rgba(250,204,21,.14); --t-alto: #c4b5fd; --t-medio: #a78bfa; --t-baixo: #8f7be0; --pf-borda: #78849a;
-            --text-sub: #cbd5e1; --estudo: #60a5fa; --concluido: #10b981; --sel-fundo: rgba(16,185,129,.14); --anel-vazio: #3a3f52; }
+            --text-sub: #cbd5e1; --edt-agora: #fb923c; --estudo: #60a5fa; --concluido: #10b981; --sel-fundo: rgba(16,185,129,.14); --anel-vazio: #3a3f52; }
     body.light-mode { --estrela: #a16207; --estrela-fundo: rgba(202,138,4,.14); --t-alto: #5b21b6; --t-medio: #6d28d9; --t-baixo: #7c3aed; --pf-borda: #6f7b8e;
-            --text-sub: #334155; --estudo: #1d4ed8; --concluido: #047857; --sel-fundo: rgba(5,150,105,.12); --anel-vazio: #cbd5e1; }
+            --text-sub: #334155; --edt-agora: #c2410c; --estudo: #1d4ed8; --concluido: #047857; --sel-fundo: rgba(5,150,105,.12); --anel-vazio: #cbd5e1; }
     /* cards de dia do cronograma: o mesmo contorno em todos (só a etiqueta "Hoje" marca o dia atual); contorno ≥ 3:1 nos dois temas */
     :root { --contorno-dia: #e5e7eb; } body.light-mode { --contorno-dia: #64748b; }
     .card-dia { border-color: var(--contorno-dia); }
@@ -217,49 +217,68 @@
     /* árvore do Edital */
     .edt-lista { display: grid; gap: 8px; }
     .edt-caixa { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-card); overflow: hidden; }
-    .edt-linha { display: grid; grid-template-columns: 26px 34px minmax(0,1fr) auto; gap: 8px; align-items: center; padding: 8px 12px 8px 8px; }
-    .edt-grupo > .edt-linha { grid-template-columns: 30px 34px minmax(0,1fr) auto; padding: 10px 12px 10px 8px; }
+    .edt-linha { display: grid; grid-template-columns: 44px 30px minmax(0,1fr) auto auto; gap: 0 6px; align-items: center; padding: 0 4px 0 0; min-height: 44px; }
     .edt-filhos { border-top: 1px solid var(--border-color); padding: 4px 6px 6px; display: grid; gap: 2px; }
-    .edt-filhos .edt-linha { padding: 6px 8px 6px 4px; border-radius: 10px; }
+    .edt-filhos .edt-linha { border-radius: 10px; }
     .edt-filhos .edt-aninhado { border-top: 0; border-left: 2px solid var(--border-color); margin-left: 22px; padding: 0 0 0 4px; }
-    .edt-chkw { display: grid; place-items: center; width: 26px; height: 26px; cursor: pointer; }
+    .edt-chkw { display: grid; place-items: center; width: 44px; height: 44px; cursor: pointer; }
     .edt-chk { appearance: none; -webkit-appearance: none; width: 14px; height: 14px; border: 1.5px solid var(--text-muted); border-radius: 4px; background: transparent; cursor: pointer; display: grid; place-items: center; margin: 0; }
     .edt-chk:checked { background: var(--concluido); border-color: var(--concluido); }
     .edt-chk:checked::after { content: ""; width: 7px; height: 3.5px; border-left: 2px solid var(--bg-panel); border-bottom: 2px solid var(--bg-panel); transform: rotate(-45deg) translate(.5px,-.5px); }
-    .edt-seta { width: 28px; height: 28px; border-radius: 9px; background: var(--bg-hover); color: var(--text-primary); display: grid; place-items: center; border: 1px solid var(--border-color); cursor: pointer; padding: 0; }
+    .edt-seta { width: 44px; height: 44px; border-radius: 12px; background: none; color: var(--text-primary); display: grid; place-items: center; border: 0; cursor: pointer; padding: 0; }
+    .edt-seta:hover { background: var(--bg-hover); }
     .edt-seta svg { width: 14px; height: 14px; transition: transform .15s ease; } .edt-seta[aria-expanded="false"] svg { transform: rotate(-90deg); }
     .edt-num { font-size: 11px; font-weight: 800; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-    .edt-nome { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+    .edt-nome { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; padding: 6px 0; }
     .edt-t { line-height: 1.35; }
     .edt-n1 .edt-t { color: var(--text-primary); font-weight: 600; font-size: 14px; } .edt-n2 .edt-t { color: var(--text-sub); font-size: 13px; }
     .edt-linha.edt-feito { background: color-mix(in srgb, var(--concluido) 9%, transparent); }
     .edt-feito .edt-t { color: var(--text-primary) !important; font-weight: 500; }
     .edt-n1.edt-feito .edt-t { font-weight: 600; }
-    .edt-em { font-size: 11px; font-weight: 700; color: var(--estudo); }
+    .edt-em { font-size: 11.5px; font-weight: 700; color: var(--estudo); display: inline-flex; align-items: center; gap: 5px; }
+    .edt-em::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--estudo); display: block; }
     .edt-diag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-secondary); }
     .edt-diag i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-    .edt-foco-chip { font-size: 11px; font-weight: 700; color: var(--btn-iniciar-fg); background: var(--btn-iniciar-bg); padding: 2px 8px; border-radius: 7px; white-space: nowrap; }
-    .edt-linha.edt-foco, .edt-linha.edt-feito.edt-foco { background: var(--sel-fundo); box-shadow: inset 0 0 0 1.5px var(--brand); }
-    .edt-dir { display: grid; grid-template-columns: 24px 92px 52px 28px; gap: 6px; align-items: center; justify-items: end; white-space: nowrap; }
-    .edt-dir.g { grid-template-columns: auto 24px 92px 52px 28px; }
-    .edt-dir.sd { grid-template-columns: 24px 92px 28px; } .edt-dir.g.sd { grid-template-columns: auto 24px 92px 28px; }
-    .edt-marcas > .edt-peso { justify-self: start; }
+    .edt-foco-chip { font-size: 11px; font-weight: 800; color: var(--edt-agora); background: color-mix(in srgb, var(--edt-agora) 14%, transparent); border: 1px solid color-mix(in srgb, var(--edt-agora) 55%, transparent); padding: 1px 8px; border-radius: 7px; white-space: nowrap; }
+    .edt-linha.edt-foco, .edt-linha.edt-feito.edt-foco { background: color-mix(in srgb, var(--edt-agora) 9%, transparent); box-shadow: inset 4px 0 0 var(--edt-agora); }
+    .edt-dir { display: flex; gap: 8px; align-items: center; justify-self: end; white-space: nowrap; } .edt-dir:empty { display: none; }
+    .edt-estrela, .edt-peso:not(span) { position: relative; } .edt-estrela::after, .edt-peso:not(span)::after { content: ""; position: absolute; inset: -10px -6px; }
     .edt-det { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
     .edt-det span { display: inline-flex; align-items: center; gap: 5px; } .edt-det i { font-size: 11px; }
     .sel-det { display: block; font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-top: 1px; } .sel-det i { font-size: 10px; margin: 0 2px 0 0; } .sel-det i + i, .sel-det span + span { margin-left: 8px; }
-    .edt-marcas { display: contents; }
-    .edt-tempo { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-    .edt-anel { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-right: 4px; }
-    .edt-mais { width: 28px; height: 28px; border-radius: 8px; color: var(--text-secondary); background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
+    .edt-tempo { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .edt-anel { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+    .edt-mais { width: 44px; height: 44px; border-radius: 12px; color: var(--text-secondary); background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
     .edt-mais:hover { background: var(--bg-hover); color: var(--text-primary); }
     .edt-classificar { height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-secondary); font-size: 11px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
     .edt-classificar[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
-    .edt-resumo-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; color: var(--text-secondary); background: var(--bg-card); border: 1px solid var(--border-color); }
-    .edt-resumo-chip.estrela { color: var(--text-primary); background: var(--estrela-fundo); border-color: transparent; }
-    .edt-resumo-chip.estrela > span { color: var(--estrela); }
+    /* resumo do Edital (R1) e chips que filtram (F2) */
+    .edt-r1 { display: grid; gap: 14px; }
+    .edt-r1-topo { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .edt-r1-tx { flex: 1; min-width: 200px; display: grid; gap: 6px; justify-items: start; }
+    .edt-anel-geral { position: relative; width: 96px; height: 96px; flex: none; } .edt-anel-geral svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .edt-anel-geral b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 22px; font-weight: 800; color: var(--text-primary); }
+    .edt-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .edt-chips-rot { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 0 6px; flex: none; }
+    .edt-resumo-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 13px; border-radius: 99px; font-size: 12.5px; font-weight: 700; color: var(--text-primary); background: var(--bg-card); border: 1px solid var(--border-color); cursor: pointer; white-space: nowrap; flex: none; }
+    .edt-resumo-chip b { font-weight: 800; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .edt-resumo-chip:hover { border-color: var(--text-muted); }
+    .edt-resumo-chip[aria-pressed="true"] { background: var(--sel-fundo); border-color: var(--concluido); box-shadow: inset 0 0 0 1px var(--concluido); }
+    .edt-resumo-chip[aria-pressed="true"] b { color: var(--text-primary); }
+    .edt-resumo-chip .edt-estrela-ic { color: var(--estrela); display: inline-grid; }
+    .edt-resumo-chip .edt-diag { color: inherit; font-size: inherit; font-weight: inherit; }
+    .edt-info { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: var(--text-secondary); padding-top: 2px; }
+    .edt-info b { color: var(--text-primary); }
+    .edt-info button { min-height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 12.5px; cursor: pointer; }
+    .edt-vazio { text-align: center; padding: 26px 14px; border: 1.5px dashed var(--pf-borda); border-radius: 14px; color: var(--text-secondary); font-size: 13.5px; display: grid; gap: 10px; justify-items: center; }
+    .edt-vazio button { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; cursor: pointer; }
+    .edt-barra { width: 120px; height: 10px; border-radius: 99px; background: var(--anel-vazio); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; display: flex; flex: none; }
+    .edt-barra i { display: block; height: 100%; } .edt-barra i.c { background: var(--concluido); } .edt-barra i.e { background: var(--estudo); }
+    .edt-pc { font-size: 15px; font-weight: 800; color: var(--concluido); min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+    .edt-disc-em { color: var(--estudo); font-weight: 700; }
     @media (max-width: 640px) {
-      .edt-linha { grid-template-columns: 26px 30px minmax(0,1fr); } .edt-grupo > .edt-linha { grid-template-columns: 30px 30px minmax(0,1fr); }
-      .edt-dir, .edt-dir.g, .edt-dir.sd, .edt-dir.g.sd { grid-column: 3; justify-items: start; grid-template-columns: auto 24px auto auto 28px; }
+      .edt-chips { flex-wrap: nowrap; overflow-x: auto; padding: 3px 3px 6px; margin: -3px; scrollbar-width: thin; }
+      .edt-disc-dir { width: 100%; } .edt-disc-dir .edt-barra { flex: 1 1 150px; width: auto; }
     }
     .edt-menu { position: fixed; z-index: 75; width: 280px; max-width: calc(100vw - 16px); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.35); padding: 8px; display: grid; gap: 2px; font-size: 13px; color: var(--text-primary); }
     .edt-menu .m-tit { padding: 6px 10px 8px; border-bottom: 1px solid var(--border-color); margin-bottom: 4px; } .edt-menu .m-tit b { display: block; font-size: 13px; line-height: 1.3; } .edt-menu .m-tit span { font-size: 11px; color: var(--text-secondary); }
@@ -370,17 +389,21 @@
       #main-content .grid > *, #main-content section { min-width: 0; }
       #main-content .overflow-x-auto { position: relative; }   /* o .sr-only da tabela não escapa do recorte */
       #cron-dias button.w-7 { width: 44px; height: 44px; } #cron-dias input, #cron-dias select { min-height: 44px; }
-      .edt-linha, .edt-grupo > .edt-linha { grid-template-columns: 44px 30px minmax(0,1fr) 44px; column-gap: 8px; row-gap: 0; }
-      .edt-dir, .edt-dir.g, .edt-dir.sd, .edt-dir.g.sd { display: contents; }
-      .edt-marcas { grid-column: 3 / 5; grid-row: 2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-      .edt-mais { grid-column: 4; grid-row: 1; justify-self: end; }
-      .edt-lista:not(.edt-classificando) .edt-ghost { display: none; }
-      .edt-chkw { width: 44px; height: 44px; } .edt-seta { width: 44px; height: 44px; background: none; border: 0; }
-      .edt-mais { width: 44px; height: 44px; }
-      button.edt-estrela { position: relative; width: 44px; height: 44px; background: none; }
-      button.edt-estrela::before { content: ""; position: absolute; inset: 10px; border-radius: 7px; background: var(--estrela-fundo); }
-      button.edt-estrela svg { position: relative; }
-      button.edt-peso { min-height: 44px; padding: 0 4px; }
+      .edt-linha, .edt-grupo > .edt-linha { grid-template-columns: 44px 28px minmax(0,1fr) 44px; column-gap: 6px; row-gap: 0; }
+      .edt-linha > .edt-mais { grid-column: 4; grid-row: 1; justify-self: end; }
+      .edt-lista:not(.edt-classificando) .edt-dir { display: none; }
+      .edt-classificando .edt-dir { grid-column: 3 / 5; grid-row: 2; justify-self: start; padding: 0 0 6px; }
+      .edt-classificando .edt-ghost { opacity: .7; }
+      /* alvos de 44 px reais; as margens negativas mantêm a linha compacta */
+      .edt-estrela::after, .edt-peso:not(span)::after { content: none; }
+      .edt-nome button.edt-estrela { width: 44px; height: 44px; margin: -10px; background: none; }
+      .edt-nome button.edt-estrela::before { content: ""; position: absolute; inset: 10px; border-radius: 7px; background: var(--estrela-fundo); }
+      .edt-nome button.edt-estrela svg { position: relative; }
+      .edt-nome button.edt-peso { min-height: 44px; margin: -14px 0; padding: 0 4px; }
+      .edt-dir button.edt-estrela { width: 44px; height: 44px; background: none; }
+      .edt-dir button.edt-estrela::before { content: ""; position: absolute; inset: 10px; border-radius: 7px; background: var(--estrela-fundo); }
+      .edt-dir button.edt-estrela svg { position: relative; }
+      .edt-dir button.edt-peso { min-height: 44px; padding: 0 4px; }
       .edt-classificar { height: 44px; padding: 0 14px; }
       .sel-chip, .sel-filtro, .sel-item, .sel-gatilho { min-height: 44px; }
     }
@@ -755,18 +778,23 @@
 
       <!-- ================= EDITAL ================= -->
       <div id="view-edital" class="hidden max-w-6xl mx-auto space-y-5">
-        <div class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
-            <div>
-              <h2 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-chart-line text-brand"></i> Progresso no Edital</h2>
-              <p class="text-sm md:text-base font-semibold text-main mt-1" id="edital-resumo-geral">0 de 0 tópicos concluídos — 0%</p>
+        <div class="bg-panel p-5 md:p-6 rounded-xl border border-theme shadow-sm edt-r1">
+          <div class="edt-r1-topo">
+            <div class="edt-anel-geral" id="edital-anel" role="img" aria-label="Progresso geral no Edital: 0%">
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--anel-vazio)" stroke-width="10"/>
+                <circle id="edital-anel-e" cx="50" cy="50" r="42" fill="none" stroke="var(--estudo)" stroke-width="10" stroke-dasharray="0 264" stroke-dashoffset="0"/>
+                <circle id="edital-anel-c" cx="50" cy="50" r="42" fill="none" stroke="var(--concluido)" stroke-width="10" stroke-dasharray="0 264"/>
+              </svg>
+              <b id="edital-anel-pct">0%</b>
             </div>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-brand border border-emerald-500/30" id="edital-ritmo-semanas"></span>
+            <div class="edt-r1-tx">
+              <h2 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-chart-line text-brand"></i> Progresso no Edital</h2>
+              <p class="text-sm md:text-base font-semibold text-main" id="edital-resumo-geral">0 de 0 tópicos concluídos em 0 disciplinas</p>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-brand border border-emerald-500/30 self-start" id="edital-ritmo-semanas"></span>
+            </div>
           </div>
-          <div class="w-full bg-card rounded-full h-3 border border-theme overflow-hidden">
-            <div id="edital-barra-geral" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
-          </div>
-          <div id="edital-diag-resumo" class="flex flex-wrap gap-2 mt-3"></div>
+          <div id="edital-diag-resumo" class="edt-chips" role="group" aria-label="Filtrar tópicos por marcas"></div>
         </div>
         <div class="sticky top-0 z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center justify-between gap-3">
           <div class="relative flex-1 min-w-[220px]">
@@ -777,6 +805,7 @@
             <button onclick="expandirTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm"><i class="fa-solid fa-angles-down text-brand"></i> Expandir todos</button>
             <button onclick="recolherTodosEdital()" class="px-3.5 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold text-main flex items-center gap-1.5 transition shadow-sm"><i class="fa-solid fa-angles-up text-blue-400"></i> Recolher todos</button>
           </div>
+          <div id="edital-filtro-info" class="hidden basis-full edt-info" role="status" aria-live="polite"></div>
         </div>
         <div id="edital-container" class="space-y-3 pb-16"></div>
       </div>
@@ -1705,6 +1734,10 @@
   const PESO_ORDEM = { alto: 0, medio: 1, baixo: 2 };
   const novoFiltroMarcas = () => ({ estrela: false, peso: [], diag: [], ordem: 'data', aberto: false, qtd: 0, total: 0 });
   const filtrosMarcas = { rev: novoFiltroMarcas(), hist: novoFiltroMarcas() };
+  // Edital: chips que filtram (mesmo grupo soma, grupos diferentes se cruzam). Só vive enquanto a tela está aberta.
+  const filtrosEdital = { estrela: false, estudo: false, peso: new Set(), diag: new Set() };
+  function resetarFiltrosEdital() { filtrosEdital.estrela = false; filtrosEdital.estudo = false; filtrosEdital.peso.clear(); filtrosEdital.diag.clear(); }
+  function filtroEditalAtivo() { const f = filtrosEdital; return f.estrela || f.estudo || f.peso.size > 0 || f.diag.size > 0; }
   const nFiltrosMarcas = f => (f.estrela ? 1 : 0) + f.peso.length + f.diag.length;
   // dentro de um grupo as escolhas somam (ou); entre os grupos se combinam (e). Sem tópico = sem marcas.
   function marcaPassa(node, f) {
@@ -1998,6 +2031,7 @@
     fecharPainelMarcas(false);
     if (tela === 'revisoes') resetarFiltrosMarcas('rev');
     if (tela === 'historico') resetarFiltrosMarcas('hist');
+    if (tela === 'edital') resetarFiltrosEdital();
     TELAS.forEach(t => {
       document.getElementById(`view-${t}`).classList.add('hidden');
       const btn = document.getElementById(`nav-${t}`);
@@ -2501,10 +2535,37 @@
     });
     return { tempo, ultima };
   }
+  // "em estudo": tem tempo registrado (no tópico ou abaixo dele) e ainda não foi concluído
+  function noEmEstudo(node) { return !node.concluido && resumoNo(node).tempo > 0; }
+  // o próprio tópico passa na busca E nos chips?
+  function nodeCasa(node, termo) {
+    if (termo && !node.nome.toLowerCase().includes(termo)) return false;
+    const f = filtrosEdital;
+    if (f.estrela && !node.aocp) return false;
+    if (f.peso.size && !f.peso.has(node.peso)) return false;
+    if (f.diag.size && !f.diag.has(node.diagnostico)) return false;
+    if (f.estudo && !noEmEstudo(node)) return false;
+    return true;
+  }
+  // aparece se ele mesmo ou algum descendente passar (o caminho até o resultado fica visível)
   function nodeMatchesFilter(node, termo) {
-    if (!termo) return true;
-    if (node.nome.toLowerCase().includes(termo)) return true;
+    if (!termo && !filtroEditalAtivo()) return true;
+    if (nodeCasa(node, termo)) return true;
     return (node.children || []).some(c => nodeMatchesFilter(c, termo));
+  }
+  function alternarFiltroEdital(chave) {
+    const f = filtrosEdital;
+    if (chave === 'estrela') f.estrela = !f.estrela;
+    else if (chave === 'estudo') f.estudo = !f.estudo;
+    else { const [g, v] = chave.split(':'), set = g === 'peso' ? f.peso : f.diag; if (set.has(v)) set.delete(v); else set.add(v); }
+    renderizarEdital();
+    const b = document.querySelector(`#edital-diag-resumo [data-fe="${chave}"]`);
+    if (b) b.focus({ preventScroll: true });
+  }
+  function limparFiltrosEdital() {
+    resetarFiltrosEdital();
+    const b = document.getElementById('busca-edital'); if (b) b.value = '';
+    renderizarEdital();
   }
   function estrelaBtnHTML(discId, node) {
     const acao = `alternarEstrela('${discId}','${node.id}')`;
@@ -2523,7 +2584,7 @@
     if (!nodeMatchesFilter(node, termo)) return '';
     const filhos = node.children || [], temFilhos = filhos.length > 0;
     const chave = discId + '_' + node.id;
-    const aberto = temFilhos && (termo ? true : !nosFechados.has(chave));
+    const aberto = temFilhos && ((termo || ctx.filtrando) ? true : !nosFechados.has(chave));
     const { tempo, ultima } = resumoNo(node);
     const feito = !!node.concluido;
     const emFoco = !!(ctx.foco && ctx.foco.discId === discId && ctx.foco.nodeId === node.id);
@@ -2536,27 +2597,35 @@
       const feitos = filhos.filter(c => c.concluido).length, tot = filhos.length, C = 2 * Math.PI * 8;
       anel = `<span class="edt-anel" title="${feitos} de ${tot} subtópicos concluídos"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="var(--anel-vazio)" stroke-width="3"/><circle cx="10" cy="10" r="8" fill="none" stroke="var(--brand)" stroke-width="3" stroke-linecap="round" stroke-dasharray="${C * feitos / tot} ${C}" transform="rotate(-90 10 10)"/></svg>${feitos} de ${tot}</span>`;
     }
+    // T2 · linha densa: as marcas ficam em seguida ao nome (estrela, peso, diagnóstico, em estudo, cronômetro, tempo)
     const centro = `<span class="edt-nome"><span class="edt-t"${grupo ? ` onclick="toggleExpandNode('${chave}')" style="cursor:pointer"` : ''}>${nome}</span>`
+      + anel
+      + (node.aocp ? estrelaBtnHTML(discId, node) : '')
+      + (node.peso ? pesoBtnHTML(discId, node) : '')
+      + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '')
       + (!feito && tempo > 0 ? '<span class="edt-em">em estudo</span>' : '')
       + (emFoco ? '<span class="edt-foco-chip">No cronômetro agora</span>' : '')
-      + (diag ? `<span class="edt-diag" title="Diagnóstico"><i style="background:${diag.cor}"></i>${diag.rotulo}</span>` : '')
+      + (!det && tempo > 0 ? `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}"><i class="fa-regular fa-clock" aria-hidden="true"></i> ${formatarMinutos(tempo)}</span>` : '')
       + (det && (tempo > 0 || ultima) ? `<span class="edt-det">${tempo > 0 ? `<span><i class="fa-regular fa-clock" aria-hidden="true"></i>${formatarMinutos(tempo)} de estudo</span>` : ''}${ultima ? `<span><i class="fa-regular fa-calendar" aria-hidden="true"></i>último estudo ${ultimoEstudoTexto(ultima)}</span>` : ''}</span>` : '')
       + '</span>';
-    const lado = `<span class="edt-dir${grupo ? ' g' : ''}${det ? ' sd' : ''}"><span class="edt-marcas">${anel}${estrelaBtnHTML(discId, node)}${pesoBtnHTML(discId, node)}`
-      + (det ? '' : `<span class="edt-tempo" title="${ultima ? 'Último estudo: ' + formatarDataBR(ultima) : 'Nunca estudado'}">${tempo ? formatarMinutos(tempo) : ''}</span>`)
-      + `</span><button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button></span>`;
+    // à direita ficam só os atalhos que ainda não foram marcados (aparecem ao passar o mouse ou em "Classificar") e o menu "⋯"
+    const lado = `<span class="edt-dir">${node.aocp ? '' : estrelaBtnHTML(discId, node)}${node.peso ? '' : pesoBtnHTML(discId, node)}</span>`
+      + `<button type="button" class="edt-mais" onclick="abrirMenuTopico(event, '${discId}', '${node.id}')" aria-haspopup="menu" aria-label="Mais opções do tópico" title="Mais opções"><i class="fa-solid fa-ellipsis"></i></button>`;
     const numTxt = `<span class="edt-num">${num ? esc(num) + '.' : ''}</span>`;
     const classes = `edt-linha edt-n${nivel >= 2 ? 2 : 1}${feito ? ' edt-feito' : ''}${emFoco ? ' edt-foco' : ''}`;
+    const htmlFilhos = () => filhos.map(c => renderNodeHTML(discId, c, termo, nivel + 1, ctx)).join('');
     if (grupo) {
+      const fh = aberto ? htmlFilhos() : '';
       return `<div class="edt-caixa edt-grupo"><div class="${classes}">
           <button type="button" class="edt-seta" onclick="toggleExpandNode('${chave}')" aria-expanded="${aberto}" aria-label="${aberto ? 'Fechar' : 'Abrir'} subtópicos" title="${aberto ? 'Fechar' : 'Abrir'} subtópicos">${SVG_SETA}</button>
           ${numTxt}${centro}${lado}</div>
-        ${aberto ? `<div class="edt-filhos">${filhos.map(c => renderNodeHTML(discId, c, termo, 2, ctx)).join('')}</div>` : ''}</div>`;
+        ${fh ? `<div class="edt-filhos">${fh}</div>` : ''}</div>`;
     }
     const check = `<label class="edt-chkw" title="Marcar como concluído"><input type="checkbox" class="edt-chk" ${feito ? 'checked' : ''} onchange="alternarStatusTopico('${discId}', '${node.id}', this.checked)" aria-label="Concluído: ${nome}"></label>`;
     const linha = `<div class="${classes}">${check}${numTxt}${centro}${lado}</div>`;
     if (nivel === 1) return `<div class="edt-caixa">${linha}</div>`;
-    return linha + (temFilhos ? `<div class="edt-filhos edt-aninhado">${filhos.map(c => renderNodeHTML(discId, c, termo, nivel + 1, ctx)).join('')}</div>` : '');
+    const fh = temFilhos ? htmlFilhos() : '';
+    return linha + (fh ? `<div class="edt-filhos edt-aninhado">${fh}</div>` : '');
   }
   // Menu "⋯" do tópico: estrela, peso, diagnóstico e ações
   let menuTopicoEl = null;
@@ -2594,7 +2663,8 @@
   function renderizarEdital() {
     if (!meusDados.length) return;
     const termo = (document.getElementById('busca-edital')?.value || '').trim().toLowerCase();
-    let totalGeral = 0, concGeral = 0, conc4Semanas = 0;
+    const filtrando = !!termo || filtroEditalAtivo();
+    let totalGeral = 0, concGeral = 0, estudoGeral = 0, conc4Semanas = 0, visiveisN = 0;
     const limite = new Date(); limite.setDate(limite.getDate() - 28);
     const limiteISO = isoLocal(limite);
     const contDiag = { dominio: 0, revisar: 0, nao_estudado: 0, menor: 0 };
@@ -2602,10 +2672,12 @@
     let aocp = 0;
     const blocos = [];
     // tópico que está no cronômetro agora (com sessão em curso)
-    const ctx = { foco: sessaoTimerEmCurso() ? { discId: document.getElementById('timer-disc').value, nodeId: document.getElementById('timer-topico').value } : null };
+    const ctx = { foco: sessaoTimerEmCurso() ? { discId: document.getElementById('timer-disc').value, nodeId: document.getElementById('timer-topico').value } : null, filtrando };
 
     meusDados.forEach(disc => {
-      let discTotal = 0, discConc = 0, discTempo = 0;
+      let discTotal = 0, discConc = 0, discEstudo = 0, discTempo = 0;
+      // se o nome da disciplina bate com a busca, a busca já está satisfeita para os tópicos dela (os chips continuam valendo)
+      const termoDisc = termo && disc.nome.toLowerCase().includes(termo) ? '' : termo;
       percorrerNos(disc.topicos, n => {
         discTotal++; totalGeral++;
         discTempo += n.tempo || 0;
@@ -2615,13 +2687,15 @@
         if (n.concluido) {
           discConc++; concGeral++;
           if (n.dataConclusao && n.dataConclusao >= limiteISO) conc4Semanas++;
-        }
+        } else if (noEmEstudo(n)) { discEstudo++; estudoGeral++; }
+        if (filtrando && nodeCasa(n, termoDisc)) visiveisN++;
       });
-      if (termo && !disc.nome.toLowerCase().includes(termo) && !disc.topicos.some(t => nodeMatchesFilter(t, termo))) return;
+      if (filtrando && !disc.topicos.some(t => nodeMatchesFilter(t, termoDisc))) return;
 
       const discKey = 'disc_' + disc.id;
-      const isDiscExpanded = termo ? true : expandedNodes.has(discKey);
+      const isDiscExpanded = filtrando ? true : expandedNodes.has(discKey);
       const pctDisc = discTotal ? Math.round((discConc / discTotal) * 100) : 0;
+      const larC = discTotal ? (discConc / discTotal) * 100 : 0, larE = discTotal ? (discEstudo / discTotal) * 100 : 0;
       let html = `
         <div class="bg-panel rounded-xl border border-theme overflow-hidden shadow-sm">
           <div onclick="toggleExpandNode('${discKey}')" class="p-4 cursor-pointer flex flex-wrap items-center justify-between gap-3 hover-bg transition select-none">
@@ -2631,35 +2705,55 @@
               </div>
               <div>
                 <h3 class="font-bold text-base text-main">${esc(disc.nome)}</h3>
-                <p class="text-xs text-sec">${discConc} de ${discTotal} itens concluídos • Tempo: ${formatarMinutos(discTempo)}</p>
+                <p class="text-xs text-sec">${discConc} de ${discTotal} itens concluídos${discEstudo ? ` • <span class="edt-disc-em">${discEstudo} em estudo</span>` : ''} • Tempo: ${formatarMinutos(discTempo)}</p>
               </div>
             </div>
-            <div class="flex items-center gap-3 flex-wrap justify-end">
+            <div class="flex items-center gap-3 flex-wrap justify-end edt-disc-dir">
               <button type="button" class="edt-classificar" aria-pressed="${detalhesLigados(disc.id)}" onclick="event.stopPropagation(); alternarDetalhes('${disc.id}')" title="Mostrar o tempo de estudo e o último estudo sob cada tópico desta disciplina"><i class="fa-regular fa-eye text-[10px]"></i> Detalhes</button>
               <button type="button" class="edt-classificar" aria-pressed="${discClassificando.has(disc.id)}" onclick="event.stopPropagation(); alternarClassificar('${disc.id}')" title="Mostrar as marcas de estrela e peso em todos os tópicos desta disciplina"><i class="fa-solid ${discClassificando.has(disc.id) ? 'fa-check' : 'fa-pen'} text-[10px]"></i> ${discClassificando.has(disc.id) ? 'Pronto' : 'Classificar'}</button>
-              <div class="w-28 bg-card rounded-full h-2 border border-theme hidden sm:block overflow-hidden">
-                <div class="bg-brand h-full rounded-full" style="width:${pctDisc}%"></div>
-              </div>
-              <span class="text-sm font-extrabold text-brand w-12 text-right">${pctDisc}%</span>
+              <div class="edt-barra" role="img" aria-label="${pctDisc}% concluído${discEstudo ? ', ' + discEstudo + ' em estudo' : ''}" title="Verde: concluído. Azul: em estudo."><i class="c" style="width:${larC}%"></i><i class="e" style="width:${larE}%"></i></div>
+              <span class="edt-pc">${pctDisc}%</span>
             </div>
           </div>`;
       if (isDiscExpanded) {
-        html += `<div class="p-3 pt-3 border-t border-theme bg-main/30 edt-lista ${discClassificando.has(disc.id) ? 'edt-classificando' : ''}">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termo, 1, { ...ctx, detalhes: detalhesLigados(disc.id) })).join('') + `</div>`;
+        html += `<div class="p-3 pt-3 border-t border-theme bg-main/30 edt-lista ${discClassificando.has(disc.id) ? 'edt-classificando' : ''}">` + disc.topicos.map(t => renderNodeHTML(disc.id, t, termoDisc, 1, { ...ctx, detalhes: detalhesLigados(disc.id) })).join('') + `</div>`;
       }
       blocos.push(html + `</div>`);
     });
-    document.getElementById('edital-container').innerHTML = blocos.join('');
+    document.getElementById('edital-container').innerHTML = blocos.length ? blocos.join('')
+      : (filtrando ? `<div class="edt-vazio"><span>Nenhum tópico com esses filtros.</span><button type="button" onclick="limparFiltrosEdital()">Limpar filtros</button></div>` : '');
 
+    // faixa "Mostrando X de Y" (fica junto da busca, que acompanha a rolagem)
+    const info = document.getElementById('edital-filtro-info');
+    if (info) {
+      info.classList.toggle('hidden', !filtrando);
+      info.innerHTML = filtrando ? `<span>Mostrando <b>${visiveisN}</b> de <b>${totalGeral}</b> tópicos</span><button type="button" onclick="limparFiltrosEdital()">Limpar filtros</button>` : '';
+    }
+
+    // resumo geral (R1): anel com o % + texto + ritmo
     const pctTotal = totalGeral ? Math.round((concGeral / totalGeral) * 100) : 0;
-    document.getElementById('edital-resumo-geral').innerText = `${concGeral} de ${totalGeral} tópicos concluídos em ${meusDados.length} disciplinas — ${pctTotal}%`;
+    const CA = 2 * Math.PI * 42, arcC = totalGeral ? CA * concGeral / totalGeral : 0, arcE = totalGeral ? CA * estudoGeral / totalGeral : 0;
+    document.getElementById('edital-resumo-geral').innerText = `${concGeral} de ${totalGeral} tópicos concluídos em ${meusDados.length} disciplinas`;
     document.getElementById('edital-ritmo-semanas').innerHTML = `<i class="fa-solid fa-bolt"></i> ${conc4Semanas} tópicos nas últimas 4 semanas`;
-    document.getElementById('edital-barra-geral').style.width = `${pctTotal}%`;
+    document.getElementById('edital-anel-pct').innerText = `${pctTotal}%`;
+    document.getElementById('edital-anel').setAttribute('aria-label', `Progresso geral no Edital: ${pctTotal}% concluído, ${estudoGeral} em estudo`);
+    const ac = document.getElementById('edital-anel-c'), ae = document.getElementById('edital-anel-e');
+    ac.setAttribute('stroke-dasharray', `${arcC} ${CA}`);
+    ae.setAttribute('stroke-dasharray', `${arcE} ${CA}`); ae.setAttribute('stroke-dashoffset', `${-arcC}`);
 
+    // chips que filtram (F2)
+    const f = filtrosEdital;
+    const chip = (chv, ativo, rotulo, n, aria) => `<button type="button" class="edt-resumo-chip" data-fe="${chv}" aria-pressed="${ativo}" aria-label="${aria}, ${n} ${n === 1 ? 'tópico' : 'tópicos'}" onclick="alternarFiltroEdital('${chv}')">${rotulo}<b>${n}</b></button>`;
     const pillsPeso = Object.entries(PESOS).map(([k, v]) =>
-      `<span class="edt-resumo-chip"><span class="edt-peso" data-nivel="${k}"><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span></span>${v.nome}: ${contPeso[k]}</span>`).join('');
+      chip('peso:' + k, f.peso.has(k), `<span class="edt-peso" data-nivel="${k}"><span class="edt-seg" aria-hidden="true"><i></i><i></i><i></i></span></span>${v.nome}`, contPeso[k], 'Filtrar ' + v.rotulo.toLowerCase())).join('');
     const pillsDiag = Object.entries(DIAGNOSTICOS).map(([k, v]) =>
-      `<span class="edt-resumo-chip"><span class="edt-diag"><i style="background:${v.cor}"></i>${v.rotulo}: ${contDiag[k] || 0}</span></span>`).join('');
-    document.getElementById('edital-diag-resumo').innerHTML = `<span class="edt-resumo-chip estrela"><span class="inline-grid">${SVG_ESTRELA}</span>${aocp} com estrela</span>` + pillsPeso + pillsDiag;
+      chip('diag:' + k, f.diag.has(k), `<span class="edt-diag"><i style="background:${v.cor}"></i>${v.rotulo}</span>`, contDiag[k] || 0, 'Filtrar diagnóstico ' + v.rotulo)).join('');
+    const alvo = document.getElementById('edital-diag-resumo'), rolagem = alvo.scrollLeft;
+    alvo.innerHTML = chip('estrela', f.estrela, `<span class="edt-estrela-ic">${SVG_ESTRELA}</span>Prioridade`, aocp, 'Filtrar prioridade AOCP')
+      + `<span class="edt-chips-rot">Peso</span>` + pillsPeso
+      + `<span class="edt-chips-rot">Diagnóstico</span>` + pillsDiag
+      + `<span class="edt-chips-rot">Situação</span>` + chip('estudo', f.estudo, 'Em estudo', estudoGeral, 'Filtrar tópicos em estudo');
+    alvo.scrollLeft = rolagem;
   }
   function abrirRegistroRapido(discId, nodeId) {
     openModalEstudo();
