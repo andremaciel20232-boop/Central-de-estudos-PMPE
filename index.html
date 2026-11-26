@@ -337,7 +337,7 @@
       .lat-barra > div:last-child button { flex-direction: column; gap: 3px; min-height: 56px; font-size: 11px; padding: 6px 2px; }
     }
     @media (min-width: 768px) and (max-width: 1023px) {
-      #view-dashboard > .grid:nth-child(2) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+      #view-dashboard > .grid:nth-child(3) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
       #bilhete-wrapper { left: 96px; }
     }
     @media (max-width: 1023px) {
@@ -360,11 +360,11 @@
       .bn-it:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
       #main-content { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       #main-content .conteudo-pag { padding: 12px; }
-      #view-dashboard > .grid:first-child { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-      #view-dashboard > .grid:first-child > div { padding: 10px; }
-      #view-dashboard > .grid:first-child > div > p:first-child { font-size: 10px; line-height: 1.25; }
-      #view-dashboard > .grid:first-child .text-3xl { font-size: 20px; line-height: 1.2; }
-      #view-dashboard > .grid:first-child .flex.items-baseline { flex-direction: column; align-items: flex-start; gap: 0; }
+      #view-dashboard > .grid:nth-child(2) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      #view-dashboard > .grid:nth-child(2) > div { padding: 10px; }
+      #view-dashboard > .grid:nth-child(2) > div > p:first-child { font-size: 10px; line-height: 1.25; }
+      #view-dashboard > .grid:nth-child(2) .text-3xl { font-size: 20px; line-height: 1.2; }
+      #view-dashboard > .grid:nth-child(2) .flex.items-baseline { flex-direction: column; align-items: flex-start; gap: 0; }
       /* cabeçalho compacto */
       header.cab-pag { flex-wrap: nowrap; gap: 8px; padding: 8px 12px; min-height: 62px; }
       header.cab-pag .cab-id { flex: 1; min-width: 0; }
@@ -509,6 +509,54 @@
     #view-historico table th:last-child, #view-historico table td:last-child:not([colspan]) { position: sticky; right: 0; background: var(--bg-panel); box-shadow: -8px 0 8px -8px rgba(0,0,0,.35); }
     #hist-tabela tr:hover td:last-child:not([colspan]) { background: var(--bg-hover); }
     @media (hover: none), (pointer: coarse), (max-width: 767px) { #hist-tabela button { width: 44px; height: 44px; } }
+    /* ===== Herói do Dashboard: sequência, contagem, tempo e edital ===== */
+    .hr { --hr-acento: #f98a2b; --hr-acento-bg: rgba(249,138,43,.09); --hr-vd: #34d399; --hr-vm: #f87171; --hr-neutro: #94a3b8;
+          container-type: inline-size; container-name: hr; border-radius: 18px; overflow: hidden; position: relative; isolation: isolate; color: #f8fafc;
+          border: 1px solid #3a4256; border-left: 5px solid var(--hr-acento); background: #0e1116 var(--hr-img, none) center / cover; }
+    .hr::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(95deg, rgba(8,11,16,.94) 0%, rgba(8,11,16,.86) 58%, rgba(8,11,16,.7) 100%); }
+    .hr-in { display: grid; gap: 14px; padding: 18px; grid-template-columns: minmax(0, 1fr); }
+    .hr-esq { display: grid; gap: 12px; min-width: 0; align-content: center; }
+    .hr-data { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--hr-acento); display: block; }
+    .hr-ola { font-size: clamp(24px, 5vw, 34px); line-height: 1.1; letter-spacing: -.01em; font-weight: 800; margin: 0; color: #f8fafc; }
+    .hr-frase { color: #e2e8f0; font-size: 14px; margin: 0; }
+    .hr-seq { container-type: inline-size; min-width: 0; }
+    .hr-painel { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.16); border-radius: 16px; padding: 12px; display: grid; gap: 12px; min-width: 0; }
+    .hr-cab { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .hr-chama { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .hr-chama-ico { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; background: var(--hr-acento-bg); color: var(--hr-acento); flex: none; }
+    .hr-chama-ico.apagada { background: rgba(255,255,255,.1); color: #cbd5e1; } .hr-chama-ico svg { width: 24px; height: 24px; }
+    .hr-chama b { font-size: 26px; line-height: 1.05; font-weight: 800; display: block; color: #f8fafc; } .hr-chama .hr-s { font-size: 12.5px; color: #cbd5e1; display: block; }
+    .hr-selo { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 6px 12px; border-radius: 99px; border: 1.5px solid currentColor; }
+    .hr-selo svg { width: 15px; height: 15px; flex: none; } .hr-selo.ok { color: #34d399; } .hr-selo.av { color: var(--hr-acento); }
+    .hr-dias { --hr-sz: 34px; --hr-gap: 4px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px var(--hr-gap); }
+    .hr-dia { position: relative; display: grid; gap: 4px; justify-items: center; min-width: 0; }
+    .hr-dl { font-size: 11px; line-height: 1; color: #cbd5e1; font-weight: 700; } .hr-dia.hoje .hr-dl { color: #fff; font-weight: 800; }
+    .hr-nd { width: var(--hr-sz); height: var(--hr-sz); display: grid; place-items: center; position: relative; }
+    .hr-nd svg { width: 100%; height: 100%; } .hr-nd.v { color: var(--hr-vd); } .hr-nd.r { color: var(--hr-vm); } .hr-nd.l { color: var(--hr-acento); } .hr-nd.n { color: var(--hr-neutro); }
+    .hr-dia.hoje .hr-nd::after { content: ""; position: absolute; inset: -4px; border: 2px solid #fff; border-radius: 50%; }
+    .hr-leg { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: #cbd5e1; } .hr-leg span { display: inline-flex; align-items: center; gap: 6px; } .hr-leg svg { width: 16px; height: 16px; }
+    .hr-leg .v { color: var(--hr-vd); } .hr-leg .r { color: var(--hr-vm); } .hr-leg .l { color: var(--hr-acento); } .hr-leg .n { color: var(--hr-neutro); }
+    @container (min-width: 440px) { .hr-dias { --hr-sz: 26px; --hr-gap: 3px; grid-template-columns: repeat(14, minmax(0, 1fr)); row-gap: 0; } }
+    .hr-lado { display: grid; gap: 8px; min-width: 0; align-content: center; }
+    .hr-vidro { background: rgba(8,11,16,.8); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; color: #f8fafc; min-width: 0; }
+    .hr-cont { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; padding: 10px 14px; }
+    .hr-cont .hr-n { grid-row: 1 / span 3; font-size: 54px; line-height: .95; font-weight: 800; letter-spacing: -.03em; color: #f8fafc; }
+    .hr-cont .hr-prova { grid-column: 2; }
+    .hr-lbl { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #cbd5e1; display: block; }
+    .hr-val { font-size: 20px; font-weight: 800; line-height: 1.1; display: block; color: #f8fafc; } .hr-apoio { font-size: 12px; color: #cbd5e1; display: block; }
+    .hr-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hr-mini { display: grid; gap: 8px; padding: 10px; text-align: left; font: inherit; cursor: pointer; width: 100%; align-content: start; }
+    .hr-mini:hover { background: rgba(20,26,36,.92); border-color: rgba(255,255,255,.34); }
+    .hr-mini:focus-visible, .hr-sem-foco:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .hr-lin { display: flex; align-items: flex-start; gap: 10px; min-width: 0; } .hr-tx { min-width: 0; flex: 1; }
+    .hr-ico2 { display: none; width: 34px; height: 34px; border-radius: 10px; place-items: center; background: rgba(255,255,255,.1); flex: none; } .hr-ico2 svg { width: 18px; height: 18px; } .hr-ico2.az { color: #7db1f9; } .hr-ico2.vd { color: #34d399; }
+    .hr-bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); overflow: hidden; } .hr-bar i { display: block; height: 100%; background: #10b981; border-radius: 99px; }
+    @container hr (min-width: 760px) {
+      .hr-in { grid-template-columns: minmax(0, 1fr) 270px; align-items: center; padding: 24px 26px; gap: 22px; }
+      .hr-cont { display: grid; grid-template-columns: 1fr; padding: 12px 16px; } .hr-cont .hr-n { grid-row: auto; font-size: 64px; } .hr-cont .hr-prova { grid-column: auto; }
+      .hr-duo { grid-template-columns: 1fr; } .hr-ico2 { display: grid; } .hr-mini { padding: 10px 14px; }
+    }
+    header.cab-pag .cab-dash-t { display: none; } header.cab-pag.cab-dash .cab-saud, header.cab-pag.cab-dash .topo-sub { display: none; } header.cab-pag.cab-dash .cab-dash-t { display: inline; }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -553,11 +601,11 @@
 
   <!-- ================= MAIN ================= -->
   <main class="flex-1 overflow-y-auto relative" id="main-content">
-    <header class="cab-pag sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
+    <header class="cab-pag cab-dash sticky top-0 topo-foto z-20 px-6 py-4 flex flex-wrap justify-between items-center gap-4 border-b border-theme">
       <div class="cab-id flex items-center gap-3 min-w-0">
         <span class="topo-avatar" aria-hidden="true"><img src="perfil.jpg" alt="" onerror="if(!this.dataset.f){this.dataset.f='1';this.classList.add('logo-fallback');this.src='logo.png';}else{this.removeAttribute('src');}"></span>
         <div class="min-w-0">
-          <h2 class="text-xl md:text-2xl font-bold topo-titulo">Olá, Jéssica<span class="topo-sobrenome"> Dayane</span></h2>
+          <h2 class="text-xl md:text-2xl font-bold topo-titulo"><span class="cab-saud">Olá, Jéssica<span class="topo-sobrenome"> Dayane</span></span><span class="cab-dash-t">Dashboard</span></h2>
           <p class="topo-sub text-xs md:text-sm">Constância vence a pressa: um passo por dia até a prova.</p>
         </div>
       </div>
@@ -578,6 +626,41 @@
 
       <!-- ================= DASHBOARD ================= -->
       <div id="view-dashboard" class="block max-w-6xl mx-auto space-y-6">
+        <section id="hr" class="hr" style="--hr-img:url(pmpe-fundo.jpg)" aria-label="Resumo do dia">
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+            <symbol id="hr-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7 12.5 10.5 16 17 8.5" fill="none" stroke="#0e1116" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+            <symbol id="hr-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M8.2 8.2l7.6 7.6M15.8 8.2l-7.6 7.6" fill="none" stroke="#0e1116" stroke-width="2.8" stroke-linecap="round"/></symbol>
+            <symbol id="hr-hoje" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M12 6.5V12l3.6 2.2" fill="none" stroke="#0e1116" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+            <symbol id="hr-vazio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3.2 3.2"/><path d="M8.5 12h7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+            <symbol id="hr-chama" viewBox="0 0 24 24"><path d="M12 3c.6 3.2 4.5 5 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-1.8.9-3 1.8-4 .3 1.2.9 1.8 1.6 2C11 8.8 11 6 12 3z" fill="currentColor"/><path d="M12 21c-3 0-5.5-1.7-5.5-4.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></symbol>
+            <symbol id="hr-aviso" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4.5M12 17.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+            <symbol id="hr-cumpriu" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 12.5l3 3 5-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+            <symbol id="hr-relogio" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5V13l3 2M9.5 3h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+            <symbol id="hr-edital" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+          </svg>
+          <div class="hr-in">
+            <div class="hr-esq">
+              <div>
+                <span class="hr-data" id="hr-data"></span>
+                <h2 class="hr-ola">Olá, Jéssica.</h2>
+                <p class="hr-frase">Constância vence a pressa: um passo por dia até a prova.</p>
+              </div>
+              <div class="hr-seq"><div class="hr-painel" id="hr-painel"></div></div>
+            </div>
+            <div class="hr-lado">
+              <div class="hr-vidro hr-cont"><span class="hr-lbl">Faltam</span><span class="hr-n" id="hr-dias">--</span><span class="hr-lbl" id="hr-dias-txt">dias para a prova</span><span class="hr-apoio hr-prova">Soldado · PMPE · 21/02/2027</span></div>
+              <div class="hr-duo">
+                <button type="button" class="hr-vidro hr-mini" id="hr-btn-tempo" onclick="navigate('historico')" aria-label="Tempo total de estudo. Abrir o Histórico">
+                  <div class="hr-lin"><span class="hr-ico2 az"><svg aria-hidden="true"><use href="#hr-relogio"/></svg></span><div class="hr-tx"><span class="hr-lbl">Tempo total de estudo</span><span class="hr-val" id="hr-tempo">0h 0m</span></div></div>
+                </button>
+                <button type="button" class="hr-vidro hr-mini" id="hr-btn-edital" onclick="navigate('edital')" aria-label="Progresso no edital. Abrir o Edital Verticalizado">
+                  <div class="hr-lin"><span class="hr-ico2 vd"><svg aria-hidden="true"><use href="#hr-edital"/></svg></span><div class="hr-tx"><span class="hr-lbl">Progresso no edital</span><span class="hr-val" id="hr-pct">0%</span><span class="hr-apoio" id="hr-topicos">0 de 0 tópicos</span></div></div>
+                  <div class="hr-bar" id="hr-barra" role="img" aria-label="0 de 0 tópicos concluídos"><i style="width:0%"></i></div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
             <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Tempo Total de Estudo</p>
@@ -1329,6 +1412,8 @@
     const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     const diff = Math.ceil((alvo - hoje) / 86400000);
     document.getElementById('countdown-dias').innerText = diff > 0 ? `${diff} DIAS` : 'CHEGOU!';
+    const hrDias = document.getElementById('hr-dias');
+    if (hrDias) { hrDias.textContent = diff > 0 ? diff : 0; document.getElementById('hr-dias-txt').textContent = diff > 1 ? 'dias para a prova' : diff === 1 ? 'dia para a prova' : 'A prova chegou!'; }
   }
   function toggleTheme() {
     const isLight = document.body.classList.toggle('light-mode');
@@ -1887,6 +1972,7 @@
       btn.classList.add('text-sec', 'font-medium');
     });
     document.getElementById(`view-${tela}`).classList.remove('hidden');
+    document.querySelector('header.cab-pag').classList.toggle('cab-dash', tela === 'dashboard');
     const ativo = document.getElementById(`nav-${tela}`);
     ativo.classList.remove('text-sec', 'font-medium');
     ativo.classList.add('text-brand', 'bg-emerald-500/10', 'font-semibold');
@@ -1929,6 +2015,7 @@
   function atualizarTudoUI() {
     atualizarDashboard();
     renderizarStreak();
+    renderizarHeroi();
     renderizarEdital();
     renderizarLembretes();
     renderizarPlanoDia();
@@ -1945,21 +2032,25 @@
   // =====================================================================
   // 7. DASHBOARD
   // =====================================================================
-  function atualizarDashboard() {
+  function totaisDoEdital() {
     let total = 0, conc = 0, min = 0, ac = 0, totQuest = 0;
     meusDados.forEach(d => percorrerNos(d.topicos, t => {
       total++; if (t.concluido) conc++;
       min += (t.tempo || 0); ac += (t.acertos || 0); totQuest += (t.totais || 0);
     }));
+    return { total, conc, min, ac, totQuest };
+  }
+  function atualizarDashboard() {
+    const { total, conc, min, ac, totQuest } = totaisDoEdital();
     document.getElementById('stat-tempo').innerText = `${Math.floor(min / 60)}h ${min % 60}m`;
     document.getElementById('stat-desempenho').innerText = `${totQuest ? Math.round((ac / totQuest) * 100) : 0}%`;
     document.getElementById('stat-questoes').innerText = `${ac} acertos / ${totQuest} feitas`;
     document.getElementById('stat-progresso').innerText = `${total ? Math.round((conc / total) * 100) : 0}%`;
     document.getElementById('stat-topicos').innerText = `${conc} de ${total} tópicos`;
   }
-  function renderizarStreak() {
-    const tracker = document.getElementById('streak-tracker');
-    tracker.innerHTML = '';
+  const MIN_CONSTANCIA = 20;   // minutos que fazem um dia valer na sequência
+  // Sequência atual e recorde, a partir do histórico diário (conta desde hoje, ou desde ontem enquanto hoje não fecha)
+  function calcularSequencia() {
     const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     const validos = Object.keys(historicoDiario).filter(k => historicoDiario[k] >= 20).sort();
     let recorde = 0, temp = 0, prev = null;
@@ -1976,6 +2067,13 @@
     let atual = 0;
     while (cursor && (historicoDiario[isoLocal(cursor)] || 0) >= 20) { atual++; cursor.setDate(cursor.getDate() - 1); }
     if (atual > recorde) recorde = atual;
+    return { atual, recorde };
+  }
+  function renderizarStreak() {
+    const tracker = document.getElementById('streak-tracker');
+    tracker.innerHTML = '';
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const { atual, recorde } = calcularSequencia();
     document.getElementById('streak-msg').innerHTML = atual > 0
       ? `<i class="fa-solid fa-fire text-orange-500 mr-1.5"></i> Você está há <strong class="text-brand">${atual} dias</strong> sem falhar. Recorde: <strong class="text-brand">${recorde} dias</strong>`
       : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Recomeçar também é avançar. Seu próximo passo é hoje.${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Recorde anterior: ${recorde} dias)</span>` : ''}`;
@@ -1990,6 +2088,72 @@
       cell.innerHTML = `<span>${String(d.getDate()).padStart(2, '0')}</span><i class="fa-solid ${ok ? 'fa-check text-brand mt-0.5' : 'fa-minus opacity-40 mt-0.5'}"></i>`;
       tracker.appendChild(cell);
     }
+  }
+
+  // ---- Herói do Dashboard (só leitura: usa registros, histórico diário e edital já salvos) ----
+  function diasParaProva() {
+    const alvo = new Date('2027-02-21T00:00:00');
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    return Math.ceil((alvo - hoje) / 86400000);
+  }
+  // Primeiro dia com estudo: recalculado a cada atualização, para acompanhar zerar, edição manual e importação
+  function primeiroDiaComEstudo() {
+    let menor = null;
+    const considera = d => { if (d && (menor === null || d < menor)) menor = d; };
+    Object.keys(historicoDiario || {}).forEach(d => { if ((Number(historicoDiario[d]) || 0) > 0) considera(d); });
+    (registrosEstudo || []).forEach(r => { if ((Number(r.minutos) || 0) > 0 || (Number(r.segundos) || 0) > 0) considera(r.data); });
+    return menor;
+  }
+  const HR_LETRAS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+  const HR_SEMANA = ['dom.', 'seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.'];
+  const hrIcone = (id, cls = '') => `<svg ${cls ? `class="${cls}" ` : ''}aria-hidden="true"><use href="#hr-${id}"/></svg>`;
+  function renderizarHeroi() {
+    const painel = document.getElementById('hr-painel');
+    if (!painel) return;
+    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    const hojeStr = isoLocal(hoje);
+    // data por extenso
+    const sem = hoje.toLocaleDateString('pt-BR', { weekday: 'long' });
+    document.getElementById('hr-data').textContent = `${sem.charAt(0).toUpperCase() + sem.slice(1)} · ${hoje.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}`;
+    // sequência
+    const { atual, recorde } = calcularSequencia();
+    const minHoje = historicoDiario[hojeStr] || 0;
+    const cumpriu = minHoje >= MIN_CONSTANCIA;
+    const primeiro = primeiroDiaComEstudo();
+    let perdidos = 0, completos = 0, neutros = 0;
+    const celulas = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(hoje); d.setDate(d.getDate() - i);
+      const iso = isoLocal(d), min = historicoDiario[iso] || 0;
+      let e, rotulo;
+      if (i === 0) { e = 'l'; rotulo = cumpriu ? 'Hoje, meta cumprida' : `Hoje, em andamento (faltam ${MIN_CONSTANCIA - min} min)`; }
+      else if (min >= MIN_CONSTANCIA) { e = 'v'; completos++; rotulo = 'Dia completo'; }
+      else if (primeiro === null || iso < primeiro) { e = 'n'; neutros++; rotulo = 'Antes de começar'; }
+      else { e = 'r'; perdidos++; rotulo = 'Dia sem a meta: a sequência quebrou'; }
+      const icone = e === 'v' ? 'ok' : e === 'r' ? 'x' : e === 'n' ? 'vazio' : (cumpriu ? 'ok' : 'hoje');
+      celulas.push(`<div class="hr-dia${i === 0 ? ' hoje' : ''}" data-estado="${e}" title="${HR_SEMANA[d.getDay()]} ${formatarDataBR(iso)}: ${min} min. ${rotulo}"><span class="hr-dl">${HR_LETRAS[d.getDay()]}</span><span class="hr-nd ${e}">${hrIcone(icone)}</span></div>`);
+    }
+    const selo = cumpriu
+      ? `<span class="hr-selo ok">${hrIcone('cumpriu')} Meta de hoje cumprida</span>`
+      : `<span class="hr-selo av">${hrIcone('aviso')} Faltam ${MIN_CONSTANCIA - minHoje} min hoje ${atual > 0 ? 'para manter a sequência' : 'para recomeçar'}</span>`;
+    const sub = atual > 0 ? `sem falhar · Recorde: ${recorde} dias` : `Recomeçar também é avançar.${recorde > 0 ? ` Recorde anterior: ${recorde} dias` : ''}`;
+    const aria = `Últimos 14 dias: ${completos} completos, ${perdidos} perdidos${neutros ? `, ${neutros} antes de começar` : ''}; hoje com ${minHoje} minutos`;
+    painel.innerHTML =
+      `<div class="hr-cab"><div class="hr-chama"><span class="hr-chama-ico${atual > 0 ? '' : ' apagada'}">${hrIcone('chama')}</span><div><b>${atual} ${atual === 1 ? 'dia' : 'dias'}</b><span class="hr-s">${sub}</span></div></div>${selo}</div>`
+      + `<div class="hr-dias" role="img" aria-label="${aria}">${celulas.join('')}</div>`
+      + `<div class="hr-leg"><span class="v">${hrIcone('ok')}<span>Dia completo (${MIN_CONSTANCIA} min)</span></span><span class="r">${hrIcone('x')}<span>Dia perdido</span></span><span class="l">${hrIcone('hoje')}<span>Hoje</span></span>${neutros ? `<span class="n">${hrIcone('vazio')}<span>Antes de começar</span></span>` : ''}</div>`;
+    // contagem, tempo e edital (mesmos números dos cartões atuais)
+    const diff = diasParaProva();
+    document.getElementById('hr-dias').textContent = diff > 0 ? diff : 0;
+    document.getElementById('hr-dias-txt').textContent = diff > 1 ? 'dias para a prova' : diff === 1 ? 'dia para a prova' : 'A prova chegou!';
+    const { total, conc, min } = totaisDoEdital();
+    const pc = total ? Math.round((conc / total) * 100) : 0;
+    document.getElementById('hr-tempo').textContent = `${Math.floor(min / 60)}h ${min % 60}m`;
+    document.getElementById('hr-pct').textContent = `${pc}%`;
+    document.getElementById('hr-topicos').textContent = `${conc} de ${total} tópicos`;
+    const barra = document.getElementById('hr-barra');
+    barra.setAttribute('aria-label', `${conc} de ${total} tópicos concluídos, ${pc}%`);
+    barra.firstElementChild.style.width = `${pc}%`;
   }
 
   // Lembretes
