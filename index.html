@@ -364,6 +364,62 @@
     .mc-confirma .ad { display: grid; grid-template-columns: 1fr; gap: 8px; } .mc-confirma .ad div { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; } .mc-confirma .ad b { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
     .mc-acoes { display: flex; gap: 8px; flex-wrap: wrap; } .mc-acoes .mc-btn { flex: 1 1 auto; }
     @container mc (max-width: 400px) { .mc-cartao { padding: 14px 8px; } .mc-cal-g { gap: 2px; } }
+    /* ---------- Cronograma: trilha, letras em acordeão e blocos em linha densa ---------- */
+    :root { --cr-feita-bg: #10b981; --cr-feita-t: #022c22; } body.light-mode { --cr-feita-bg: #047857; --cr-feita-t: #ffffff; }
+    .cr-principal { container: cr / inline-size; display: grid; gap: 20px; }
+    .cr-principal.hidden { display: none; }
+    .cr-topo { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; justify-content: space-between; } .cr-tit { flex: 1 1 260px; min-width: 0; }
+    .cr-acoes { display: flex; gap: 8px; flex-wrap: wrap; } .mc-btn[aria-pressed="true"] { background: var(--sel-fundo); border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+    .cr-cartao { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0; }
+    .cr-lin { display: flex; align-items: center; gap: 6px 12px; flex-wrap: wrap; } .cr-frase { font-size: 13px; color: var(--text-secondary); } .cr-pc { font-size: 20px; font-weight: 800; color: var(--ms-feito-t); margin-left: auto; font-variant-numeric: tabular-nums; }
+    .cr-trilha { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cr-bola { width: 52px; display: grid; gap: 3px; justify-items: center; background: none; border: 0; padding: 0; color: var(--text-secondary); font-size: 11.5px; font-weight: 700; cursor: pointer; }
+    .cr-bola i { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--pf-borda); display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 15px; color: var(--text-secondary); }
+    .cr-bola.f i { background: var(--cr-feita-bg); border-color: var(--cr-feita-bg); color: var(--cr-feita-t); }
+    .cr-bola.h { color: var(--ms-acento-t); } .cr-bola.h i { border-color: var(--ms-acento); color: var(--ms-acento-t); background: var(--ms-acento-bg); box-shadow: 0 0 0 3px var(--ms-acento-bg); }
+    .cr-bola:focus-visible { outline: none; } .cr-bola:focus-visible i { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .cr-prox { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px 12px; }
+    .cr-prox > div { flex: 1 1 200px; min-width: 0; display: grid; gap: 2px; } .cr-prox b { font-size: 15px; } .cr-prox .t { font-size: 13px; color: var(--text-secondary); overflow-wrap: anywhere; }
+    .cr-prox.fim { border-color: var(--ms-feito-bd); background: var(--ms-feito-bg); }
+    .cr-ini { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; cursor: pointer; white-space: nowrap; }
+    .cr-ini:hover { background: var(--bg-hover); } .cr-ini.pri { background: var(--ms-acento); border-color: var(--ms-acento); color: var(--ms-acento-fg); } .cr-ini.pri:hover { filter: brightness(1.06); }
+    .cr-ini.parar { background: var(--ms-acento); border-color: var(--ms-acento); color: var(--ms-acento-fg); }
+    .cr-sec { display: grid; gap: 10px; } .cr-lista { display: grid; gap: 10px; }
+    .cr-dia { border: 1px solid var(--pf-borda); border-radius: 18px; background: var(--bg-panel); overflow: hidden; min-width: 0; }
+    .cr-dia.atual { border-color: var(--ms-acento); box-shadow: inset 4px 0 0 var(--ms-acento); } .cr-dia.feito { border-color: var(--ms-feito-bd); }
+    .cr-dia-cab { display: flex; align-items: center; gap: 8px 10px; padding: 6px 12px 6px 6px; flex-wrap: wrap; min-height: 56px; }
+    .cr-seta { width: 44px; height: 44px; border: 0; background: none; color: var(--text-secondary); display: grid; place-items: center; border-radius: 12px; cursor: pointer; flex: none; } .cr-seta:hover { background: var(--bg-hover); }
+    .cr-seta i { transition: transform .2s; } .cr-seta[aria-expanded="true"] i { transform: rotate(90deg); }
+    .cr-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; border: 1.5px solid var(--pf-borda); color: var(--text-secondary); white-space: nowrap; }
+    .cr-tag.h { background: var(--ms-acento); border-color: var(--ms-acento); color: var(--ms-acento-fg); } .cr-tag.f { border-color: var(--ms-feito-bd); color: var(--ms-feito-t); }
+    .cr-dia-nome { flex: 1 1 160px; min-width: 0; display: grid; gap: 1px; } .cr-dia-nome b { font-size: 16px; overflow-wrap: anywhere; } .cr-dia-nome span { font-size: 12.5px; color: var(--text-secondary); }
+    .cr-nome-in { flex: 1 1 160px; min-width: 0; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 0 10px; font-weight: 800; font-size: 15px; }
+    .cr-mini { display: inline-flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .cr-mini .bar { width: 90px; height: 8px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; display: block; } .cr-mini .bar i { display: block; height: 100%; background: var(--brand); }
+    .cr-ed { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+    .cr-q { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--pf-borda); background: var(--bg-card); color: var(--text-secondary); display: grid; place-items: center; cursor: pointer; padding: 0; } .cr-q:hover { background: var(--bg-hover); color: var(--text-primary); } .cr-q.perigo { color: var(--mc-ruim-t); }
+    .cr-dia-corpo { border-top: 1px solid var(--border-color); padding: 8px; display: grid; gap: 6px; background: color-mix(in srgb, var(--bg-main) 35%, transparent); }
+    .cr-vazio { color: var(--text-secondary); font-style: italic; font-size: 13px; padding: 6px 8px; }
+    .cr-bl { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 0 8px; align-items: center; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-card); padding: 0 6px 0 2px; min-width: 0; }
+    .cr-bl.feito { background: var(--ms-feito-bg); border-color: var(--ms-feito-bd); } .cr-bl.parcial { background: var(--ms-parc-bg); border-color: var(--ms-parc-bd); } .cr-bl.prox { border-color: var(--ms-acento); box-shadow: inset 4px 0 0 var(--ms-acento); }
+    .cr-ck { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; } .cr-ck input { width: 22px; height: 22px; accent-color: #10b981; cursor: pointer; }
+    .cr-bl-c { min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; padding: 7px 0; }
+    .cr-bl-d { font-weight: 800; font-size: 14px; } .cr-bl-t { font-size: 13px; color: var(--text-sub); overflow-wrap: anywhere; }
+    .cr-bl-m { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12px; } .cr-bl .marcas { margin: 0; display: inline-flex; } .cr-bl .resumo-disc { margin: 0; display: inline; }
+    .cr-bl-min { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .cr-tg { font-size: 11px; font-weight: 800; padding: 1px 8px; border-radius: 7px; white-space: nowrap; border: 1px solid; }
+    .cr-tg.ok { color: var(--ms-feito-t); border-color: var(--ms-feito-bd); } .cr-tg.prox { color: var(--ms-acento-t); border-color: var(--ms-acento); background: var(--ms-acento-bg); }
+    .cr-falta { font-size: 12.5px; font-weight: 800; color: var(--ms-acento-t); white-space: nowrap; }
+    .cr-bl-a { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; padding: 4px 0; }
+    .cr-bl-a .sel-gatilho { width: auto; max-width: 16rem; min-height: 44px; }
+    .cr-min { width: 68px; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); text-align: center; font-weight: 700; }
+    .cr-add { justify-self: start; }
+    .cr-hist { display: flex; gap: 8px; flex-wrap: wrap; } .cr-hist span { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 13px; color: var(--text-secondary); } .cr-hist b { color: var(--text-primary); }
+    @container cr (max-width: 640px) {
+      .cr-bl { grid-template-columns: 44px minmax(0, 1fr); } .cr-bl-c { display: grid; } .cr-bl-a { grid-column: 2; justify-content: flex-start; padding: 0 0 8px; } .cr-bl-a:empty { display: none; }
+      .cr-dia-cab .cr-mini { flex-basis: 100%; padding-left: 52px; } .cr-acoes .mc-btn { flex: 1 1 auto; }
+      .cr-bl-a .sel-gatilho { max-width: 100%; flex: 1 1 100%; }
+    }
     /* seletor de tópicos em duas etapas */
     .sel-gatilho { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; cursor: pointer; font-size: 13px; }
     .sel-gatilho:hover:not(:disabled) { border-color: var(--brand); } .sel-gatilho:disabled { opacity: .55; cursor: not-allowed; }
@@ -882,47 +938,27 @@
 
       <!-- ================= CRONOGRAMA ================= -->
       <div id="view-cronograma" class="hidden max-w-5xl mx-auto space-y-6">
-        <div id="cron-principal" class="space-y-6">
-        <header class="flex flex-wrap items-start justify-between gap-3">
-          <div class="flex-1" style="min-width:220px">
-            <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2"></i> Meu Cronograma</h2>
-            <p class="text-sec text-sm">Monte seus dias do jeito que preferir: quantas sessões, em que disciplina, por quantos minutos. A rodada repete os dias em sequência. Ou use <b>Montar ciclo</b> para o sistema sugerir pelo peso da prova e pelas suas lacunas.</p>
+        <div id="cron-principal" class="cr-principal">
+        <header class="cr-topo">
+          <div class="cr-tit">
+            <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-diagram-project text-emerald-400 mr-2" aria-hidden="true"></i> Meu Cronograma</h2>
+            <p class="text-sec text-sm" id="cron-sub">Monte seus dias do jeito que preferir. A rodada repete os dias em sequência.</p>
           </div>
-          <button type="button" id="cron-btn-montar" onclick="abrirMontarCiclo()" class="mc-btn ini"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Montar ciclo</button>
+          <div class="cr-acoes">
+            <button type="button" id="cron-btn-montar" onclick="abrirMontarCiclo()" class="mc-btn"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Montar ciclo</button>
+            <button type="button" id="cron-btn-editar" onclick="alternarEdicaoCron()" class="mc-btn" aria-pressed="false"><i class="fa-solid fa-pen" aria-hidden="true"></i> <span>Editar ciclo</span></button>
+            <button type="button" id="cron-btn-pular-b" onclick="pularDia()" class="mc-btn"><i class="fa-solid fa-forward-step" aria-hidden="true"></i> <span id="cron-btn-pular">Pular dia atual</span></button>
+            <button type="button" id="cron-btn-novo-b" onclick="adicionarDia()" class="mc-btn pri hidden"><i class="fa-solid fa-plus" aria-hidden="true"></i> <span id="cron-btn-novo">Novo dia</span></button>
+          </div>
         </header>
-
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Rodada atual</p>
-            <p class="text-3xl font-bold text-brand" id="cron-rodada">1</p>
-          </div>
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1" id="cron-dia-rot">Dia atual</p>
-            <p class="text-2xl font-bold text-main truncate" id="cron-dia">—</p>
-          </div>
-          <div class="bg-card p-4 rounded-lg border border-theme">
-            <p class="text-xs text-sec font-bold uppercase mb-1">Progresso da rodada</p>
-            <p class="text-3xl font-bold text-blue-400" id="cron-progresso">0%</p>
-            <div class="w-full bg-card rounded-full h-2 border border-theme overflow-hidden mt-2">
-              <div id="cron-barra" class="bg-brand h-full rounded-full transition-all duration-500" style="width:0%"></div>
-            </div>
-          </div>
+        <section class="cr-cartao" id="cron-resumo" aria-label="Resumo do ciclo"></section>
+        <section class="cr-sec" aria-labelledby="cron-dias-tit">
+          <h3 class="mc-rot" id="cron-dias-tit">Dias do ciclo</h3>
+          <div id="cron-dias" class="cr-lista"></div>
         </section>
-
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
-          <div class="flex flex-wrap justify-between items-center gap-3">
-            <h3 class="font-bold text-main text-lg" id="cron-dias-tit">Dias do ciclo</h3>
-            <div class="flex gap-2">
-              <button onclick="pularDia()" class="px-3 py-2 rounded-lg bg-card hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-forward-step mr-1"></i> <span id="cron-btn-pular">Pular dia atual</span></button>
-              <button onclick="adicionarDia()" class="px-3 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> <span id="cron-btn-novo">Novo dia</span></button>
-            </div>
-          </div>
-          <div id="cron-dias" class="space-y-4"></div>
-        </section>
-
-        <section class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-          <h3 class="font-bold text-main text-lg mb-3"><i class="fa-solid fa-clock-rotate-left text-blue-400 mr-2"></i> Rodadas concluídas</h3>
-          <div id="cron-historico" class="space-y-2 text-sm"></div>
+        <section class="cr-sec" aria-labelledby="cron-hist-tit">
+          <h3 class="mc-rot" id="cron-hist-tit">Rodadas concluídas</h3>
+          <div id="cron-historico" class="cr-hist"></div>
         </section>
         </div>
         <div id="cron-montar" class="hidden" aria-labelledby="mc-titulo"></div>
@@ -1775,11 +1811,8 @@
   }
   // Sessão ou bloco sem tópico: quantos tópicos de peso alto e com estrela da disciplina ainda não foram concluídos
   function resumoDisciplinaHTML(discId) {
-    const disc = meusDados.find(d => d.id === discId);
-    if (!disc) return '';
-    let alto = 0, estrela = 0;
-    percorrerNos(disc.topicos, n => { if (!n.concluido) { if (n.peso === 'alto') alto++; if (n.aocp) estrela++; } });
-    return `<p class="resumo-disc">${alto || estrela ? `${alto} de peso alto e ${estrela} com estrela ainda sem concluir` : 'Nenhum tópico de peso alto ou com estrela pendente'}</p>`;
+    const t = resumoDisciplinaTexto(discId);
+    return t ? `<p class="resumo-disc">${t}</p>` : '';
   }
   const PESO_ORDEM = { alto: 0, medio: 1, baixo: 2 };
   const novoFiltroMarcas = () => ({ estrela: false, peso: [], diag: [], ordem: 'data', aberto: false, qtd: 0, total: 0 });
@@ -2097,7 +2130,7 @@
       if (ativoBn) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
     if (tela === 'erros') voltarVitrineErros();
-    if (tela === 'cronograma') { mostrarCronogramaPrincipal(); renderizarCronograma(); }
+    if (tela === 'cronograma') { cronEditando = false; cronAbertos.clear(); mostrarCronogramaPrincipal(); renderizarCronograma(); }
     if (tela === 'revisoes') renderizarRevisoes();
     if (tela === 'historico') { popularFiltrosHist(); renderizarHistorico(); }
     if (tela === 'edital') renderizarEdital();
@@ -2903,7 +2936,7 @@
     salvarTudo();
   }
   function removerDia(i) {
-    if (!confirm('Remover este dia e todas as suas sessões?')) return;
+    if (!confirm(cicloEmLetras() ? 'Remover esta letra e todos os seus blocos?' : 'Remover este dia e todas as suas sessões?')) return;
     cronograma.dias.splice(i, 1);
     if (cronograma.diaAtual >= cronograma.dias.length) cronograma.diaAtual = Math.max(0, cronograma.dias.length - 1);
     salvarTudo();
@@ -2912,21 +2945,7 @@
     const j = i + dir;
     if (j < 0 || j >= cronograma.dias.length) return;
     [cronograma.dias[i], cronograma.dias[j]] = [cronograma.dias[j], cronograma.dias[i]];
-    salvarTudo();
-  }
-  function popularTopicoDia(diaId) {
-    const disc = document.getElementById(`sd-disc-${diaId}`).value;
-    document.getElementById(`sd-top-${diaId}`).innerHTML = optionsTopicos(disc, '', '— disciplina inteira —');
-  }
-  function adicionarSessao(i) {
-    const dia = cronograma.dias[i];
-    if (!dia) return;
-    const disc = document.getElementById(`sd-disc-${dia.id}`).value;
-    const topicoId = document.getElementById(`sd-top-${dia.id}`).value;
-    const min = parseInt(document.getElementById(`sd-min-${dia.id}`).value, 10);
-    if (!disc) { alert('Escolha a disciplina da sessão.'); return; }
-    if (!(min > 0)) { alert('Informe a duração em minutos.'); return; }
-    dia.sessoes.push({ id: novoId(), disc, min, topicoId: topicoId || '', feita: false });
+    if (cronograma.diaAtual === i) cronograma.diaAtual = j; else if (cronograma.diaAtual === j) cronograma.diaAtual = i;
     salvarTudo();
   }
   function removerSessao(i, sid) {
@@ -2953,70 +2972,114 @@
     if (s) { s.topicoId = valor; salvarTudo(); }
   }
 
-  function diaHTML(dia, i) {
-    const atual = i === cronograma.diaAtual;
-    const totalMin = dia.sessoes.reduce((acc, s) => acc + s.min, 0);
-    const sessoes = dia.sessoes.map((s, k) => {
-      const d = meusDados.find(x => x.id === s.disc);
-      return `
-        <div class="ses-cron p-2.5 rounded-lg border border-theme bg-card ${s.feita && s.parcial ? 'sessao-parcial' : s.feita ? 'sessao-concluida' : ''}">
-          <div class="flex flex-wrap items-center gap-2">
-            <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" class="w-4 h-4 accent-emerald-500" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
-            <p class="flex-1 min-w-0 text-sm font-semibold truncate ${s.feita && !s.parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
-            ${s.feita && s.parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : ''}
-            <input type="number" min="5" value="${s.min}" onchange="editarMinSessao(${i}, ${s.id}, this.value)" class="w-20 bg-panel border border-theme rounded-lg p-1.5 text-xs text-main outline-none" title="Minutos">
-            <span class="text-[11px] text-sec">min</span>
-            <button onclick="moverSessao(${i}, ${s.id}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir"><i class="fa-solid fa-arrow-up"></i></button>
-            <button onclick="moverSessao(${i}, ${s.id}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer"><i class="fa-solid fa-arrow-down"></i></button>
-            <button onclick="removerSessao(${i}, ${s.id})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover"><i class="fa-solid fa-xmark"></i></button>
-          </div>
-          <button type="button" class="sel-gatilho mt-2" onclick="abrirSeletorSessao(${i}, ${s.id})" aria-haspopup="dialog">${rotuloSeletorHTML(s.disc, s.topicoId || '', { valor: '', rotulo: 'Disciplina inteira' }, null)}<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i></button>
-          ${(() => { const { node } = getNodeRef(s.disc, s.topicoId); return node ? marcasHTML(node) : resumoDisciplinaHTML(s.disc); })()}
-        </div>`;
-    }).join('');
-
-    return `
-      <div class="rounded-xl border card-dia bg-panel p-4 space-y-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${atual ? 'bg-brand text-white' : 'bg-card border border-theme text-sec'}">${atual ? (cicloEmLetras() ? 'Agora' : 'Hoje') : (cicloEmLetras() ? 'Letra ' + letraDoIndice(i) : 'Dia ' + (i + 1))}</span>
-          <input value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" class="flex-1 min-w-[140px] bg-card border border-theme rounded-lg p-1.5 text-sm font-bold text-main outline-none">
-          <span class="text-xs text-sec">${dia.sessoes.length} sessão(ões) · ${formatarMinutos(totalMin)}</span>
-          <button onclick="moverDia(${i}, -1)" class="w-7 h-7 rounded hover-bg text-sec" title="Subir dia"><i class="fa-solid fa-arrow-up"></i></button>
-          <button onclick="moverDia(${i}, 1)" class="w-7 h-7 rounded hover-bg text-sec" title="Descer dia"><i class="fa-solid fa-arrow-down"></i></button>
-          <button onclick="removerDia(${i})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Remover dia"><i class="fa-solid fa-trash"></i></button>
-        </div>
-        <div class="space-y-2">${sessoes || `<p class="text-xs text-mut italic">Nenhuma sessão ${cicloEmLetras() ? 'nesta letra' : 'neste dia'} ainda.</p>`}</div>
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-2 border-t border-theme">
-          <select id="sd-disc-${dia.id}" onchange="popularTopicoDia(${dia.id})" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none">${optionsDisciplinas()}</select>
-          <select id="sd-top-${dia.id}" class="sm:col-span-1 bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"><option value="">— disciplina inteira —</option></select>
-          <input id="sd-min-${dia.id}" type="number" min="5" value="${preferencias.duracaoPadrao}" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none" title="Minutos">
-          <button onclick="adicionarSessao(${i})" class="bg-brand hover:opacity-90 text-white font-bold rounded-lg p-2 text-xs transition"><i class="fa-solid fa-plus mr-1"></i> Adicionar sessão</button>
-        </div>
-      </div>`;
+  // ---------- Cronograma: tela (trilha, letras em acordeão, blocos em linha densa, Editar ciclo) ----------
+  let cronEditando = false;
+  const cronAbertos = new Map();   // id do dia/letra → aberto? (só na memória da tela)
+  function vocabCron() {
+    return cicloEmLetras()
+      ? { un: 'letra', agora: 'Agora', feito: 'Feita', avir: 'A vir', tit: 'Letras do ciclo', pular: 'Pular letra atual', novo: 'Nova letra', prox: 'Próximo bloco', ses: 'bloco', sess: 'blocos', rot: i => letraDoIndice(i), tag: () => 'A vir',
+          sub: 'A fila de letras não depende do dia da semana: faltou um dia, você continua do bloco em que parou.', fim: 'Letra concluída. A próxima já está na fila.', vazio: 'Nenhum bloco nesta letra ainda.' }
+      : { un: 'dia', agora: 'Hoje', feito: 'Feito', avir: 'A vir', tit: 'Dias do ciclo', pular: 'Pular dia atual', novo: 'Novo dia', prox: 'Próxima sessão', ses: 'sessão', sess: 'sessões', rot: i => String(i + 1), tag: i => 'Dia ' + (i + 1),
+          sub: 'Monte seus dias do jeito que preferir. A rodada repete os dias em sequência.', fim: 'Dia concluído. Bom descanso!', vazio: 'Nenhuma sessão neste dia ainda.' };
   }
-
+  const diaCompleto = d => d.sessoes.length > 0 && d.sessoes.every(s => s.feita);
+  const cronEmCurso = (i, s) => !!timerInterval && !!timerSessao && timerSessao.diaIdx === i && timerSessao.sid === s.id;
+  function cronAberto(d, i) { return cronAbertos.has(d.id) ? cronAbertos.get(d.id) : i === cronograma.diaAtual; }
+  function alternarDiaCron(id) {
+    const i = cronograma.dias.findIndex(d => d.id === id); if (i < 0) return;
+    cronAbertos.set(id, !cronAberto(cronograma.dias[i], i)); renderizarCronograma();
+    const b = document.querySelector(`#cron-dia-${id} .cr-seta`); if (b) b.focus({ preventScroll: true });
+  }
+  function irParaDiaCron(id) {
+    cronAbertos.set(id, true); renderizarCronograma();
+    const el = document.getElementById('cron-dia-' + id);
+    if (el) { el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); const b = el.querySelector('.cr-seta'); if (b) b.focus({ preventScroll: true }); }
+  }
+  function alternarEdicaoCron() { cronEditando = !cronEditando; renderizarCronograma(); const b = document.getElementById('cron-btn-editar'); if (b) b.focus({ preventScroll: true }); }
+  function minutosBlocoPadrao() { const u = cronograma.plano && cronograma.plano.ultimoUso; return (cicloEmLetras() && u && u.bloco) || preferencias.duracaoPadrao || 50; }
+  function adicionarBlocoCron(i) {
+    const dia = cronograma.dias[i]; if (!dia) return;
+    abrirSeletorTopico({ lerDisc: () => '', lerTopico: () => '', fixarDisc: false, vazio: { valor: '', rotulo: 'Disciplina inteira' }, discVazio: null,
+      aplicar: (d, t) => { if (!d) return; dia.sessoes.push({ id: novoId(), disc: d, min: minutosBlocoPadrao(), topicoId: t || '', feita: false }); cronAbertos.set(dia.id, true); salvarTudo(); } });
+  }
+  function resumoDisciplinaTexto(discId) {
+    const disc = meusDados.find(d => d.id === discId);
+    if (!disc) return '';
+    let alto = 0, estrela = 0;
+    percorrerNos(disc.topicos, n => { if (!n.concluido) { if (n.peso === 'alto') alto++; if (n.aocp) estrela++; } });
+    return alto || estrela ? `${alto} de peso alto e ${estrela} com estrela ainda sem concluir` : 'Nenhum tópico de peso alto ou com estrela pendente';
+  }
+  function blocoCronHTML(s, i, atual, proxId) {
+    const d = meusDados.find(x => x.id === s.disc), nomeD = esc(d ? d.nome : '—'), { node } = getNodeRef(s.disc, s.topicoId);
+    const parcial = s.feita && s.parcial, prox = atual && s.id === proxId, emCurso = cronEmCurso(i, s), v = vocabCron();
+    const topico = node ? esc(node.nome) : 'Disciplina inteira';
+    const marcas = node ? `<span class="marcas">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}${diagnosticoBadgeHTML(node)}</span>` : `<span class="resumo-disc">${resumoDisciplinaTexto(s.disc)}</span>`;
+    const tags = parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : s.feita ? `<span class="cr-tg ok">${v.feito}</span>` : prox ? '<span class="cr-tg prox">Próximo</span>' : '';
+    let acao = '';
+    if (cronEditando) {
+      acao = `<button type="button" class="sel-gatilho" onclick="abrirSeletorSessao(${i}, ${s.id})" aria-haspopup="dialog" aria-label="Trocar o tópico de ${nomeD}">${rotuloSeletorHTML(s.disc, s.topicoId || '', { valor: '', rotulo: 'Disciplina inteira' }, null)}<i class="fa-solid fa-chevron-down sel-chev" aria-hidden="true"></i></button>
+        <input type="number" class="cr-min" min="5" value="${s.min}" onchange="editarMinSessao(${i}, ${s.id}, this.value)" aria-label="Minutos de ${nomeD}">
+        <button type="button" class="cr-q" onclick="moverSessao(${i}, ${s.id}, -1)" aria-label="Subir ${nomeD}" title="Subir"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
+        <button type="button" class="cr-q" onclick="moverSessao(${i}, ${s.id}, 1)" aria-label="Descer ${nomeD}" title="Descer"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+        <button type="button" class="cr-q perigo" onclick="removerSessao(${i}, ${s.id})" aria-label="Remover ${nomeD}" title="Remover"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
+    } else if (parcial) acao = `<span class="cr-falta">Faltam ${Math.max(0, s.min - s.parcial.estudadoMin)} min</span>`;
+    else if (atual && !s.feita) acao = emCurso
+      ? `<button type="button" class="cr-ini parar" onclick="alternarIniciarParar()"><i class="fa-solid fa-stop" aria-hidden="true"></i> Parar</button>`
+      : `<button type="button" class="cr-ini${prox ? ' pri' : ''}" onclick="iniciarSessaoCron(${i}, ${s.id})" aria-label="Iniciar ${nomeD}"><i class="fa-solid fa-play" aria-hidden="true"></i> Iniciar</button>`;
+    return `<div class="cr-bl ses-cron ${parcial ? 'parcial sessao-parcial' : s.feita ? 'feito sessao-concluida' : ''} ${prox ? 'prox' : ''}">
+        <label class="cr-ck chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" aria-label="${v.ses === 'bloco' ? 'Bloco' : 'Sessão'} feito: ${nomeD}"></label>
+        <div class="cr-bl-c"><span class="cr-bl-d">${nomeD}</span><span class="cr-bl-t">${topico}</span><span class="cr-bl-m">${tags}${marcas}${cronEditando ? '' : `<span class="cr-bl-min">${s.min} min</span>`}</span></div>
+        <div class="cr-bl-a">${acao}</div></div>`;
+  }
+  function diaHTML(dia, i) {
+    const v = vocabCron(), atual = i === cronograma.diaAtual, feito = diaCompleto(dia), aberto = cronAberto(dia, i);
+    const totalMin = dia.sessoes.reduce((acc, s) => acc + s.min, 0), nf = dia.sessoes.filter(s => s.feita).length;
+    const alto = dia.sessoes.filter(s => { const { node } = getNodeRef(s.disc, s.topicoId); return node && node.peso === 'alto'; }).length;
+    const proxId = atual ? (dia.sessoes.find(s => !s.feita) || {}).id : null;
+    const tag = atual ? `<span class="cr-tag h">${v.agora}</span>` : feito ? `<span class="cr-tag f"><i class="fa-solid fa-check" aria-hidden="true"></i> ${v.feito}</span>` : `<span class="cr-tag">${v.tag(i)}</span>`;
+    const resumo = `${dia.sessoes.length} ${dia.sessoes.length === 1 ? v.ses : v.sess} · ${formatarMinutos(totalMin)}`;
+    const nome = cronEditando ? `<input class="cr-nome-in" value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" aria-label="Nome ${v.un === 'letra' ? 'da letra' : 'do dia'}">` : `<span class="cr-dia-nome"><b>${esc(dia.nome)}</b><span>${resumo}</span></span>`;
+    const mini = !aberto && dia.sessoes.length ? `<span class="cr-mini"><span class="bar" aria-hidden="true"><i style="width:${Math.round(nf / dia.sessoes.length * 100)}%"></i></span>${nf}/${dia.sessoes.length}${alto ? ` · peso alto ×${alto}` : ''}</span>` : '';
+    const ed = cronEditando ? `<span class="cr-ed"><button type="button" class="cr-q" onclick="moverDia(${i}, -1)" aria-label="Subir ${esc(dia.nome)}" title="Subir"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" class="cr-q" onclick="moverDia(${i}, 1)" aria-label="Descer ${esc(dia.nome)}" title="Descer"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button><button type="button" class="cr-q perigo" onclick="removerDia(${i})" aria-label="Remover ${esc(dia.nome)}" title="Remover"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></span>` : '';
+    const corpo = aberto ? `<div class="cr-dia-corpo" id="cron-corpo-${dia.id}">${dia.sessoes.length ? dia.sessoes.map(s => blocoCronHTML(s, i, atual, proxId)).join('') : `<p class="cr-vazio">${v.vazio}</p>`}${cronEditando ? `<button type="button" class="mc-btn pri cr-add" onclick="adicionarBlocoCron(${i})"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar ${v.ses}</button>` : ''}</div>` : '';
+    return `<div class="cr-dia card-dia ${atual ? 'atual' : feito ? 'feito' : ''}" id="cron-dia-${dia.id}"><div class="cr-dia-cab">
+        <button type="button" class="cr-seta" onclick="alternarDiaCron(${dia.id})" aria-expanded="${aberto}" ${aberto ? `aria-controls="cron-corpo-${dia.id}"` : ''} aria-label="${aberto ? 'Recolher' : 'Abrir'} ${esc(dia.nome)}"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+        ${tag}${nome}${mini}${ed}</div>${corpo}</div>`;
+  }
+  function resumoCronHTML() {
+    const v = vocabCron(), prog = progressoRodada(), dia = diaAtualObj(), plan = cronograma.dias.reduce((a, d) => a + d.sessoes.reduce((x, s) => x + s.min, 0), 0);
+    if (!cronograma.dias.length) return `<p class="cr-vazio">Seu cronograma está vazio. Use <b>Montar ciclo</b> para o sistema sugerir, ou <b>${v.novo}</b> para montar à mão.</p>`;
+    const bolas = cronograma.dias.map((d, i) => { const h = i === cronograma.diaAtual, f = diaCompleto(d), est = h ? v.agora : f ? v.feito : v.avir;
+      return `<button type="button" class="cr-bola ${h ? 'h' : f ? 'f' : ''}" onclick="irParaDiaCron(${d.id})" aria-label="Ir para ${esc(d.nome)} (${est.toLowerCase()})"><i>${v.rot(i)}</i>${est}</button>`; }).join('');
+    const s = dia && dia.sessoes.find(x => !x.feita);
+    let prox;
+    if (!dia) prox = '';
+    else if (!s) prox = `<div class="cr-prox fim"><div><span class="mc-rot">${v.prox} · <span id="cron-dia">${esc(dia.nome)}</span></span><b>${dia.sessoes.length ? v.fim : v.vazio}</b></div></div>`;
+    else {
+      const d = meusDados.find(x => x.id === s.disc), { node } = getNodeRef(s.disc, s.topicoId), emCurso = cronEmCurso(cronograma.diaAtual, s);
+      const bt = emCurso ? `<button type="button" class="cr-ini parar" onclick="alternarIniciarParar()"><i class="fa-solid fa-stop" aria-hidden="true"></i> Parar</button>`
+        : `<button type="button" class="cr-ini pri" onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" aria-label="Iniciar ${esc(d ? d.nome : '')}"><i class="fa-solid fa-play" aria-hidden="true"></i> Iniciar</button>`;
+      prox = `<div class="cr-prox"><div><span class="mc-rot">${v.prox} · <span id="cron-dia">${esc(dia.nome)}</span></span><b>${esc(d ? d.nome : '—')} · ${s.min} min</b><span class="t">${node ? esc(node.nome) : 'Disciplina inteira'}</span></div>${bt}</div>`;
+    }
+    return `<div class="cr-lin"><span class="mc-rot">Rodada <span id="cron-rodada">${cronograma.rodada}</span></span><span class="cr-frase">${prog.feitas} de ${prog.total} ${v.sess} · ${formatarMinutos(plan)} planejadas</span><span class="cr-pc" id="cron-progresso">${prog.pct}%</span></div>
+      <div class="cr-trilha" role="group" aria-label="${v.tit}">${bolas}</div>${prox}`;
+  }
   function renderizarCronograma() {
-    const prog = progressoRodada();
-    const dia = diaAtualObj();
-    document.getElementById('cron-rodada').innerText = cronograma.rodada;
-    document.getElementById('cron-dia').innerText = dia ? dia.nome : '—';
-    const letras = cicloEmLetras();
-    document.getElementById('cron-dia-rot').innerText = letras ? 'Letra atual' : 'Dia atual';
-    document.getElementById('cron-dias-tit').innerText = letras ? 'Letras do ciclo' : 'Dias do ciclo';
-    document.getElementById('cron-btn-pular').innerText = letras ? 'Pular letra atual' : 'Pular dia atual';
-    document.getElementById('cron-btn-novo').innerText = letras ? 'Nova letra' : 'Novo dia';
-    document.getElementById('cron-progresso').innerText = `${prog.pct}%`;
-    document.getElementById('cron-barra').style.width = `${prog.pct}%`;
-
-    document.getElementById('cron-dias').innerHTML = cronograma.dias.length
-      ? cronograma.dias.map((d, i) => diaHTML(d, i)).join('')
-      : '<p class="text-sm text-mut italic">Seu cronograma está vazio. Use "Montar ciclo" ou "Novo dia" para começar.</p>';
-
+    const v = vocabCron(), vazio = !cronograma.dias.length;
+    document.getElementById('cron-sub').innerText = v.sub;
+    document.getElementById('cron-dias-tit').innerText = v.tit;
+    document.getElementById('cron-btn-pular').innerText = v.pular;
+    document.getElementById('cron-btn-novo').innerText = v.novo;
+    document.getElementById('cron-btn-pular-b').classList.toggle('hidden', vazio);
+    document.getElementById('cron-btn-novo-b').classList.toggle('hidden', !(cronEditando || vazio));
+    const be = document.getElementById('cron-btn-editar');
+    be.setAttribute('aria-pressed', String(cronEditando)); be.classList.toggle('hidden', vazio);
+    be.innerHTML = `<i class="fa-solid ${cronEditando ? 'fa-check' : 'fa-pen'}" aria-hidden="true"></i> <span>${cronEditando ? 'Pronto' : 'Editar ciclo'}</span>`;
+    document.getElementById('cron-resumo').innerHTML = resumoCronHTML();
+    document.getElementById('cron-dias').innerHTML = cronograma.dias.map((d, i) => diaHTML(d, i)).join('');
     document.getElementById('cron-historico').innerHTML = cronograma.historico.length
-      ? cronograma.historico.slice().reverse().map(h =>
-          `<div class="flex justify-between p-2.5 rounded-lg bg-card border border-theme"><span class="font-semibold">Rodada ${h.rodada}</span><span class="text-sec">concluída em ${formatarDataBR(h.concluidaEm)}</span></div>`).join('')
-      : '<p class="text-xs text-mut italic">Nenhuma rodada concluída ainda.</p>';
-    vincularSeletoresDias();   // seletor de tópicos das sessões novas de cada dia
+      ? cronograma.historico.slice().reverse().map(h => `<span><b>Rodada ${h.rodada}</b> · concluída em ${formatarDataBR(h.concluidaEm)}</span>`).join('')
+      : '<p class="cr-vazio">Nenhuma rodada concluída ainda.</p>';
   }
 
   // =====================================================================
@@ -3509,6 +3572,7 @@
     const btn = document.getElementById('timer-btn-iniciar');
     if (!btn) return;
     renderizarPlanoDia();   // Missão do Dia: a sessão em curso mostra "Parar"
+    if (visivel('view-cronograma') && !document.getElementById('cron-principal').classList.contains('hidden')) renderizarCronograma();
     const rodando = !!timerInterval;
     const rotulo = rodando ? 'Parar' : (timerAcumuladoMs > 0 ? 'Retomar' : 'Iniciar');
     btn.innerHTML = `<i class="fa-solid ${rodando ? 'fa-stop' : 'fa-play'}"></i><span class="sr-only">${rotulo}</span>`;
@@ -5471,9 +5535,6 @@
     if (!s) return;
     abrirSeletorTopico({ lerDisc: () => s.disc, lerTopico: () => s.topicoId || '', fixarDisc: true, vazio: { valor: '', rotulo: 'Disciplina inteira' }, discVazio: null,
       aplicar: (d, t) => editarTopicoSessao(diaIdx, sid, t) });
-  }
-  function vincularSeletoresDias() {
-    cronograma.dias.forEach(d => vincularSeletor({ disc: `sd-disc-${d.id}`, top: `sd-top-${d.id}`, vazio: { valor: '', rotulo: 'Disciplina inteira' }, span: 'span 2' }));
   }
   function iniciarSeletoresDeTopico() {
     vincularSeletor({ disc: 'plano-disc', top: 'plano-topico', vazio: { valor: '', rotulo: 'Tópico (opcional)' }, discVazio: 'Sem disciplina', span: 'span 2' });
