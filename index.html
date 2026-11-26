@@ -360,7 +360,7 @@
       .bn-it:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
       #main-content { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       #main-content .conteudo-pag { padding: 12px; }
-      #view-dashboard > .grid:nth-child(2) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      #view-dashboard > .grid:nth-child(2) { grid-template-columns: minmax(0, 1fr); gap: 8px; }
       #view-dashboard > .grid:nth-child(2) > div { padding: 10px; }
       #view-dashboard > .grid:nth-child(2) > div > p:first-child { font-size: 10px; line-height: 1.25; }
       #view-dashboard > .grid:nth-child(2) .text-3xl { font-size: 20px; line-height: 1.2; }
@@ -661,23 +661,12 @@
             </div>
           </div>
         </section>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
-            <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Tempo Total de Estudo</p>
-            <p class="text-3xl font-bold text-main" id="stat-tempo">0h 0m</p>
-          </div>
+        <div class="grid grid-cols-1 gap-4">
           <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
             <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Desempenho em Questões</p>
             <div class="flex items-baseline gap-3">
               <p class="text-3xl font-bold text-main" id="stat-desempenho">0%</p>
               <p class="text-xs text-sec" id="stat-questoes">0 acertos / 0 feitas</p>
-            </div>
-          </div>
-          <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
-            <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Progresso Geral no Edital</p>
-            <div class="flex items-baseline gap-3">
-              <p class="text-3xl font-bold text-brand" id="stat-progresso">0%</p>
-              <p class="text-xs text-sec" id="stat-topicos">0 de 0 tópicos</p>
             </div>
           </div>
         </div>
@@ -709,7 +698,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 bg-panel p-6 rounded-xl border border-theme shadow-sm">
+          <div class="lg:col-span-3 bg-panel p-6 rounded-xl border border-theme shadow-sm">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-sec text-xs font-bold uppercase tracking-wider"><i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> Minha Força & Inspiração</h3>
               <button onclick="trocarVersiculoManual()" class="text-xs text-brand hover:underline font-medium"><i class="fa-solid fa-rotate mr-1"></i> Nova frase</button>
@@ -723,24 +712,6 @@
             <div class="text-center p-5 bg-card rounded-xl border border-theme">
               <p class="text-main font-medium italic text-base md:text-lg leading-relaxed" id="versiculo-diario"></p>
               <p class="text-brand text-sm font-bold mt-2" id="versiculo-ref"></p>
-            </div>
-          </div>
-          <div class="space-y-6">
-            <div class="bg-panel p-6 rounded-xl border border-theme text-center flex flex-col justify-center items-center shadow-sm">
-              <p class="text-sec text-xs font-bold uppercase mb-1 tracking-wider">Faltam</p>
-              <p class="text-5xl font-extrabold text-blue-500 my-1" id="countdown-dias">-- DIAS</p>
-              <p class="text-xs text-sec font-bold uppercase tracking-widest mb-4">Para a Prova Objetiva</p>
-              <div class="w-full border-t border-theme mb-3"></div>
-              <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg px-4 py-2 w-full">
-                <p class="text-sm font-bold text-blue-400">Soldado · PMPE</p>
-                <p class="text-xs font-semibold text-main mt-0.5">dom., 21 de fev. de 2027</p>
-              </div>
-            </div>
-            <div class="bg-panel p-6 rounded-xl border border-theme shadow-sm">
-              <p class="text-sec text-xs font-bold uppercase mb-3 tracking-wider">Constância nos Estudos</p>
-              <div class="text-sm text-main mb-4 bg-card p-3.5 rounded-lg border border-theme leading-relaxed" id="streak-msg"></div>
-              <div class="flex justify-between items-center gap-1 overflow-x-auto pb-1" id="streak-tracker"></div>
-              <p class="text-[11px] text-mut mt-2 text-center">Últimos 14 dias (mín. 20 min/dia)</p>
             </div>
           </div>
         </div>
@@ -1411,7 +1382,6 @@
     const alvo = new Date('2027-02-21T00:00:00');
     const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
     const diff = Math.ceil((alvo - hoje) / 86400000);
-    document.getElementById('countdown-dias').innerText = diff > 0 ? `${diff} DIAS` : 'CHEGOU!';
     const hrDias = document.getElementById('hr-dias');
     if (hrDias) { hrDias.textContent = diff > 0 ? diff : 0; document.getElementById('hr-dias-txt').textContent = diff > 1 ? 'dias para a prova' : diff === 1 ? 'dia para a prova' : 'A prova chegou!'; }
   }
@@ -2014,7 +1984,6 @@
   function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
     atualizarDashboard();
-    renderizarStreak();
     renderizarHeroi();
     renderizarEdital();
     renderizarLembretes();
@@ -2041,12 +2010,9 @@
     return { total, conc, min, ac, totQuest };
   }
   function atualizarDashboard() {
-    const { total, conc, min, ac, totQuest } = totaisDoEdital();
-    document.getElementById('stat-tempo').innerText = `${Math.floor(min / 60)}h ${min % 60}m`;
+    const { ac, totQuest } = totaisDoEdital();
     document.getElementById('stat-desempenho').innerText = `${totQuest ? Math.round((ac / totQuest) * 100) : 0}%`;
     document.getElementById('stat-questoes').innerText = `${ac} acertos / ${totQuest} feitas`;
-    document.getElementById('stat-progresso').innerText = `${total ? Math.round((conc / total) * 100) : 0}%`;
-    document.getElementById('stat-topicos').innerText = `${conc} de ${total} tópicos`;
   }
   const MIN_CONSTANCIA = 20;   // minutos que fazem um dia valer na sequência
   // Sequência atual e recorde, a partir do histórico diário (conta desde hoje, ou desde ontem enquanto hoje não fecha)
@@ -2068,26 +2034,6 @@
     while (cursor && (historicoDiario[isoLocal(cursor)] || 0) >= 20) { atual++; cursor.setDate(cursor.getDate() - 1); }
     if (atual > recorde) recorde = atual;
     return { atual, recorde };
-  }
-  function renderizarStreak() {
-    const tracker = document.getElementById('streak-tracker');
-    tracker.innerHTML = '';
-    const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
-    const { atual, recorde } = calcularSequencia();
-    document.getElementById('streak-msg').innerHTML = atual > 0
-      ? `<i class="fa-solid fa-fire text-orange-500 mr-1.5"></i> Você está há <strong class="text-brand">${atual} dias</strong> sem falhar. Recorde: <strong class="text-brand">${recorde} dias</strong>`
-      : `<i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Recomeçar também é avançar. Seu próximo passo é hoje.${recorde > 0 ? ` <span class="text-xs text-sec block mt-1">(Recorde anterior: ${recorde} dias)</span>` : ''}`;
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date(hoje); d.setDate(d.getDate() - i);
-      const s = isoLocal(d);
-      const min = historicoDiario[s] || 0;
-      const ok = min >= 20;
-      const cell = document.createElement('div');
-      cell.title = `${formatarDataBR(s)}: ${min} min estudados`;
-      cell.className = `flex flex-col items-center justify-center w-8 h-11 rounded-lg text-[10px] font-bold shrink-0 border ${ok ? 'bg-emerald-500/15 border-emerald-500/50 text-brand' : 'bg-card border-theme text-mut'}`;
-      cell.innerHTML = `<span>${String(d.getDate()).padStart(2, '0')}</span><i class="fa-solid ${ok ? 'fa-check text-brand mt-0.5' : 'fa-minus opacity-40 mt-0.5'}"></i>`;
-      tracker.appendChild(cell);
-    }
   }
 
   // ---- Herói do Dashboard (só leitura: usa registros, histórico diário e edital já salvos) ----
