@@ -457,6 +457,33 @@
     .rv-hist-bt i { transition: transform .2s; } .rv-hist-bt[aria-expanded="true"] i { transform: rotate(90deg); }
     .rv-vazio { text-align: center; padding: 22px 12px; border: 1.5px dashed var(--pf-borda); border-radius: 12px; color: var(--text-secondary); font-size: 13px; margin: 0; }
     @container rv (max-width: 520px) { .rv-semana { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    /* ---------- Caderno de Erros: estante, resumo e filtros do mural ---------- */
+    :root { --ce-ouro: #fbbf24; --ce-ouro-bg: rgba(251,191,36,.14); } body.light-mode { --ce-ouro: #92400e; --ce-ouro-bg: rgba(180,83,9,.10); }
+    #view-erros { container: ce / inline-size; }
+    .ce-topo { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; justify-content: space-between; }
+    .ce-estante { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); } @container ce (min-width: 680px) { .ce-estante { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .ce-lv { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; align-items: center; min-height: 88px; border-radius: 14px; border: 1px solid var(--pf-borda); background: var(--bg-panel); color: var(--text-primary); text-align: left; padding: 10px 14px 10px 10px; cursor: pointer; }
+    .ce-lv:hover { background: var(--bg-hover); } .ce-lom { width: 64px; height: 68px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-size: 24px; }
+    .ce-lv .tx { min-width: 0; display: grid; gap: 3px; } .ce-lv .tx b { font-size: 15px; overflow-wrap: anywhere; } .ce-lv .s { font-size: 12.5px; color: var(--text-secondary); } .ce-lv .s em { font-style: normal; color: var(--text-primary); font-weight: 700; }
+    .ce-lv .num { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; } .ce-lv .num small { display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+    .ce-lv.zero { min-height: 64px; } .ce-lv.zero .ce-lom { height: 44px; font-size: 17px; } .ce-lv.zero .num { color: var(--text-secondary); }
+    .ce-ouro { display: inline-flex; gap: 5px; align-items: center; font-size: 11px; font-weight: 800; color: var(--ce-ouro); background: var(--ce-ouro-bg); padding: 1px 8px; border-radius: 99px; justify-self: start; }
+    .ce-res { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; padding: 14px 16px; display: grid; gap: 12px; } .ce-res:empty { display: none; }
+    .ce-kp { display: flex; gap: 8px; flex-wrap: wrap; } .ce-kpi { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px 12px; display: grid; } .ce-kpi span { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); } .ce-kpi b { font-size: 18px; }
+    .ce-res-g { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); } @container ce (min-width: 680px) { .ce-res-g { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+    .ce-mot { display: grid; gap: 6px; align-content: start; } .ce-mot-l { display: grid; grid-template-columns: minmax(110px, 160px) minmax(0, 1fr) 28px; gap: 8px; align-items: center; font-size: 12.5px; }
+    .ce-bb { height: 10px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; } .ce-bb i { display: block; height: 100%; } .ce-mot-l b { text-align: right; font-variant-numeric: tabular-nums; }
+    .ce-topl { display: grid; gap: 6px; align-content: start; } .ce-tp { min-height: 44px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; padding: 6px 10px; font-size: 13px; cursor: pointer; }
+    .ce-tp:hover { background: var(--bg-hover); } .ce-tp small { display: block; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--text-secondary); } .ce-tp b { font-variant-numeric: tabular-nums; }
+    .ce-filtros { display: grid; gap: 8px; } .ce-busca-l { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ce-busca { flex: 1 1 220px; min-width: 0; min-height: 44px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); padding: 0 12px; font-size: 14px; } .ce-busca::placeholder { color: var(--text-secondary); }
+    .ce-sel { flex: 1 1 220px; min-width: 0; max-width: 100%; min-height: 44px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); padding: 0 10px; font-size: 13px; }
+    .ce-chips { display: flex; flex-wrap: wrap; gap: 6px; } @container ce (max-width: 520px) { .ce-chips { flex-wrap: nowrap; overflow-x: auto; padding: 2px 2px 6px; } }
+    .ce-chip { min-height: 44px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 12.5px; display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; flex: none; cursor: pointer; }
+    .ce-chip b { color: var(--text-secondary); font-variant-numeric: tabular-nums; } .ce-chip i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+    .ce-chip[aria-pressed="true"] { background: var(--sel-fundo); border-color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); } .ce-chip[aria-pressed="true"] b { color: var(--text-primary); }
+    #erros-mural { padding: 6px; }   /* os post-its são levemente girados: não encostam na borda */
+    #erros-mural .ce-vazio { grid-column: 1 / -1; text-align: center; padding: 26px 14px; border: 1.5px dashed var(--pf-borda); border-radius: 14px; color: var(--text-secondary); font-size: 13.5px; display: grid; gap: 10px; justify-items: center; }
     /* seletor de tópicos em duas etapas */
     .sel-gatilho { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; cursor: pointer; font-size: 13px; }
     .sel-gatilho:hover:not(:disabled) { border-color: var(--brand); } .sel-gatilho:disabled { opacity: .55; cursor: not-allowed; }
@@ -575,8 +602,9 @@
     :root { --perigo: #f87171; } body.light-mode { --perigo: #b91c1c; }
     .so-toque, .erro-add-b.so-toque { display: none; } .so-mouse { display: inline; }
     @media (hover: none), (pointer: coarse) { .so-toque, .erro-add-b.so-toque { display: inline-flex; } .so-mouse { display: none; } }
-    .post-btn { width: 28px; height: 28px; }
-    @media (hover: none), (pointer: coarse), (max-width: 767px) { .post-btn { width: 44px; height: 44px; } .post-it .t1-acoes { gap: 4px; } }
+    .post-btn { width: 44px; height: 44px; } .post-it .t1-acoes { gap: 4px; }
+    .post-mot { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; background: rgba(15,23,42,.1); padding: 2px 6px; border-radius: 6px; } .post-mot i { width: 7px; height: 7px; border-radius: 50%; display: block; background: var(--mcor); }
+    .post-rod { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: #475569; margin-top: 8px; font-weight: 600; }
     .post-btn:disabled { opacity: .35; cursor: not-allowed; }
     .erro-thumbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
     .erro-th { position: relative; display: block; width: 100%; aspect-ratio: 3 / 2; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: #fff; padding: 0; cursor: zoom-in; }
@@ -1018,21 +1046,29 @@
       <!-- ================= CADERNO DE ERROS ================= -->
       <div id="view-erros" class="hidden max-w-6xl mx-auto">
         <div id="erros-vitrine">
-          <header class="mb-6">
-            <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-book-bookmark text-rose-400 mr-2"></i> Caderno de Erros</h2>
-            <p class="text-sec text-sm">Escolha uma disciplina para revisar seus erros.</p>
+          <header class="ce-topo mb-4">
+            <div>
+              <h2 class="text-2xl font-bold mb-1"><i class="fa-solid fa-book-bookmark text-rose-400 mr-2" aria-hidden="true"></i> Caderno de Erros</h2>
+              <p class="text-sec text-sm">Escolha uma disciplina para revisar seus erros.</p>
+            </div>
+            <button type="button" onclick="abrirEdicaoErro(null)" class="mc-btn pri"><i class="fa-solid fa-plus" aria-hidden="true"></i> Novo erro</button>
           </header>
-          <div id="erros-capas" class="grid grid-cols-2 sm:grid-cols-3 gap-5"></div>
+          <div id="erros-resumo" class="ce-res mb-4"></div>
+          <div id="erros-capas" class="ce-estante"></div>
         </div>
         <div id="erros-disc" class="hidden">
           <div class="sticky top-0 z-10 bg-main/95 backdrop-blur py-3 border-b border-theme flex flex-wrap items-center gap-3 mb-4">
-            <button onclick="voltarVitrineErros()" class="px-3 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i> Vitrine</button>
+            <button type="button" onclick="voltarVitrineErros()" class="mc-btn"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Vitrine</button>
             <h2 id="erros-disc-titulo" class="font-bold text-lg flex-1 min-w-[150px]"></h2>
-            <select id="erros-filtro" onchange="mudarFiltroErros()" class="bg-panel border border-theme rounded-lg p-2 text-xs text-main outline-none max-w-xs"></select>
-            <button type="button" id="erros-btn-organizar" onclick="alternarOrganizarErros()" aria-pressed="false" class="edt-classificar" title="Mostrar as setas ▲ ▼ para mudar a ordem dos cartões"><i class="fa-solid fa-sort text-[10px]" aria-hidden="true"></i> <span>Organizar</span></button>
-            <button onclick="abrirEdicaoErro(null)" class="px-4 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> Novo erro</button>
+            <button type="button" id="erros-btn-organizar" onclick="alternarOrganizarErros()" aria-pressed="false" class="mc-btn" title="Mostrar as setas ▲ ▼ para mudar a ordem dos cartões"><i class="fa-solid fa-sort" aria-hidden="true"></i> <span>Organizar</span></button>
+            <button type="button" onclick="abrirEdicaoErro(null)" class="mc-btn pri"><i class="fa-solid fa-plus" aria-hidden="true"></i> Novo erro</button>
           </div>
-          <p id="erros-subtitulo" class="text-xs text-sec mb-5"></p>
+          <div class="ce-filtros mb-3">
+            <div class="ce-busca-l"><input type="search" id="erros-busca" class="ce-busca" placeholder="Buscar no texto do erro..." aria-label="Buscar no texto do erro" oninput="buscarErros(this.value)">
+            <select id="erros-filtro" onchange="mudarFiltroErros()" class="ce-sel" aria-label="Tópico"></select></div>
+            <div id="erros-chips" class="ce-chips" role="group" aria-label="Filtrar erros"></div>
+          </div>
+          <p id="erros-subtitulo" class="text-xs text-sec mb-5" role="status"></p>
           <div id="erros-mural" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </div>
         <div id="erro-edicao" class="hidden" onkeydown="if (event.key === 'Escape') { event.preventDefault(); voltarEdicaoErro(); }">
@@ -4798,6 +4834,15 @@
   // 14. CADERNO DE ERROS (vitrine, murais, cartões arrastáveis, prints no IndexedDB)
   // =====================================================================
   const errosCtx = { discId: null, filtro: 'geral' };
+  const errosFiltro = { q: '', max: false, mot: new Set() };   // busca e chips do mural (só na tela)
+  const MOTIVO_CORES = { 'Não sabia o conceito': '#6366f1', 'Interpretação': '#0284c7', 'Distração': '#d97706', 'Pegadinha da banca': '#e11d48', 'Cálculo / conta': '#059669', 'Memória (esqueci)': '#a855f7', 'Sem motivo': '#64748b' };
+  const motivoDe = e => e.motivo || 'Sem motivo';
+  const corMotivo = m => MOTIVO_CORES[m] || '#64748b';
+  const filtroErrosAtivo = () => !!(errosFiltro.q || errosFiltro.max || errosFiltro.mot.size);
+  function resetarFiltrosErros() { errosFiltro.q = ''; errosFiltro.max = false; errosFiltro.mot.clear(); const b = document.getElementById('erros-busca'); if (b) b.value = ''; }
+  const diasDesde = d => d ? Math.max(0, Math.round((new Date(hojeISO() + 'T00:00:00') - new Date(d + 'T00:00:00')) / 86400000)) : null;
+  const textoDias = n => n === 0 ? 'hoje' : `há ${n} ${n === 1 ? 'dia' : 'dias'}`;
+  function contarMotivos(lista) { const c = {}; lista.forEach(e => { const m = motivoDe(e); c[m] = (c[m] || 0) + 1; }); return Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); }
   let erroEdicao = null;
   let errosOrganizando = false;   // botão Organizar: mostra ▲ ▼ nos cartões
   let previewToken = 0;
@@ -4863,38 +4908,46 @@
 
   function renderizarVitrineErros() {
     if (!meusDados.length) return;
-    document.getElementById('erros-capas').innerHTML = meusDados.map(d => {
-      const errosDisc = cadernoErros.filter(e => e.discId === d.id);
-      const prio = errosDisc.filter(e => e.prioridade).length;
+    // ---- painel "Seus erros"
+    const res = document.getElementById('erros-resumo');
+    if (res) {
+      if (!cadernoErros.length) res.innerHTML = '';
+      else {
+        const cm = contarMotivos(cadernoErros), maxN = cm[0][1], porTop = {};
+        cadernoErros.forEach(e => { const k = e.discId + '|' + e.topicoId; porTop[k] = porTop[k] || { e, n: 0 }; porTop[k].n++; });
+        const top = Object.values(porTop).sort((a, b) => b.n - a.n).slice(0, 3);
+        res.innerHTML = `<span class="mc-rot">Seus erros</span>
+          <div class="ce-kp"><div class="ce-kpi"><span>Total</span><b>${cadernoErros.length}</b></div><div class="ce-kpi"><span>Máxima prioridade</span><b>${cadernoErros.filter(e => e.prioridade).length}</b></div><div class="ce-kpi"><span>Motivo mais comum</span><b>${esc(cm[0][0])}</b></div></div>
+          <div class="ce-res-g"><div class="ce-mot"><span class="mc-rot">Por motivo</span>${cm.map(([m, n]) => `<div class="ce-mot-l"><span>${esc(m)}</span><span class="ce-bb" aria-hidden="true"><i style="background:${corMotivo(m)};width:${Math.round(n / maxN * 100)}%"></i></span><b>${n}</b></div>`).join('')}</div>
+          <div class="ce-topl"><span class="mc-rot">Tópicos com mais erros</span>${top.map(x => { const d = meusDados.find(y => y.id === x.e.discId), { node } = getNodeRef(x.e.discId, x.e.topicoId);
+            return `<button type="button" class="ce-tp" onclick="abrirDisciplinaErros('${x.e.discId}', '${x.e.topicoId}')"><span><small>${esc(d ? d.nome : '—')}</small>${esc(node ? node.nome : 'Tópico removido')}</span><b>${x.n}</b></button>`; }).join('')}</div></div>`;
+      }
+    }
+    // ---- estante
+    const dados = meusDados.map(d => { const l = cadernoErros.filter(e => e.discId === d.id), datas = l.map(e => e.criadoEm).filter(Boolean).sort();
+      return { d, l, max: l.filter(e => e.prioridade).length, mot: l.length ? contarMotivos(l)[0][0] : '', ult: datas.length ? diasDesde(datas[datas.length - 1]) : null }; });
+    const ord = [...dados.filter(x => x.l.length).sort((a, b) => b.l.length - a.l.length), ...dados.filter(x => !x.l.length)];
+    document.getElementById('erros-capas').innerHTML = ord.map(({ d, l, max, mot, ult }) => {
       const capa = CAPAS[d.id] || { grad: ['#334155', '#0f172a'], icone: 'fa-book' };
-      return `
-        <button onclick="abrirDisciplinaErros('${d.id}')" class="capa-caderno group text-left rounded-xl overflow-hidden border border-theme shadow-lg" style="background: linear-gradient(160deg, ${capa.grad[0]}, ${capa.grad[1]}); aspect-ratio: 3/4;">
-          <div class="h-full w-full p-5 flex flex-col justify-between text-white">
-            <div class="flex justify-between items-start gap-2">
-              <span class="text-[10px] font-bold uppercase tracking-widest bg-black/25 px-2 py-0.5 rounded">${errosDisc.length} erro(s)</span>
-              ${prio ? `<span class="text-[10px] font-bold bg-amber-400 text-slate-900 px-2 py-0.5 rounded"><i class="fa-solid fa-star"></i> ${prio}</span>` : ''}
-            </div>
-            <div class="flex-1 flex items-center justify-center">
-              <i class="fa-solid ${capa.icone} text-6xl opacity-30 group-hover:opacity-50 transition"></i>
-            </div>
-            <div>
-              <h3 class="font-extrabold text-2xl leading-tight">${esc(d.nome)}</h3>
-              <p class="text-xs opacity-85 uppercase tracking-widest mt-1">Caderno de erros</p>
-            </div>
-          </div>
-        </button>`;
+      const det = l.length ? `${max ? `<span class="ce-ouro"><i class="fa-solid fa-star" aria-hidden="true"></i> ${max} de máxima prioridade</span>` : ''}<span class="s">Mais comum: <em>${esc(mot)}</em>${ult !== null ? ` · último ${textoDias(ult)}` : ''}</span>` : '<span class="s">Nenhum erro ainda</span>';
+      return `<button type="button" onclick="abrirDisciplinaErros('${d.id}')" class="ce-lv capa-caderno ${l.length ? '' : 'zero'}" aria-label="${esc(d.nome)}: ${l.length} ${l.length === 1 ? 'erro' : 'erros'}">
+          <span class="ce-lom" style="background: linear-gradient(160deg, ${capa.grad[0]}, ${capa.grad[1]}); background-color: ${capa.grad[1]}" aria-hidden="true"><i class="fa-solid ${capa.icone}"></i></span>
+          <span class="tx"><b>${esc(d.nome)}</b>${det}</span><span class="num">${l.length}<small>${l.length === 1 ? 'erro' : 'erros'}</small></span></button>`;
     }).join('');
   }
   function voltarVitrineErros() {
     errosOrganizando = false;
+    resetarFiltrosErros();
     document.getElementById('erros-disc').classList.add('hidden');
     document.getElementById('erros-vitrine').classList.remove('hidden');
     renderizarVitrineErros();
   }
-  function abrirDisciplinaErros(discId) {
+  function abrirDisciplinaErros(discId, topicoId) {
+    if (!visivel('view-erros')) navigate('erros');
     errosOrganizando = false;
+    resetarFiltrosErros();
     errosCtx.discId = discId;
-    errosCtx.filtro = 'geral';
+    errosCtx.filtro = topicoId || 'geral';
     document.getElementById('erros-vitrine').classList.add('hidden');
     document.getElementById('erros-disc').classList.remove('hidden');
     popularFiltroErros();
@@ -4902,9 +4955,10 @@
   }
   function popularFiltroErros() {
     const disc = meusDados.find(d => d.id === errosCtx.discId);
-    document.getElementById('erros-filtro').innerHTML =
-      `<option value="geral">Mural Geral</option>` + optionsTopicos(disc.id, '', null);
-    document.getElementById('erros-filtro').value = errosCtx.filtro;
+    const sel = document.getElementById('erros-filtro'), daDisc = cadernoErros.filter(e => e.discId === disc.id);
+    sel.innerHTML = `<option value="geral">Mural geral (${daDisc.length})</option>` + optionsTopicos(disc.id, '', null);
+    [...sel.options].forEach(o => { if (o.value === 'geral') return; const { node } = getNodeRef(disc.id, o.value); const ids = node ? idsDescendentes(node) : new Set(); const n = daDisc.filter(e => ids.has(e.topicoId)).length; if (n) o.textContent += ` (${n})`; });
+    sel.value = errosCtx.filtro;
   }
   function mudarFiltroErros() {
     errosCtx.filtro = document.getElementById('erros-filtro').value;
@@ -4919,25 +4973,47 @@
     }
     return lista.sort((a, b) => (Number(!!b.prioridade) - Number(!!a.prioridade)) || ((a.ordem || 0) - (b.ordem || 0)));
   }
+  function buscarErros(v) { errosFiltro.q = v.trim(); renderizarMuralErros(); }
+  function alternarChipErros(chave) {
+    if (chave === 'todos') { errosFiltro.max = false; errosFiltro.mot.clear(); }
+    else if (chave === 'max') errosFiltro.max = !errosFiltro.max;
+    else { const m = chave.slice(4); if (errosFiltro.mot.has(m)) errosFiltro.mot.delete(m); else errosFiltro.mot.add(m); }
+    renderizarMuralErros();
+    const b = document.querySelector(`#erros-chips [data-ce="${CSS.escape(chave)}"]`); if (b) b.focus({ preventScroll: true });
+  }
+  function limparFiltrosErros() { resetarFiltrosErros(); renderizarMuralErros(); }
+  function errosParaMostrar(base) {
+    const q = errosFiltro.q.toLowerCase();
+    return base.filter(e => (!errosFiltro.max || e.prioridade) && (!errosFiltro.mot.size || errosFiltro.mot.has(motivoDe(e)))
+      && (!q || [e.enunciado, e.minha, e.correta, e.anotacao, nomeTopico(e.discId, e.topicoId)].join(' ').toLowerCase().includes(q)));
+  }
   function renderizarMuralErros() {
     const disc = meusDados.find(d => d.id === errosCtx.discId);
     if (!disc) return;
     document.getElementById('erros-disc-titulo').innerText = disc.nome;
-    const lista = errosVisiveis();
+    const base = errosVisiveis(), lista = errosParaMostrar(base), filtrando = filtroErrosAtivo();
+    if (filtrando && errosOrganizando) errosOrganizando = false;
+    // chips
+    const daDisc = cadernoErros.filter(e => e.discId === disc.id);
+    document.getElementById('erros-chips').innerHTML = daDisc.length ? `<button type="button" class="ce-chip" data-ce="todos" aria-pressed="${!errosFiltro.max && !errosFiltro.mot.size}" onclick="alternarChipErros('todos')">Todos <b>${base.length}</b></button>`
+      + `<button type="button" class="ce-chip" data-ce="max" aria-pressed="${errosFiltro.max}" onclick="alternarChipErros('max')"><span style="color:var(--ce-ouro)" aria-hidden="true">★</span> Máxima <b>${base.filter(e => e.prioridade).length}</b></button>`
+      + contarMotivos(base).map(([m, n]) => `<button type="button" class="ce-chip" data-ce="mot:${esc(m)}" aria-pressed="${errosFiltro.mot.has(m)}" onclick="alternarChipErros(this.dataset.ce)"><i style="background:${corMotivo(m)}" aria-hidden="true"></i>${esc(m)} <b>${n}</b></button>`).join('') : '';
     const subtitulo = errosCtx.filtro === 'geral' ? 'Mural geral da disciplina' : 'Erros específicos: ' + nomeTopico(disc.id, errosCtx.filtro);
-    document.getElementById('erros-subtitulo').innerText = `${subtitulo} · ${lista.length} erro(s). Arraste os cartões para organizar.`;
+    document.getElementById('erros-subtitulo').innerHTML = `${esc(subtitulo)} · mostrando ${lista.length} de ${base.length}. ${filtrando ? 'Com filtro ligado, "Organizar" fica desativado.' : 'A máxima prioridade fica sempre primeiro; arraste os cartões ou use "Organizar".'}`;
+    const bo = document.getElementById('erros-btn-organizar');
+    bo.disabled = filtrando;
     const mural = document.getElementById('erros-mural');
     if (!lista.length) {
-      mural.innerHTML = `<div class="col-span-full text-center p-10 border border-dashed border-theme rounded-xl text-sec text-sm">Nenhum erro registrado aqui ainda.</div>`;
+      mural.innerHTML = base.length ? `<div class="ce-vazio"><span>Nenhum erro com esse filtro.</span><button type="button" class="mc-btn" onclick="limparFiltrosErros()">Limpar filtros</button></div>` : `<div class="ce-vazio"><span>Nenhum erro registrado aqui ainda.</span></div>`;
+      bo.setAttribute('aria-pressed', String(errosOrganizando));
       return;
     }
     const mesmoGrupo = (a, b) => !!a.prioridade === !!b.prioridade;
-    mural.innerHTML = lista.map((e, i) => cardErroHTML(e, { org: errosOrganizando,
+    mural.innerHTML = lista.map((e, i) => cardErroHTML(e, { org: errosOrganizando, fixo: filtrando,
       sobe: i > 0 && mesmoGrupo(lista[i - 1], e), desce: i < lista.length - 1 && mesmoGrupo(lista[i + 1], e) })).join('');
-    const bo = document.getElementById('erros-btn-organizar');
     bo.setAttribute('aria-pressed', String(errosOrganizando));
     bo.querySelector('span').textContent = errosOrganizando ? 'Pronto' : 'Organizar';
-    bo.querySelector('i').className = 'fa-solid ' + (errosOrganizando ? 'fa-check' : 'fa-sort') + ' text-[10px]';
+    bo.querySelector('i').className = 'fa-solid ' + (errosOrganizando ? 'fa-check' : 'fa-sort');
     carregarImagensErros();
   }
   function alternarOrganizarErros() {
@@ -4963,16 +5039,17 @@
     const espelho = (errosCtx.filtro === 'geral' && e.prioridade)
       ? `<span class="text-[10px] font-bold uppercase bg-slate-900/15 px-1.5 py-0.5 rounded ml-1">Espelho</span>` : '';
     return `
-      <article draggable="true"
+      <article ${o.fixo ? '' : `draggable="true"
         ondragstart="dragStartErro(event, ${e.id})" ondragover="dragOverErro(event)" ondragleave="dragLeaveErro(event)"
-        ondrop="dropErro(event, ${e.id})" ondragend="dragEndErro(event)"
-        class="post-it rounded-md p-4 cursor-grab active:cursor-grabbing" style="background:${cor}">
+        ondrop="dropErro(event, ${e.id})" ondragend="dragEndErro(event)"`}
+        class="post-it rounded-md p-4 ${o.fixo ? '' : 'cursor-grab active:cursor-grabbing'}" style="background:${cor};--mcor:${corMotivo(motivoDe(e))}">
         <div class="flex justify-between items-start gap-2 mb-2">
           <div class="min-w-0 flex flex-wrap items-center gap-1">
             ${num ? `<span class="text-[10px] font-extrabold bg-slate-900/10 px-1.5 py-0.5 rounded">${esc(num)}</span>` : ''}
             ${e.prioridade ? `<span class="text-[10px] font-extrabold bg-slate-900 text-amber-300 px-1.5 py-0.5 rounded">★ MÁXIMA</span>` : ''}
             ${espelho}
             ${pesoBadgeHTML(node, true)}
+            <span class="post-mot"><i aria-hidden="true"></i>${esc(motivoDe(e))}</span>
           </div>
           <div class="t1-acoes flex flex-wrap justify-end gap-1 shrink-0">
             ${o.org ? `<button type="button" data-mover="${e.id}:-1" onclick="moverErro(${e.id}, -1)" ${o.sobe ? '' : 'disabled'} class="post-btn rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="Mover para cima" aria-label="Mover para cima"><i class="fa-solid fa-chevron-up"></i></button>
@@ -4983,6 +5060,7 @@
         </div>
         <p class="font-semibold text-sm leading-snug ${e.expandido ? '' : 'truncate'}">${esc(e.expandido ? e.enunciado : resumo)}</p>
         ${e.expandido ? conteudoExpandidoErro(e) : ''}
+        <div class="post-rod"><span>${e.criadoEm ? textoDias(diasDesde(e.criadoEm)) : ''}</span>${!e.expandido && (e.imgIds || []).length ? `<span>${e.imgIds.length} ${e.imgIds.length === 1 ? 'print' : 'prints'}</span>` : ''}</div>
       </article>`;
   }
   function conteudoExpandidoErro(e) {
