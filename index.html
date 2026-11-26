@@ -420,6 +420,43 @@
       .cr-dia-cab .cr-mini { flex-basis: 100%; padding-left: 52px; } .cr-acoes .mc-btn { flex: 1 1 auto; }
       .cr-bl-a .sel-gatilho { max-width: 100%; flex: 1 1 100%; }
     }
+    /* ---------- Pendências e Revisões: semana, fila por urgência e cartões ---------- */
+    #view-revisoes { container: rv / inline-size; }
+    .rv-resumo { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; padding: 14px 16px; display: grid; gap: 10px; }
+    .rv-res-cab { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; } .rv-cts { display: flex; gap: 8px; flex-wrap: wrap; }
+    .rv-ct { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+    .rv-ct i { width: 9px; height: 9px; border-radius: 50%; display: block; } .rv-ct.pend i { background: var(--ms-parc-bd); } .rv-ct.atras i { background: var(--mc-ruim-bd); } .rv-ct b { font-variant-numeric: tabular-nums; }
+    .rv-ct[aria-pressed="true"], .rv-sd[aria-pressed="true"] { border-color: var(--brand); box-shadow: inset 0 0 0 2px var(--brand); background: var(--sel-fundo); }
+    .rv-semana { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .rv-sd { min-height: 64px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); display: grid; justify-items: center; align-content: center; gap: 2px; padding: 4px 2px; color: var(--text-secondary); font-size: 11.5px; font-weight: 700; cursor: pointer; }
+    .rv-sd b { font-size: 18px; color: var(--text-primary); font-variant-numeric: tabular-nums; } .rv-sd.zero b { color: var(--text-secondary); font-weight: 600; }
+    .rv-sd.hoje { border-color: var(--ms-acento); box-shadow: inset 0 0 0 1px var(--ms-acento); color: var(--ms-acento-t); background: var(--ms-acento-bg); }
+    .rv-mostra { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--text-secondary); margin: 0; }
+    .rv-fila { display: grid; gap: 18px; } .rv-grupo { display: grid; gap: 8px; }
+    .rv-g-tit { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin: 0; }
+    .rv-g-tit i { width: 10px; height: 10px; border-radius: 50%; display: block; background: var(--estudo); } .rv-g-tit span { font-weight: 700; letter-spacing: 0; text-transform: none; }
+    .rv-grupo.pend .rv-g-tit { color: var(--t-pausado); } .rv-grupo.pend .rv-g-tit i { background: var(--ms-parc-bd); }
+    .rv-grupo.atras .rv-g-tit { color: var(--mc-ruim-t); } .rv-grupo.atras .rv-g-tit i { background: var(--mc-ruim-bd); }
+    .rv-grupo.hoje .rv-g-tit { color: var(--ms-acento-t); } .rv-grupo.hoje .rv-g-tit i { background: var(--ms-acento); } .rv-grupo.depois .rv-g-tit i { background: var(--pf-borda); }
+    .rv-lista { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+    @container rv (min-width: 680px) { .rv-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .rv-card { --c: var(--estudo); border: 1px solid var(--border-color); border-left: 4px solid var(--c); border-radius: 14px; background: var(--bg-panel); padding: 12px 14px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+    .rv-card.pend { --c: var(--ms-parc-bd); } .rv-card.atras { --c: var(--mc-ruim-bd); } .rv-card.hoje { --c: var(--ms-acento); } .rv-card.depois { --c: var(--pf-borda); } .rv-card.feita { --c: var(--ms-feito-bd); } .rv-card.ign { --c: var(--pf-borda); }
+    .rv-q { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; } .rv-quando { font-size: 13px; font-weight: 800; color: var(--text-primary); }
+    .rv-card.atras .rv-quando { color: var(--mc-ruim-t); } .rv-card.hoje .rv-quando { color: var(--ms-acento-t); } .rv-card.feita .rv-quando { color: var(--ms-feito-t); } .rv-card.ign .rv-quando { color: var(--text-secondary); }
+    .rv-tipo { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; border: 1px solid var(--pf-borda); color: var(--text-secondary); white-space: nowrap; }
+    .rv-disc { font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); margin: 0; }
+    .rv-top { font-size: 14px; font-weight: 600; line-height: 1.35; color: var(--text-primary); overflow-wrap: anywhere; margin: 0; } .rv-num { color: var(--text-secondary); font-weight: 800; }
+    .rv-card .marcas { margin-top: 0; } .rv-det { font-size: 12.5px; color: var(--text-secondary); margin: 0; }
+    .rv-mbar { display: inline-block; width: 90px; height: 6px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; vertical-align: middle; } .rv-mbar i { display: block; height: 100%; background: var(--ms-parc-bd); }
+    .rv-acoes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .rv-bt { min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-weight: 700; font-size: 12.5px; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; white-space: nowrap; }
+    .rv-bt:hover { background: var(--bg-hover); } .rv-bt.pri { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); } .rv-bt.ini { background: var(--ms-acento); color: var(--ms-acento-fg); border-color: var(--ms-acento); }
+    .rv-bt.sug { border-color: var(--ms-acento); } .rv-bt.pri.sug { box-shadow: 0 0 0 2px var(--ms-acento); } .rv-sug { font-size: 10px; font-weight: 800; color: var(--ms-acento-t); } .rv-bt.pri .rv-sug { color: inherit; }
+    .rv-hist-bt { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; color: var(--text-secondary); font-weight: 800; font-size: 13px; padding: 0; cursor: pointer; justify-self: start; }
+    .rv-hist-bt i { transition: transform .2s; } .rv-hist-bt[aria-expanded="true"] i { transform: rotate(90deg); }
+    .rv-vazio { text-align: center; padding: 22px 12px; border: 1.5px dashed var(--pf-borda); border-radius: 12px; color: var(--text-secondary); font-size: 13px; margin: 0; }
+    @container rv (max-width: 520px) { .rv-semana { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
     /* seletor de tópicos em duas etapas */
     .sel-gatilho { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 40px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); text-align: left; cursor: pointer; font-size: 13px; }
     .sel-gatilho:hover:not(:disabled) { border-color: var(--brand); } .sel-gatilho:disabled { opacity: .55; cursor: not-allowed; }
@@ -968,14 +1005,14 @@
       <div id="view-revisoes" class="hidden max-w-6xl mx-auto">
         <div class="flex flex-wrap justify-between items-end gap-4 mb-6">
           <header>
-            <h2 class="text-2xl font-bold mb-1">Painel de Pendências e Revisões</h2>
+            <h2 class="text-2xl font-bold mb-1">Pendências e Revisões</h2>
             <p class="text-sec text-sm">Complete o que ficou faltando nas sessões parciais e revise o conteúdo em intervalos até a prova.</p>
           </header>
-          <button onclick="abrirNovaRevisao()" class="bg-brand hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition text-sm"><i class="fa-solid fa-calendar-plus mr-2"></i> Nova revisão</button>
+          <button type="button" onclick="abrirNovaRevisao()" class="mc-btn pri"><i class="fa-solid fa-calendar-plus" aria-hidden="true"></i> Nova revisão</button>
         </div>
-        <div id="rev-filtros" class="flex flex-wrap gap-2 mb-5"></div>
+        <div id="rev-resumo" class="rv-resumo mb-4" aria-label="Resumo da semana"></div>
         <div id="rev-marcas-barra" class="mb-4" data-mk-tela="rev"></div>
-        <div id="rev-lista" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        <div id="rev-lista" class="rv-fila"></div>
       </div>
 
       <!-- ================= CADERNO DE ERROS ================= -->
@@ -2112,7 +2149,7 @@
   function navigate(tela) {
     if (!liberarEdicaoErro()) return;
     fecharPainelMarcas(false);
-    if (tela === 'revisoes') resetarFiltrosMarcas('rev');
+    if (tela === 'revisoes') { resetarFiltrosMarcas('rev'); revFiltro = null; revHistAberto = false; }
     if (tela === 'historico') resetarFiltrosMarcas('hist');
     if (tela === 'edital') resetarFiltrosEdital();
     TELAS.forEach(t => {
@@ -4301,86 +4338,71 @@
   // =====================================================================
   // 12. MURAL DE REVISÕES
   // =====================================================================
-  let revFiltro = 'programadas';
+  let revFiltro = null;      // filtro da semana: { tipo: 'dia', valor: 'aaaa-mm-dd' } ou { tipo: 'grupo', valor: 'pend' | 'atras' }
+  let revHistAberto = false;
   let revEdicao = null;
   function statusEfetivoRev(r) {
     if (r.status === 'concluida' || r.status === 'ignorada') return r.status;
     return r.dataAgendada < hojeISO() ? 'atrasada' : 'programada';
   }
-  function setFiltroRev(f) { revFiltro = f; renderizarRevisoes(); }
+  // compatível com o atalho antigo das abas
+  function setFiltroRev(f) { revFiltro = f === 'pendencias' ? { tipo: 'grupo', valor: 'pend' } : f === 'atrasadas' ? { tipo: 'grupo', valor: 'atras' } : null; renderizarRevisoes(); }
+  function filtrarSemanaRev(tipo, valor) { revFiltro = revFiltro && revFiltro.tipo === tipo && revFiltro.valor === valor ? null : { tipo, valor }; renderizarRevisoes(); const b = document.querySelector(`#rev-resumo [data-rf="${tipo}:${valor}"]`); if (b) b.focus({ preventScroll: true }); }
+  function alternarHistoricoRev() { revHistAberto = !revHistAberto; renderizarRevisoes(); const b = document.getElementById('rev-hist-bt'); if (b) b.focus({ preventScroll: true }); }
+  const REV_SUG = { revisar: 7, nao_estudado: 7, dominio: 30, menor: 30 };   // intervalo sugerido pelo diagnóstico (sem diagnóstico: 15)
+  const REV_DS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const revDias = d => Math.round((new Date(d + 'T00:00:00') - new Date(hojeISO() + 'T00:00:00')) / 86400000);
+  const revAberta = r => ['programada', 'atrasada'].includes(statusEfetivoRev(r));
+  function grupoRev(r) { if (r.pendencia) return 'pend'; const d = revDias(r.dataAgendada); return d < 0 ? 'atras' : d === 0 ? 'hoje' : d <= 7 ? 'semana' : 'depois'; }
+  function cartaoRevHTML(r) {
+    const disc = meusDados.find(d => d.id === r.discId), { node } = getNodeRef(r.discId, r.nodeId);
+    const num = node ? numeroEdital(node.nome) : '', nome = node ? nomeSemNumero(node.nome) : 'Tópico removido';
+    const st = statusEfetivoRev(r), dd = revDias(r.dataAgendada), g = grupoRev(r), p = r.pendencia, ds = REV_DS[new Date(r.dataAgendada + 'T00:00:00').getDay()];
+    const quando = st === 'concluida' ? `Feita em ${formatarDataBR(r.concluidaEm)}` : st === 'ignorada' ? `Ignorada · era para ${formatarDataBR(r.dataAgendada)}`
+      : p ? 'Pendência' : dd < 0 ? `Atrasada ${-dd} ${dd === -1 ? 'dia' : 'dias'}` : dd === 0 ? 'Hoje' : dd === 1 ? 'Amanhã' : `${ds} · ${formatarDataBR(r.dataAgendada).slice(0, 5)}`;
+    const cls = st === 'concluida' ? 'feita' : st === 'ignorada' ? 'ign' : p ? 'pend' : g;
+    const detalhe = p ? `<p class="rv-det">Sessão de ${p.planejadoMin} min em ${formatarDataBR(p.data)}: estudou ${p.estudadoMin} min. <span class="rv-mbar" role="img" aria-label="${p.estudadoMin} de ${p.planejadoMin} minutos"><i style="width:${p.planejadoMin ? Math.min(100, Math.round(p.estudadoMin / p.planejadoMin * 100)) : 0}%"></i></span></p>` : '';
+    let acoes = '';
+    if (revAberta(r)) {
+      if (p) acoes = `<button type="button" class="rv-bt ini" onclick="revisarAgora('${r.id}')"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Estudar ${p.faltamMin} min agora</button>
+        <button type="button" class="rv-bt pri" onclick="resolverPendencia('${r.id}')">Resolver</button><button type="button" class="rv-bt" onclick="abrirReagendar('${r.id}')">Reagendar</button><button type="button" class="rv-bt" onclick="ignorarRev('${r.id}')">Ignorar</button>`;
+      else {
+        const sug = REV_SUG[node && node.diagnostico] || 15;
+        const conc = [7, 15, 30].map(d => `<button type="button" class="rv-bt${d === 7 ? ' pri' : ''}${d === sug ? ' sug' : ''}" onclick="concluirRev('${r.id}', ${d})" aria-label="Concluir e revisar de novo em ${d} dias${d === sug ? ', sugerido pelo diagnóstico' : ''}">${d === 7 ? 'Concluir +7d' : `+${d}d`}${d === sug ? '<span class="rv-sug" aria-hidden="true">sug.</span>' : ''}</button>`).join('');
+        acoes = `<button type="button" class="rv-bt${dd <= 0 ? ' ini' : ''}" onclick="revisarAgora('${r.id}')"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Revisar agora</button>${conc}<button type="button" class="rv-bt" onclick="abrirReagendar('${r.id}')">Reagendar</button><button type="button" class="rv-bt" onclick="ignorarRev('${r.id}')">Ignorar</button>`;
+      }
+    }
+    return `<article class="rv-card ${cls}">
+        <div class="rv-q"><span class="rv-quando">${quando}</span>${p ? `<span class="selo-pendencia">Pendência · faltam ${p.faltamMin} min</span>` : `<span class="rv-tipo">${esc(r.tipo)}</span>`}</div>
+        <p class="rv-disc">${esc(disc ? disc.nome : '—')}</p>
+        <p class="rv-top">${num ? `<span class="rv-num">${esc(num)}.</span> ` : ''}${esc(nome)}</p>
+        ${marcasHTML(node)}${detalhe}
+        ${acoes ? `<div class="rv-acoes">${acoes}</div>` : ''}</article>`;
+  }
   function renderizarRevisoes() {
-    const hoje = hojeISO();
-    // Pendências abertas (sessões parciais) têm aba própria; não se repetem em Programadas/Atrasadas
-    const pendAberta = r => !!r.pendencia && ['programada', 'atrasada'].includes(statusEfetivoRev(r));
-    const naAba = {
-      pendencias: r => pendAberta(r),
-      programadas: r => !r.pendencia && statusEfetivoRev(r) === 'programada',
-      atrasadas: r => !r.pendencia && statusEfetivoRev(r) === 'atrasada',
-      ignoradas: r => statusEfetivoRev(r) === 'ignorada',
-      concluidas: r => statusEfetivoRev(r) === 'concluida'
-    };
-    const cont = Object.fromEntries(Object.entries(naAba).map(([k, f]) => [k, minhasRevisoes.filter(f).length]));
-    const abas = [['pendencias', 'Pendências', 'selo-cont-pend'], ['programadas', 'Programadas', 'text-blue-400'], ['atrasadas', 'Atrasadas', 'text-red-400'],
-                  ['ignoradas', 'Ignoradas', 'text-mut'], ['concluidas', 'Concluídas', 'text-brand']];
-    document.getElementById('rev-filtros').innerHTML = abas.map(([k, t, c]) =>
-      `<button onclick="setFiltroRev('${k}')" class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${revFiltro === k ? 'bg-card border-brand text-brand' : 'bg-panel border-theme text-sec hover-bg'}">${t} <span class="${c}" ${c === 'selo-cont-pend' ? 'style="color:var(--t-pausado)"' : ''}>(${cont[k]})</span></button>`
-    ).join('');
-    let lista = minhasRevisoes.filter(naAba[revFiltro] || naAba.programadas)
-      .sort((a, b) => (a.dataAgendada || '').localeCompare(b.dataAgendada || ''));
-    if (revFiltro === 'concluidas') lista.reverse();
+    const hoje = hojeISO(), abertas = minhasRevisoes.filter(revAberta);
+    // ---- resumo da semana
+    const conta = { pend: abertas.filter(r => r.pendencia).length, atras: abertas.filter(r => grupoRev(r) === 'atras').length };
+    const ligado = (t, v) => !!revFiltro && revFiltro.tipo === t && revFiltro.valor === v;
+    const ct = (v, rot) => `<button type="button" class="rv-ct ${v}" data-rf="grupo:${v}" onclick="filtrarSemanaRev('grupo','${v}')" aria-pressed="${ligado('grupo', v)}"><i aria-hidden="true"></i>${rot} <b>${conta[v]}</b></button>`;
+    const dias = Array.from({ length: 7 }, (_, k) => { const d = new Date(hoje + 'T00:00:00'); d.setDate(d.getDate() + k); return isoLocal(d); });
+    const semana = dias.map((d, k) => { const n = abertas.filter(r => !r.pendencia && r.dataAgendada === d).length, rot = k === 0 ? 'Hoje' : REV_DS[new Date(d + 'T00:00:00').getDay()];
+      return `<button type="button" class="rv-sd${k === 0 ? ' hoje' : ''}${n ? '' : ' zero'}" data-rf="dia:${d}" onclick="filtrarSemanaRev('dia','${d}')" aria-pressed="${ligado('dia', d)}" aria-label="${rot}, ${formatarDataBR(d)}: ${n} ${n === 1 ? 'revisão' : 'revisões'}">${rot}<b>${n}</b>${formatarDataBR(d).slice(0, 5)}</button>`; }).join('');
+    document.getElementById('rev-resumo').innerHTML = `<div class="rv-res-cab"><span class="mc-rot">Esta semana</span><div class="rv-cts">${ct('pend', 'Pendências')}${ct('atras', 'Atrasadas')}</div></div><div class="rv-semana" role="group" aria-label="Revisões por dia">${semana}</div>`
+      + (revFiltro ? `<p class="rv-mostra" role="status">Mostrando ${revFiltro.tipo === 'dia' ? (revFiltro.valor === hoje ? 'só hoje' : 'só ' + REV_DS[new Date(revFiltro.valor + 'T00:00:00').getDay()] + ' ' + formatarDataBR(revFiltro.valor).slice(0, 5)) : revFiltro.valor === 'pend' ? 'só as pendências' : 'só as atrasadas'} <button type="button" class="rv-bt" onclick="revFiltro = null; renderizarRevisoes()">Mostrar tudo</button></p>` : '');
+    // ---- fila por urgência (com os filtros de marcas e a ordem)
+    let lista = abertas.slice().sort((a, b) => (a.dataAgendada || '').localeCompare(b.dataAgendada || ''));
+    if (revFiltro) lista = lista.filter(r => revFiltro.tipo === 'dia' ? (!r.pendencia && r.dataAgendada === revFiltro.valor) : grupoRev(r) === revFiltro.valor);
     lista = aplicarMarcasNaLista(lista, filtrosMarcas.rev, r => getNodeRef(r.discId, r.nodeId).node);
     desenharBarraMarcas('rev');
-    const el = document.getElementById('rev-lista');
-    if (!lista.length) {
-      el.innerHTML = filtrosMarcas.rev.total ? marcasVazioHTML('rev') : `<p class="text-sm text-mut italic py-6 text-center col-span-full">Nada aqui no momento.</p>`;
-      atualizarPainelMarcas();
-      return;
-    }
-    el.innerHTML = lista.map(r => {
-      const disc = meusDados.find(d => d.id === r.discId);
-      const { node } = getNodeRef(r.discId, r.nodeId);
-      const num = node ? numeroEdital(node.nome) : '';
-      const st = statusEfetivoRev(r);
-      const diff = Math.round((new Date(r.dataAgendada + 'T00:00:00') - new Date(hoje + 'T00:00:00')) / 86400000);
-      const txt = st === 'concluida' ? `Feita em ${formatarDataBR(r.concluidaEm)}`
-        : st === 'ignorada' ? `Ignorada · era para ${formatarDataBR(r.dataAgendada)}`
-        : diff < 0 ? `Atrasada ${Math.abs(diff)} dia(s) · ${formatarDataBR(r.dataAgendada)}`
-        : diff === 0 ? 'Para hoje'
-        : `Em ${diff} dia(s) · ${formatarDataBR(r.dataAgendada)}`;
-      const borda = st === 'atrasada' ? 'border-l-red-500' : st === 'concluida' ? 'border-l-emerald-500' : st === 'ignorada' ? 'border-l-slate-500' : r.pendencia ? 'border-l-amber-500' : 'border-l-blue-500';
-      const p = r.pendencia;
-      const detalhe = p ? `<p class="text-[11px] text-sec mt-1">Sessão de ${p.planejadoMin} min em ${formatarDataBR(p.data)}: estudou ${p.estudadoMin} min.</p>` : '';
-      const acoes = (st === 'concluida' || st === 'ignorada') ? '' : p ? `
-        <div class="flex flex-wrap gap-1.5 mt-3">
-          <button onclick="revisarAgora('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold"><i class="fa-solid fa-stopwatch mr-1"></i>Estudar ${p.faltamMin} min agora</button>
-          <button onclick="resolverPendencia('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-brand hover:opacity-90 text-white text-[11px] font-bold">Resolver</button>
-          <button onclick="abrirReagendar('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-card border border-theme text-[11px] font-bold">Reagendar</button>
-          <button onclick="ignorarRev('${r.id}')" class="px-2.5 py-1.5 rounded-md text-[11px] font-bold text-sec hover-bg">Ignorar</button>
-        </div>` : `
-        <div class="flex flex-wrap gap-1.5 mt-3">
-          <button onclick="revisarAgora('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold"><i class="fa-solid fa-stopwatch mr-1"></i>Revisar agora</button>
-          <button onclick="concluirRev('${r.id}', 7)" class="px-2.5 py-1.5 rounded-md bg-brand hover:opacity-90 text-white text-[11px] font-bold">Concluir +7d</button>
-          <button onclick="concluirRev('${r.id}', 15)" class="px-2.5 py-1.5 rounded-md bg-card border border-theme text-[11px] font-bold">+15d</button>
-          <button onclick="concluirRev('${r.id}', 30)" class="px-2.5 py-1.5 rounded-md bg-card border border-theme text-[11px] font-bold">+30d</button>
-          <button onclick="abrirReagendar('${r.id}')" class="px-2.5 py-1.5 rounded-md bg-card border border-theme text-[11px] font-bold">Reagendar</button>
-          <button onclick="ignorarRev('${r.id}')" class="px-2.5 py-1.5 rounded-md text-[11px] font-bold text-sec hover-bg">Ignorar</button>
-        </div>`;
-      return `
-        <div class="p-4 rounded-xl border border-theme bg-panel border-l-4 ${borda} shadow-sm">
-          <div class="flex justify-between items-start gap-2">
-            <div class="min-w-0">
-              <p class="text-xs font-bold text-main">${txt}</p>
-              <p class="text-[11px] text-sec font-bold uppercase mt-1">${esc(disc ? disc.nome : '—')}</p>
-              <p class="text-sm font-medium text-main mt-0.5">${num ? `<span class="text-[11px] text-sec mr-1">${esc(num)}</span>` : ''}${esc(node ? node.nome : 'Tópico removido')}</p>
-              ${marcasHTML(node)}
-              ${detalhe}
-            </div>
-            ${p ? `<span class="selo-pendencia shrink-0">Pendência · faltam ${p.faltamMin} min</span>`
-              : `<span class="shrink-0 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-card border border-theme text-sec">${esc(r.tipo)}</span>`}
-          </div>
-          ${acoes}
-        </div>`;
-    }).join('');
+    const G = [['pend', 'Pendências', 'complete o que faltou'], ['atras', 'Atrasadas', 'revise ou reagende'], ['hoje', 'Hoje', ''], ['semana', 'Próximos 7 dias', ''], ['depois', 'Depois', '']];
+    const grupos = G.map(([k, t, sub]) => { const l = lista.filter(r => grupoRev(r) === k); return l.length ? `<section class="rv-grupo ${k}" aria-labelledby="rv-g-${k}"><h3 class="rv-g-tit" id="rv-g-${k}"><i aria-hidden="true"></i>${t} · ${l.length}${sub ? ` <span>— ${sub}</span>` : ''}</h3><div class="rv-lista">${l.map(cartaoRevHTML).join('')}</div></section>` : ''; }).join('');
+    const fechadas = minhasRevisoes.filter(r => !revAberta(r)).filter(r => marcaPassa(getNodeRef(r.discId, r.nodeId).node, filtrosMarcas.rev))
+      .sort((a, b) => (b.concluidaEm || b.dataAgendada || '').localeCompare(a.concluidaEm || a.dataAgendada || ''));
+    const nC = fechadas.filter(r => statusEfetivoRev(r) === 'concluida').length, nI = fechadas.length - nC;
+    const hist = fechadas.length ? `<section class="rv-grupo hist"><button type="button" id="rev-hist-bt" class="rv-hist-bt" onclick="alternarHistoricoRev()" aria-expanded="${revHistAberto}"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i> Histórico · ${nC} ${nC === 1 ? 'concluída' : 'concluídas'} · ${nI} ${nI === 1 ? 'ignorada' : 'ignoradas'}</button>${revHistAberto ? `<div class="rv-lista">${fechadas.map(cartaoRevHTML).join('')}</div>` : ''}</section>` : '';
+    const vazio = filtrosMarcas.rev.total && !lista.length ? marcasVazioHTML('rev') : !lista.length ? `<p class="rv-vazio">${revFiltro ? 'Nada para mostrar com esse filtro.' : 'Nada pendente. Novas revisões aparecem aqui quando você estuda ou usa "Nova revisão".'}</p>` : '';
+    document.getElementById('rev-lista').innerHTML = (grupos || vazio) + hist;
     atualizarPainelMarcas();
   }
   function concluirRev(id, dias) {
