@@ -68,7 +68,6 @@
 
     .sessao-concluida { background: rgba(16,185,129,.12) !important; border-color: rgba(16,185,129,.5) !important; }
     /* Etapa 3: sessão parcialmente concluída e pendências (texto com --t-pausado: 4,5:1 ou mais nos dois temas) */
-    .sessao-parcial { background: rgba(245,158,11,.10) !important; border-color: rgba(245,158,11,.55) !important; }
     .selo-parcial, .selo-pendencia { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap;
       color: var(--t-pausado); background: color-mix(in srgb, var(--c-pausado) 16%, transparent); }
     .aviso-outra-aba { position: fixed; left: 50%; transform: translateX(-50%); top: max(16px, env(safe-area-inset-top, 0px)); z-index: 65; width: min(92vw, 460px);
@@ -312,7 +311,7 @@
     body.light-mode { --nav-ativo-fundo: rgba(5,150,105,.14); --nav-ativo-txt: #047857; }
     @supports (height: 100dvh) { body.h-screen { height: 100dvh; } }
     #main-content { min-width: 0; }
-    .nav-curto, .bn-pag, .quebra-linha { display: none; }
+    .nav-curto, .bn-pag { display: none; }
     /* Registrar Estudo: primeiro item da lateral, em verde */
     .lat-reg { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); margin-bottom: 6px; } .lat-reg:hover { opacity: .92; }
     .lat-barra nav > .lat-reg { min-height: 44px; }
@@ -342,7 +341,6 @@
       .lat-barra > div:last-child button { flex-direction: column; gap: 3px; min-height: 56px; font-size: 11px; padding: 6px 2px; }
     }
     @media (min-width: 768px) and (max-width: 1023px) {
-      #view-dashboard > .grid:nth-child(3) { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
       #bilhete-wrapper { left: 96px; }
     }
     @media (max-width: 1023px) {
@@ -356,11 +354,6 @@
       .bn-it:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
       #main-content { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
       #main-content .conteudo-pag { padding: 12px; }
-      #view-dashboard > .grid:nth-child(2) { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-      #view-dashboard > .grid:nth-child(2) > div { padding: 10px; }
-      #view-dashboard > .grid:nth-child(2) > div > p:first-child { font-size: 10px; line-height: 1.25; }
-      #view-dashboard > .grid:nth-child(2) .text-3xl { font-size: 20px; line-height: 1.2; }
-      #view-dashboard > .grid:nth-child(2) .flex.items-baseline { flex-direction: column; align-items: flex-start; gap: 0; }
       /* cronômetro e bilhete acima da barra inferior */
       #floating-timer-wrapper { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
       #bilhete-wrapper { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
@@ -368,15 +361,12 @@
       #timer-panel { max-height: calc(100vh - 112px); max-height: calc(100dvh - 112px); }
       /* alvos de toque de 44 px */
       .chk-toque { min-width: 44px; min-height: 44px; }
-      #plano-lista button { min-height: 44px; } #plano-lista button.w-8 { width: 44px; }
       #view-cronograma > section.grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 10px; }
       #view-cronograma > section.grid > div { padding: 8px; }
       #view-cronograma > section.grid .text-3xl, #view-cronograma > section.grid .text-2xl { font-size: 18px; line-height: 1.25; }
       #view-cronograma > section.grid p.text-xs { font-size: 10px; line-height: 1.25; }
       #cron-dias p.truncate { flex: 1 1 calc(100% - 60px); }
       #view-erros .capa-caderno h3 { font-size: 17px; line-height: 1.2; overflow-wrap: anywhere; }
-      .plano-extra { flex-wrap: wrap; row-gap: 0; } .plano-extra .quebra-linha { display: block; flex-basis: 100%; height: 0; }
-      .plano-extra [data-bloco-lapis] { margin-left: 56px; }
       #main-content .grid > *, #main-content section { min-width: 0; }
       #main-content .overflow-x-auto { position: relative; }   /* o .sr-only da tabela não escapa do recorte */
       #cron-dias button.w-7 { width: 44px; height: 44px; } #cron-dias input, #cron-dias select { min-height: 44px; }
@@ -542,6 +532,80 @@
       .hr-cont { display: grid; grid-template-columns: 1fr; padding: 12px 16px; } .hr-cont .hr-n { grid-row: auto; font-size: 64px; } .hr-cont .hr-prova { grid-column: auto; }
       .hr-duo { grid-template-columns: 1fr; } .hr-ico2 { display: grid; } .hr-mini { padding: 10px 14px; }
     }
+    /* ===== Etapas 2 a 5: Missão do Dia, Minha Força & Inspiração, Mural de Lembretes e encaixe ===== */
+    :root { --ms-acento: #f98a2b; --ms-acento-t: #f98a2b; --ms-acento-fg: #1a1208; --ms-acento-bg: rgba(249,138,43,.12); --ms-feito-bg: rgba(16,185,129,.12); --ms-feito-bd: #0f9d70; --ms-feito-t: #34d399; --ms-parc-bg: rgba(245,158,11,.10); --ms-parc-bd: #d98a0b; --ms-trilho: #2a3242; --coracao: #fb7185; --ouro-i: #fbb315; }
+    body.light-mode { --ms-acento: #c2410c; --ms-acento-t: #9a3412; --ms-acento-fg: #ffffff; --ms-acento-bg: rgba(194,65,12,.08); --ms-feito-bg: rgba(5,150,105,.10); --ms-feito-bd: #059669; --ms-feito-t: #047857; --ms-parc-bg: rgba(217,119,6,.10); --ms-parc-bd: #b45309; --ms-trilho: #eef2f7; --coracao: #be123c; --ouro-i: #a16207; }
+    .sessao-parcial { background: var(--ms-parc-bg) !important; border-color: var(--ms-parc-bd) !important; }
+    /* encaixe do Dashboard: Missão à esquerda; Mural e Minha Força à direita (computador). Tablet: Missão inteira e, abaixo, Mural e Força lado a lado. Celular: empilhado. */
+    .dash-grade { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+    .dash-esq, .dash-dir { display: contents; }
+    @media (min-width: 768px) { .dash-grade { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .dash-esq > #ms { grid-column: 1 / -1; } }
+    @media (min-width: 1024px) {
+      .dash-grade { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+      .dash-esq { display: block; } .dash-dir { display: grid; gap: 16px; min-width: 0; align-content: start; }
+      .dash-esq > #ms { grid-column: auto; }
+    }
+    /* com lembrete vencido, o Mural sobe para antes da Missão (tablet e celular) */
+    @media (max-width: 1023px) { #view-dashboard.tem-aviso #mu { order: -1; grid-column: 1 / -1; } #view-dashboard.tem-aviso #fi { grid-column: 1 / -1; } }
+    /* Missão do Dia */
+    .ms, .mu, .fi { container-type: inline-size; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 18px; padding: 16px; display: grid; gap: 14px; min-width: 0; align-content: start; }
+    .ms { container-name: ms; } .mu { container-name: mu; } .fi { container-name: fi; }
+    @media (min-width: 768px) { .ms, .mu, .fi { padding: 20px 22px; } }
+    .ms-cab { display: flex; align-items: center; gap: 12px; } .ms-tit { flex: 1; min-width: 0; }
+    .ms-tit h3 { font-size: 20px; line-height: 1.15; font-weight: 800; display: flex; align-items: center; gap: 8px; margin: 0; } .ms-sub { font-size: 12.5px; color: var(--text-secondary); margin: 3px 0 0; }
+    .ms-pct { font-size: 18px; font-weight: 800; color: var(--ms-feito-t); }
+    .ms-barra { height: 8px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; } .ms-barra i { display: block; height: 100%; background: var(--brand); border-radius: 99px; }
+    .ms-lista { display: grid; gap: 8px; } .ms-grupo { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin: 4px 0 -2px; }
+    .ms-it { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 2px 8px; align-items: center; border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-card); padding: 8px 10px 8px 4px; min-width: 0; }
+    .ms-it.agora { border-color: var(--ms-acento); background: var(--ms-acento-bg); box-shadow: inset 4px 0 0 var(--ms-acento); }
+    .ms-it.feito { background: var(--ms-feito-bg); border-color: var(--ms-feito-bd); } .ms-it.feito .ms-nome { text-decoration: line-through; color: var(--text-secondary); }
+    .ms-chk { width: 22px; height: 22px; accent-color: #10b981; }
+    .ms-corpo { min-width: 0; display: grid; gap: 2px; justify-items: start; } .ms-nome { font-size: 15px; font-weight: 700; line-height: 1.25; margin: 0; overflow-wrap: anywhere; } .ms-det { font-size: 12.5px; color: var(--text-secondary); margin: 0; line-height: 1.35; overflow-wrap: anywhere; }
+    .ms-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ms-acento-t); } .ms-tag.ex { color: var(--text-secondary); }
+    .ms-mini { height: 6px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; margin-top: 4px; width: min(220px, 100%); } .ms-mini i { display: block; height: 100%; background: var(--ms-acento); }
+    .ms-acoes { grid-column: 2; display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin-bottom: 2px; }
+    .ms-bt { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 6px; align-items: center; justify-content: center; cursor: pointer; white-space: nowrap; }
+    .ms-bt:hover { background: var(--bg-hover); } .ms-bt:focus-visible, .ms-campo:focus-visible, .mu-atalhos button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .ms-bt.pri { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); } .ms-bt.pri:hover { opacity: .92; }
+    .ms-bt.run { background: var(--ms-acento); color: var(--ms-acento-fg); border-color: var(--ms-acento); } .ms-bt.ic { min-width: 44px; padding: 0; } .ms-bt.perigo { color: var(--perigo); } .ms-bt.larga { width: 100%; }
+    .ms-feita-t { font-size: 12.5px; font-weight: 800; color: var(--ms-feito-t); padding: 0 8px; }
+    .ms-tudo { text-align: center; padding: 14px; border-radius: 14px; background: var(--ms-feito-bg); border: 1px solid var(--ms-feito-bd); font-weight: 800; color: var(--ms-feito-t); }
+    .ms-vazio-t { text-align: center; padding: 18px 12px; border: 1.5px dashed var(--pf-borda); border-radius: 14px; color: var(--text-secondary); font-size: 13px; margin: 0; }
+    .ms-add { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border-color); }
+    .ms-add-linha { display: grid; gap: 8px; grid-template-columns: repeat(4, minmax(0, 1fr)); } .ms-add-linha > .ms-campo { grid-column: 1 / -1; } .ms-add-linha > .sel-gatilho { grid-column: 1 / -1 !important; }
+    .ms-campo { min-height: 44px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 0 12px; width: 100%; outline: none; } .ms-campo::placeholder { color: var(--text-secondary); opacity: 1; }
+    @container ms (min-width: 560px) {
+      .ms-it { grid-template-columns: 44px minmax(0, 1fr) auto; } .ms-acoes { grid-column: auto; margin: 0; }
+      .ms-add-linha > #plano-texto { grid-column: span 2; } .ms-add-linha > .sel-gatilho { grid-column: span 2 !important; }
+    }
+    /* Mural de Lembretes */
+    .mu-t { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; margin: 0; } .mu-t i { color: var(--ouro-i); font-size: 14px; }
+    #lem-alerta { display: grid; gap: 8px; }
+    .mu-al { border-radius: 16px; border: 1px solid var(--ms-acento); background: var(--ms-acento-bg); padding: 10px 12px; display: grid; gap: 10px; }
+    .mu-al-lin { display: flex; align-items: center; gap: 12px; min-width: 0; } .mu-sino { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--ms-acento); color: var(--ms-acento-fg); flex: none; font-size: 14px; }
+    @media (prefers-reduced-motion: no-preference) { .mu-sino { animation: mu-pulsa 2.4s ease-in-out infinite; } @keyframes mu-pulsa { 0%, 100% { box-shadow: 0 0 0 0 rgba(249,138,43,.55); } 50% { box-shadow: 0 0 0 8px rgba(249,138,43,0); } } }
+    .mu-al-tx { min-width: 0; display: grid; gap: 3px; } .mu-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ms-acento-t); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; } .mu-chip { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 99px; border: 1.5px solid currentColor; text-transform: none; letter-spacing: .02em; white-space: nowrap; }
+    .mu-txt { font-size: 15px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; } .mu-bt { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mu-fu { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-card); padding: 8px 8px 8px 10px; min-width: 0; }
+    .mu-fu-tx { min-width: 0; display: grid; gap: 2px; } .mu-fu .mu-txt { font-weight: 600; } .mu-em { font-size: 12px; color: var(--text-secondary); }
+    .mu-cal { width: 46px; height: 50px; border-radius: 11px; border: 1.5px solid var(--pf-borda); display: grid; place-items: center; align-content: center; line-height: 1; background: var(--bg-panel); } .mu-cal b { font-size: 18px; font-weight: 800; } .mu-cal span { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); margin-top: 3px; }
+    .mu-vazio { text-align: center; padding: 18px 12px; border: 1.5px dashed var(--pf-borda); border-radius: 14px; color: var(--text-secondary); font-size: 13px; margin: 0; }
+    .mu-linha { display: grid; gap: 8px; margin-top: 8px; } .mu-atalhos { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; } .mu-rot { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }
+    .mu-atalhos button { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-secondary); font-weight: 700; font-size: 12.5px; cursor: pointer; } .mu-atalhos button[aria-pressed="true"] { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    @container mu (min-width: 520px) { .mu-al { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
+    /* Minha Força & Inspiração */
+    .fi-t { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; margin: 0; } .fi-t i { color: var(--coracao); font-size: 15px; }
+    .fi-faixa { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 10px; }
+    .fi-foto { display: block; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-card); padding: 0; width: 100%; aspect-ratio: 3 / 4; cursor: zoom-in; } .fi-foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; } .fi-foto:hover img { transform: scale(1.04); }
+    .fi-foto:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; } .fi-lupa { position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(8,11,16,.72); color: #fff; display: grid; place-items: center; font-size: 14px; }
+    .fi-cit { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 18px; display: grid; gap: 8px; margin: 0; min-width: 0; }
+    .fi-asp { font-size: 44px; line-height: .6; font-weight: 800; color: var(--t-foco, var(--brand)); height: 20px; font-family: Georgia, serif; }
+    .fi-frase { margin: 0; font-size: 17px; line-height: 1.5; font-style: italic; font-weight: 500; } .fi-ref { font-size: 13px; font-weight: 800; color: var(--t-foco, var(--brand)); }
+    .fi-nova { justify-self: end; min-height: 44px; border-radius: 99px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--t-foco, var(--brand)); display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; font-weight: 800; font-size: 13px; cursor: pointer; } .fi-nova:hover { background: var(--bg-hover); } .fi-nova:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .fi-semfoto { font-size: 12.5px; color: var(--text-secondary); margin: 0; }
+    @container fi (max-width: 559px) { .fi-faixa { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .fi-foto { aspect-ratio: 4 / 5; } }
+    @container fi (min-width: 560px) { .fi-frase { font-size: 19px; } }
+    #visualizador-print[data-sem-dados] .vz-dados { display: none; }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -630,58 +694,60 @@
             </div>
           </div>
         </section>
-        <div class="grid grid-cols-1 gap-4">
-          <div class="bg-panel p-5 rounded-xl border border-theme shadow-sm">
-            <p class="text-sec text-xs font-bold uppercase tracking-wider mb-1">Desempenho em Questões</p>
-            <div class="flex items-baseline gap-3">
-              <p class="text-3xl font-bold text-main" id="stat-desempenho">0%</p>
-              <p class="text-xs text-sec" id="stat-questoes">0 acertos / 0 feitas</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <section class="lg:col-span-3 bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
-            <h3 id="plano-titulo" class="font-bold text-main text-lg"><i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia</h3>
-            <div id="plano-lista" class="space-y-2"></div>
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-3 border-t border-theme">
-              <input id="plano-texto" type="text" placeholder="Ex: Revisar Art. 5º da CF" class="sm:col-span-2 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
-              <select id="plano-disc" onchange="popularTopicosPlano()" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
-              <select id="plano-topico" class="bg-card border border-theme rounded-lg p-2 text-xs text-main outline-none"></select>
-            </div>
-            <button onclick="adicionarBlocoPlano()" class="w-full bg-brand hover:opacity-90 text-white font-bold py-2 rounded-lg transition text-sm">+ Adicionar bloco extra ao dia</button>
-          </section>
-
-          <section class="lg:col-span-2 bg-panel p-6 rounded-xl border border-theme shadow-sm space-y-4">
-            <h3 class="font-bold text-main text-lg"><i class="fa-solid fa-thumbtack text-amber-400 mr-2"></i> Mural de Lembretes</h3>
-            <div id="lem-alerta" class="hidden space-y-3"></div>
-            <div class="space-y-2">
-              <input id="lem-texto" type="text" placeholder="Ex: Pagar inscrição / Prova 21/02" class="w-full bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
-              <div class="flex flex-wrap gap-2">
-                <input id="lem-data" type="date" class="min-w-[9rem] flex-1 bg-card border border-theme rounded-lg p-2 text-sm text-main outline-none">
-                <button onclick="adicionarLembrete()" class="px-4 rounded-lg bg-brand hover:opacity-90 text-white font-bold text-xs transition">+ Lembrete</button>
+        <div class="dash-grade">
+          <div class="dash-esq">
+            <section id="ms" class="ms" aria-label="Missão do Dia">
+              <div class="ms-cab">
+                <div class="ms-tit"><h3 id="plano-titulo"></h3><p class="ms-sub" id="plano-sub"></p></div>
+                <span class="ms-pct" id="plano-pct">0%</span>
               </div>
-            </div>
-            <div id="lem-lista" class="space-y-2"></div>
-          </section>
-        </div>
+              <div class="ms-barra" id="plano-barra" role="img" aria-label="0% concluído"><i style="width:0%"></i></div>
+              <div id="plano-lista" class="ms-lista"></div>
+              <div class="ms-add">
+                <div class="ms-add-linha">
+                  <input id="plano-texto" type="text" placeholder="Ex: Revisar Art. 5º da CF" aria-label="Texto do bloco extra" class="ms-campo">
+                  <select id="plano-disc" onchange="popularTopicosPlano()" class="ms-campo"></select>
+                  <select id="plano-topico" class="ms-campo"></select>
+                </div>
+                <button type="button" onclick="adicionarBlocoPlano()" class="ms-bt pri larga">+ Adicionar bloco extra ao dia</button>
+              </div>
+            </section>
+          </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-3 bg-panel p-6 rounded-xl border border-theme shadow-sm">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-sec text-xs font-bold uppercase tracking-wider"><i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> Minha Força & Inspiração</h3>
-              <button onclick="trocarVersiculoManual()" class="text-xs text-brand hover:underline font-medium"><i class="fa-solid fa-rotate mr-1"></i> Nova frase</button>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto1.jpg" alt="Inspiração 1" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
-              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto2.jpg" alt="Inspiração 2" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
-              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto3.jpg" alt="Inspiração 3" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
-              <div class="h-52 bg-card rounded-lg overflow-hidden border border-theme shadow"><img src="foto4.jpg" alt="Inspiração 4" class="w-full h-full object-cover transition hover:scale-105 duration-500" onerror="this.style.display='none'"></div>
-            </div>
-            <div class="text-center p-5 bg-card rounded-xl border border-theme">
-              <p class="text-main font-medium italic text-base md:text-lg leading-relaxed" id="versiculo-diario"></p>
-              <p class="text-brand text-sm font-bold mt-2" id="versiculo-ref"></p>
-            </div>
+          <div class="dash-dir">
+            <section id="mu" class="mu" aria-label="Mural de Lembretes">
+              <h3 class="mu-t"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i> Mural de Lembretes</h3>
+              <div id="lem-alerta" class="hidden"></div>
+              <div id="lem-lista" class="ms-lista"></div>
+              <div class="ms-add">
+                <button type="button" id="lem-abrir" class="ms-bt larga" onclick="alternarFormLembrete()" aria-expanded="false" aria-controls="lem-form"><i class="fa-solid fa-plus" aria-hidden="true"></i> Novo lembrete</button>
+                <div id="lem-form" hidden>
+                  <div class="mu-linha">
+                    <input id="lem-texto" type="text" placeholder="Ex: Pagar inscrição / Prova 21/02" aria-label="Texto do lembrete" class="ms-campo">
+                    <input id="lem-data" type="date" aria-label="Data do lembrete" oninput="marcarAtalhoLembrete()" class="ms-campo">
+                    <div class="mu-atalhos" role="group" aria-label="Atalhos de data"><span class="mu-rot">Data:</span><button type="button" data-at="hoje" onclick="lembreteAtalho('hoje')">Hoje</button><button type="button" data-at="amanha" onclick="lembreteAtalho('amanha')">Amanhã</button><button type="button" data-at="semana" onclick="lembreteAtalho('semana')">Em 1 semana</button></div>
+                    <button type="button" onclick="adicionarLembrete()" class="ms-bt pri larga">+ Lembrete</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="fi" class="fi" aria-label="Minha Força e Inspiração">
+              <h3 class="fi-t"><i class="fa-solid fa-heart" aria-hidden="true"></i> Minha Força &amp; Inspiração</h3>
+              <div class="fi-faixa" id="fi-faixa">
+                <button type="button" class="fi-foto" onclick="ampliarFoto(this)" aria-label="Ampliar a foto 1"><img src="foto1.jpg" alt="Inspiração 1"><span class="fi-lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>
+                <button type="button" class="fi-foto" onclick="ampliarFoto(this)" aria-label="Ampliar a foto 2"><img src="foto2.jpg" alt="Inspiração 2"><span class="fi-lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>
+                <button type="button" class="fi-foto" onclick="ampliarFoto(this)" aria-label="Ampliar a foto 3"><img src="foto3.jpg" alt="Inspiração 3"><span class="fi-lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>
+                <button type="button" class="fi-foto" onclick="ampliarFoto(this)" aria-label="Ampliar a foto 4"><img src="foto4.jpg" alt="Inspiração 4"><span class="fi-lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>
+              </div>
+              <p class="fi-semfoto" id="fi-semfoto" hidden>As fotos não foram encontradas. Coloque foto1.jpg a foto4.jpg na pasta do site.</p>
+              <figure class="fi-cit">
+                <span class="fi-asp" aria-hidden="true">“</span>
+                <blockquote class="fi-frase" id="versiculo-diario"></blockquote>
+                <figcaption class="fi-ref" id="versiculo-ref"></figcaption>
+                <button type="button" class="fi-nova" onclick="trocarVersiculoManual()"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Nova frase</button>
+              </figure>
+            </section>
           </div>
         </div>
       </div>
@@ -1341,8 +1407,29 @@
   ];
   let versiculoIdx = new Date().getDate() % versiculos.length;
   function atualizarVersiculo() {
-    document.getElementById('versiculo-diario').innerText = versiculos[versiculoIdx].texto;
-    document.getElementById('versiculo-ref').innerText = versiculos[versiculoIdx].ref;
+    const v = versiculos[versiculoIdx];
+    document.getElementById('versiculo-diario').innerText = v.texto.replace(/^"|"$/g, '');
+    const ref = document.getElementById('versiculo-ref');
+    ref.innerText = v.ref; ref.hidden = !v.ref;
+  }
+  // Minha Força: foto que não carrega some do desenho; sem nenhuma, aparece um aviso
+  function ajustarFaixaFotos() {
+    const f = document.getElementById('fi-faixa'); if (!f) return;
+    const n = f.querySelectorAll('.fi-foto').length;
+    f.style.setProperty('--n', Math.max(1, n)); f.hidden = n === 0;
+    document.getElementById('fi-semfoto').hidden = n > 0;
+  }
+  function vigiarFotos() {
+    document.querySelectorAll('#fi-faixa .fi-foto img').forEach(img => {
+      const tirar = () => { const b = img.closest('.fi-foto'); if (b) b.remove(); ajustarFaixaFotos(); };
+      if (img.complete && img.naturalWidth === 0) tirar(); else img.addEventListener('error', tirar, { once: true });
+    });
+    ajustarFaixaFotos();
+  }
+  function ampliarFoto(btn) {
+    const todas = [...document.querySelectorAll('#fi-faixa .fi-foto')];
+    const itens = todas.map((b, k) => { const im = b.querySelector('img'); return { src: im.currentSrc || im.src, nome: `inspiracao-${k + 1}.jpg` }; });
+    abrirVisualizadorPrint(itens, todas.indexOf(btn), { tipo: 'Foto' }, btn);
   }
   function trocarVersiculoManual() {
     versiculoIdx = (versiculoIdx + 1) % versiculos.length;
@@ -1951,7 +2038,6 @@
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharMaisMovel(); });
   function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
-    atualizarDashboard();
     renderizarHeroi();
     renderizarEdital();
     renderizarLembretes();
@@ -1976,11 +2062,6 @@
       min += (t.tempo || 0); ac += (t.acertos || 0); totQuest += (t.totais || 0);
     }));
     return { total, conc, min, ac, totQuest };
-  }
-  function atualizarDashboard() {
-    const { ac, totQuest } = totaisDoEdital();
-    document.getElementById('stat-desempenho').innerText = `${totQuest ? Math.round((ac / totQuest) * 100) : 0}%`;
-    document.getElementById('stat-questoes').innerText = `${ac} acertos / ${totQuest} feitas`;
   }
   const MIN_CONSTANCIA = 20;   // minutos que fazem um dia valer na sequência
   // Sequência atual e recorde, a partir do histórico diário (conta desde hoje, ou desde ontem enquanto hoje não fecha)
@@ -2071,12 +2152,35 @@
   }
 
   // Lembretes
+  // Mural de Lembretes: aviso dos vencidos, próximos com mini calendário e novo lembrete recolhido
+  const MESES_ABREV = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  function prazoLembrete(iso) {
+    const n = Math.round((new Date(iso + 'T00:00:00') - new Date(hojeISO() + 'T00:00:00')) / 86400000);
+    return n === 0 ? 'é hoje' : n === 1 ? 'amanhã' : n > 1 ? `em ${n} dias` : n === -1 ? 'atrasado há 1 dia' : `atrasado há ${-n} dias`;
+  }
+  function alternarFormLembrete(abrir) {
+    const f = document.getElementById('lem-form'), b = document.getElementById('lem-abrir');
+    const mostrar = typeof abrir === 'boolean' ? abrir : f.hidden;
+    f.hidden = !mostrar; b.setAttribute('aria-expanded', String(mostrar));
+    if (mostrar) { if (!document.getElementById('lem-data').value) lembreteAtalho('semana'); else marcarAtalhoLembrete(); document.getElementById('lem-texto').focus(); }
+  }
+  function lembreteAtalho(k) {
+    const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + (k === 'hoje' ? 0 : k === 'amanha' ? 1 : 7));
+    document.getElementById('lem-data').value = isoLocal(d); marcarAtalhoLembrete();
+  }
+  function marcarAtalhoLembrete() {
+    const v = document.getElementById('lem-data').value;
+    const alvo = { hoje: 0, amanha: 1, semana: 7 };
+    document.querySelectorAll('#lem-form [data-at]').forEach(b => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + alvo[b.dataset.at]); b.setAttribute('aria-pressed', String(isoLocal(d) === v)); });
+  }
   function adicionarLembrete() {
     const texto = document.getElementById('lem-texto').value.trim();
     const data = document.getElementById('lem-data').value;
     if (!texto || !data) { alert('Informe o texto e a data do lembrete.'); return; }
     lembretes.push({ id: novoId(), texto, data, status: 'pendente', adiadoEm: null });
     document.getElementById('lem-texto').value = '';
+    document.getElementById('lem-data').value = '';
+    alternarFormLembrete(false);
     salvarTudo();
   }
   function lembreteObrigado(id) {
@@ -2100,20 +2204,21 @@
     const vencidos = ativos.filter(l => l.data <= hojeStr).sort((a, b) => a.data.localeCompare(b.data));
     const futuros = ativos.filter(l => l.data > hojeStr).sort((a, b) => a.data.localeCompare(b.data));
     const alertaEl = document.getElementById('lem-alerta');
+    document.getElementById('view-dashboard').classList.toggle('tem-aviso', vencidos.length > 0);
     if (vencidos.length) {
       alertaEl.classList.remove('hidden');
       alertaEl.innerHTML = vencidos.map(l => `
-        <div class="alerta-pulse rounded-xl border-2 border-orange-500 bg-orange-500/15 p-4">
-          <div class="flex items-start gap-3">
-            <i class="fa-solid fa-bell text-orange-400 text-xl mt-0.5"></i>
-            <div class="flex-1 min-w-0">
-              <p class="text-[11px] font-bold uppercase tracking-wider text-orange-400">Atenção · ${formatarDataBR(l.data)}${l.adiadoEm ? ' · adiado' : ''}</p>
-              <p class="font-semibold text-main break-words">${esc(l.texto)}</p>
+        <div class="mu-al" role="alert">
+          <div class="mu-al-lin">
+            <span class="mu-sino" aria-hidden="true"><i class="fa-solid fa-bell"></i></span>
+            <div class="mu-al-tx">
+              <span class="mu-tag">Atenção · ${formatarDataBR(l.data)}${l.adiadoEm ? ' · adiado' : ''} <span class="mu-chip">${prazoLembrete(l.data)}</span></span>
+              <span class="mu-txt">${esc(l.texto)}</span>
             </div>
           </div>
-          <div class="flex flex-wrap gap-2 mt-3">
-            <button onclick="lembreteObrigado(${l.id})" class="px-3 py-1.5 rounded-lg bg-brand text-white text-xs font-bold">Obrigada por lembrar</button>
-            <button onclick="lembreteAdiar(${l.id})" class="px-3 py-1.5 rounded-lg bg-card border border-theme text-main text-xs font-bold">Lembrar mais tarde</button>
+          <div class="mu-bt">
+            <button type="button" onclick="lembreteObrigado(${l.id})" class="ms-bt pri"><i class="fa-solid fa-check" aria-hidden="true"></i> Obrigada por lembrar</button>
+            <button type="button" onclick="lembreteAdiar(${l.id})" class="ms-bt">Lembrar mais tarde</button>
           </div>
         </div>`).join('');
     } else {
@@ -2121,15 +2226,15 @@
       alertaEl.innerHTML = '';
     }
     document.getElementById('lem-lista').innerHTML = futuros.length
-      ? futuros.map(l => `
-          <div class="flex items-center gap-3 p-2.5 bg-card rounded-lg border border-theme">
-            <div class="flex-1 min-w-0">
-              <p class="text-xs font-bold text-blue-400">${formatarDataBR(l.data)}</p>
-              <p class="text-sm text-main break-words">${esc(l.texto)}</p>
-            </div>
-            <button onclick="lembreteRemover(${l.id})" class="w-7 h-7 rounded text-red-400 hover-bg" title="Apagar"><i class="fa-solid fa-xmark"></i></button>
-          </div>`).join('')
-      : '<p class="text-xs text-mut italic">Nenhum lembrete futuro.</p>';
+      ? '<p class="ms-grupo">Próximos</p>' + futuros.map(l => {
+          const d = new Date(l.data + 'T00:00:00');
+          return `
+          <div class="mu-fu">
+            <span class="mu-cal" aria-hidden="true"><b>${d.getDate()}</b><span>${MESES_ABREV[d.getMonth()]}</span></span>
+            <div class="mu-fu-tx"><span class="mu-txt">${esc(l.texto)}</span><span class="mu-em">${formatarDataBR(l.data)} · ${prazoLembrete(l.data)}</span></div>
+            <button type="button" onclick="lembreteRemover(${l.id})" class="ms-bt ic perigo" title="Apagar" aria-label="Apagar o lembrete: ${esc(l.texto)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+          </div>`; }).join('')
+      : '<p class="mu-vazio">Nenhum lembrete futuro.</p>';
   }
 
   // Missão do Dia: sessões do dia atual do cronograma + blocos extras
@@ -2228,26 +2333,38 @@
     const total = sessoes.length + extras.length;
     const feitos = sessoes.filter(s => s.feita).length + extras.filter(b => b.feito).length;
     const pct = total ? Math.round((feitos / total) * 100) : 0;
-    let dataTxt = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-    dataTxt = dataTxt.charAt(0).toUpperCase() + dataTxt.slice(1);
-    document.getElementById('plano-titulo').innerHTML =
-      `<i class="fa-solid fa-calendar-day text-brand mr-2"></i> Missão do Dia (${dataTxt} · ${pct}% concluído)`;
+    const planejado = sessoes.reduce((a, s) => a + (Number(s.min) || 0), 0);
+    const fmtPlan = m => m >= 60 ? `${Math.floor(m / 60)}h${m % 60 ? ' ' + String(m % 60).padStart(2, '0') + 'm' : ''}` : `${m} min`;
+    document.getElementById('plano-titulo').innerHTML = '<i class="fa-solid fa-calendar-day text-brand" aria-hidden="true"></i> Missão do Dia';
+    document.getElementById('plano-sub').textContent = total ? `${feitos} de ${total} ${total === 1 ? 'item' : 'itens'}${planejado ? ' · planejado ' + fmtPlan(planejado) : ''}` : 'Nenhuma sessão para hoje';
+    document.getElementById('plano-pct').textContent = `${pct}%`;
+    const barra = document.getElementById('plano-barra');
+    barra.setAttribute('aria-label', `${pct}% concluído`); barra.firstElementChild.style.width = `${pct}%`;
+    const agoraId = (sessoes.find(x => !x.feita) || {}).id;
+    const emCurso = s => !!timerInterval && !!timerSessao && timerSessao.diaIdx === cronograma.diaAtual && timerSessao.sid === s.id;
 
-    const blocoCron = sessoes.map((s, k) => {
+    const blocoCron = sessoes.map(s => {
       const d = meusDados.find(x => x.id === s.disc);
       const { node } = getNodeRef(s.disc, s.topicoId);
       const parcial = s.feita && s.parcial;
+      const agora = !s.feita && s.id === agoraId;
+      const tag = parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : agora ? '<span class="ms-tag">Agora</span>' : '';
+      const acoes = parcial ? `<span class="ms-feita-t" style="color:var(--ms-acento-t)">Faltam ${Math.max(0, s.min - s.parcial.estudadoMin)} min</span>`
+        : s.feita ? '<span class="ms-feita-t">Feita</span>'
+        : emCurso(s) ? `<button type="button" onclick="alternarIniciarParar()" class="ms-bt run"><i class="fa-solid fa-stop" aria-hidden="true"></i> Parar</button>`
+        : `<button type="button" onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" class="ms-bt${agora ? ' pri' : ''}"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Iniciar</button>`;
+      const mini = parcial && s.min ? `<div class="ms-mini" role="img" aria-label="${s.parcial.estudadoMin} de ${s.min} minutos"><i style="width:${Math.min(100, Math.round(s.parcial.estudadoMin / s.min * 100))}%"></i></div>` : '';
       return `
-        <div class="flex items-center gap-3 p-3 rounded-lg border transition ${parcial ? 'sessao-parcial' : s.feita ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
-          <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="w-4 h-4 accent-emerald-500 shrink-0" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold truncate ${s.feita && !parcial ? 'line-through text-mut' : 'text-main'}">${esc(d ? d.nome : '—')}</p>
-            <p class="text-[11px] text-sec truncate">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
+        <div class="ms-it ${parcial ? 'sessao-parcial' : s.feita ? 'feito' : agora ? 'agora' : ''}">
+          <label class="chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${cronograma.diaAtual}, ${s.id})" class="ms-chk" aria-label="Sessão concluída: ${esc(d ? d.nome : '—')}"></label>
+          <div class="ms-corpo">
+            ${tag}
+            <p class="ms-nome">${esc(d ? d.nome : '—')}</p>
+            <p class="ms-det">${node ? esc(node.nome) : 'Disciplina inteira'} · ${s.min} min</p>
             ${node ? marcasHTML(node) : resumoDisciplinaHTML(s.disc)}
+            ${mini}
           </div>
-          ${parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>`
-            : s.feita ? '<span class="text-xs font-bold text-brand">Feita</span>'
-            : `<button onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>`}
+          <div class="ms-acoes">${acoes}</div>
         </div>`;
     }).join('');
 
@@ -2256,25 +2373,29 @@
       if (blocoEdicao && blocoEdicao.id === b.id) return blocoEdicaoHTML();
       const { disc, node } = getNodeRef(b.discId, b.topicoId);
       return `
-        <div class="plano-extra flex items-center gap-3 p-3 rounded-lg border transition ${b.feito ? 'bg-emerald-500/15 border-emerald-500/50' : 'bg-card border-theme'}">
-          <label class="chk-toque"><input type="checkbox" ${b.feito ? 'checked' : ''} onchange="alternarBlocoPlano(${b.id})" class="w-4 h-4 accent-emerald-500 shrink-0" aria-label="Bloco concluído: ${esc(b.texto)}"></label>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold truncate ${b.feito ? 'line-through text-mut' : 'text-main'}">${esc(b.texto)}</p>
-            ${disc ? `<p class="text-[11px] text-sec truncate">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
+        <div class="ms-it plano-extra ${b.feito ? 'feito' : ''}">
+          <label class="chk-toque"><input type="checkbox" ${b.feito ? 'checked' : ''} onchange="alternarBlocoPlano(${b.id})" class="ms-chk" aria-label="Bloco concluído: ${esc(b.texto)}"></label>
+          <div class="ms-corpo">
+            <span class="ms-tag ex">Extra</span>
+            <p class="ms-nome">${esc(b.texto)}</p>
+            ${disc ? `<p class="ms-det">${esc(disc.nome)}${node ? ' · ' + esc(node.nome) : ''}</p>` : ''}
             ${node ? marcasHTML(node) : (disc ? resumoDisciplinaHTML(b.discId) : '')}
           </div>
-          <button onclick="iniciarBlocoNoCronometro(${b.id})" class="h-8 px-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold shrink-0"><i class="fa-solid fa-stopwatch mr-1"></i> Iniciar</button>
-          <span class="quebra-linha" aria-hidden="true"></span>
-          <button type="button" onclick="editarBlocoPlano(${b.id})" data-bloco-lapis="${b.id}" class="w-8 h-8 rounded-md text-sec hover-bg shrink-0" title="Editar bloco" aria-label="Editar bloco: ${esc(b.texto)}"><i class="fa-solid fa-pen"></i></button>
-          <button onclick="removerBlocoPlano(${b.id})" class="w-8 h-8 rounded-md text-red-400 hover-bg shrink-0" title="Remover"><i class="fa-solid fa-xmark"></i></button>
+          <div class="ms-acoes">
+            <button type="button" onclick="iniciarBlocoNoCronometro(${b.id})" class="ms-bt"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Iniciar</button>
+            <button type="button" onclick="editarBlocoPlano(${b.id})" data-bloco-lapis="${b.id}" class="ms-bt ic" title="Editar bloco" aria-label="Editar bloco: ${esc(b.texto)}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+            <button type="button" onclick="removerBlocoPlano(${b.id})" class="ms-bt ic perigo" title="Remover" aria-label="Remover bloco: ${esc(b.texto)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+          </div>
         </div>`;
     }).join('');
 
     const vazio = !total
-      ? '<p class="text-xs text-mut italic">Nenhuma sessão para hoje. Monte seu cronograma na aba Cronograma.</p>' : '';
+      ? '<p class="ms-vazio-t">Nenhuma sessão para hoje. Monte seu cronograma na aba Cronograma.</p>' : '';
+    const cumprida = total && sessoes.every(s => s.feita && !s.parcial) && extras.every(b => b.feito)
+      ? '<div class="ms-tudo">Missão cumprida. Todas as sessões e blocos de hoje estão feitos.</div>' : '';
     const foco = document.activeElement, refoco = foco && foco.id === 'bloco-edit-texto' ? [foco.selectionStart, foco.selectionEnd] : null;
-    document.getElementById('plano-lista').innerHTML = vazio + blocoCron +
-      (extras.length ? `<p class="text-[11px] font-bold uppercase text-sec pt-2">Extras de hoje</p>${blocoExtra}` : '');
+    document.getElementById('plano-lista').innerHTML = vazio + cumprida + blocoCron +
+      (extras.length ? `<p class="ms-grupo">Extras de hoje</p>${blocoExtra}` : '');
     if (refoco) { const c = document.getElementById('bloco-edit-texto'); if (c) { c.focus(); c.setSelectionRange(refoco[0], refoco[1]); } }
   }
   function iniciarBlocoNoCronometro(id) {
@@ -2965,6 +3086,7 @@
   function atualizarBotoesTimer() {
     const btn = document.getElementById('timer-btn-iniciar');
     if (!btn) return;
+    renderizarPlanoDia();   // Missão do Dia: a sessão em curso mostra "Parar"
     const rodando = !!timerInterval;
     const rotulo = rodando ? 'Parar' : (timerAcumuladoMs > 0 ? 'Retomar' : 'Iniciar');
     btn.innerHTML = `<i class="fa-solid ${rodando ? 'fa-stop' : 'fa-play'}"></i><span class="sr-only">${rotulo}</span>`;
@@ -4618,13 +4740,15 @@
   }
   function abrirVisualizadorPrint(itens, i, dados, origem) {
     fecharVisualizadorPrint(true);
-    vz = { itens, i: Math.max(0, Math.min(i, itens.length - 1)), zoom: 1, x: 0, y: 0, dados: dados || {}, origem: origem || document.activeElement, ptr: new Map(), pinch: 0 };
+    const ehFoto = !!dados && dados.tipo === 'Foto';
+    const rot = ehFoto ? { n: 'Foto', fechar: 'Fechar a foto', baixar: 'Baixar a foto', ant: 'Foto anterior', prox: 'Próxima foto', amp: 'Foto ampliada' } : { n: 'Print', fechar: 'Fechar o print', baixar: 'Baixar o print', ant: 'Print anterior', prox: 'Próximo print', amp: 'Print ampliado' };
+    vz = { itens, i: Math.max(0, Math.min(i, itens.length - 1)), zoom: 1, x: 0, y: 0, dados: dados || {}, origem: origem || document.activeElement, ptr: new Map(), pinch: 0, rot };
     const el = document.createElement('div');
-    el.id = 'visualizador-print'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Print ampliado');
+    el.id = 'visualizador-print'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', rot.amp); if (ehFoto) el.setAttribute('data-sem-dados', '');
     const grupoZoom = `<button type="button" class="vz-b" data-vz="menos" aria-label="Diminuir o zoom" title="Diminuir (−)"><i class="fa-solid fa-minus" aria-hidden="true"></i></button><span class="vz-zoomtxt" data-vz-txt>100%</span><button type="button" class="vz-b" data-vz="mais" aria-label="Aumentar o zoom" title="Aumentar (+)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button><button type="button" class="vz-b" data-vz="ajustar" aria-label="Ajustar à tela" title="Ajustar (0)"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>`;
     el.innerHTML = `<div class="vz-col">
-        <div class="vz-bar"><button type="button" class="vz-b" data-vz="fechar" aria-label="Fechar o print" title="Fechar (Esc)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><span class="vz-n" data-vz-n aria-live="polite"></span><span class="vz-grupo-zoom">${grupoZoom}</span><button type="button" class="vz-b" data-vz="baixar" aria-label="Baixar o print" title="Baixar"><i class="fa-solid fa-download" aria-hidden="true"></i></button></div>
-        <div class="vz-palco" data-vz-palco><button type="button" class="vz-seta e" data-vz="ant" aria-label="Print anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><img data-vz-img alt="" draggable="false"><button type="button" class="vz-seta d" data-vz="prox" aria-label="Próximo print"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
+        <div class="vz-bar"><button type="button" class="vz-b" data-vz="fechar" aria-label="${rot.fechar}" title="Fechar (Esc)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><span class="vz-n" data-vz-n aria-live="polite"></span><span class="vz-grupo-zoom">${grupoZoom}</span><button type="button" class="vz-b" data-vz="baixar" aria-label="${rot.baixar}" title="Baixar"><i class="fa-solid fa-download" aria-hidden="true"></i></button></div>
+        <div class="vz-palco" data-vz-palco><button type="button" class="vz-seta e" data-vz="ant" aria-label="${rot.ant}"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><img data-vz-img alt="" draggable="false"><button type="button" class="vz-seta d" data-vz="prox" aria-label="${rot.prox}"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
         <div class="vz-rodape">${grupoZoom}</div>
       </div>
       <div class="vz-dados" data-vz-dados></div>`;
@@ -4658,8 +4782,8 @@
   function renderizarVz() {
     const el = document.getElementById('visualizador-print'); if (!el || !vz) return;
     const it = vz.itens[vz.i], d = vz.dados;
-    const img = el.querySelector('[data-vz-img]'); img.src = it.src; img.alt = `Print ${vz.i + 1} de ${vz.itens.length}`;
-    el.querySelector('[data-vz-n]').textContent = `Print ${vz.i + 1} de ${vz.itens.length}`;
+    const img = el.querySelector('[data-vz-img]'); img.src = it.src; img.alt = `${vz.rot.n} ${vz.i + 1} de ${vz.itens.length}`;
+    el.querySelector('[data-vz-n]').textContent = `${vz.rot.n} ${vz.i + 1} de ${vz.itens.length}`;
     el.querySelectorAll('[data-vz="ant"], [data-vz="prox"]').forEach(b => { b.disabled = vz.itens.length < 2; });
     el.querySelector('[data-vz-dados]').innerHTML = `<small>${esc(d.cab || 'Erro')}</small>`
       + (d.enunciado ? `<span class="vz-enun">${esc(d.enunciado)}</span>` : '')
@@ -4949,6 +5073,7 @@
       atualizarIconeTema();
     }
     atualizarVersiculo();
+    vigiarFotos();
     atualizarCountdown();
     let bruto = null;
     try {
