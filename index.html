@@ -410,6 +410,69 @@
       .edt-classificar { height: 44px; padding: 0 14px; }
       .sel-chip, .sel-filtro, .sel-item, .sel-gatilho { min-height: 44px; }
     }
+
+    /* ===== Etapa 6: Caderno de Erros (tela de edição, visualizador de print, ordem dos cartões) ===== */
+    :root { --perigo: #f87171; } body.light-mode { --perigo: #b91c1c; }
+    .so-toque, .erro-add-b.so-toque { display: none; } .so-mouse { display: inline; }
+    @media (hover: none), (pointer: coarse) { .so-toque, .erro-add-b.so-toque { display: inline-flex; } .so-mouse { display: none; } }
+    .post-btn { width: 28px; height: 28px; }
+    @media (hover: none), (pointer: coarse), (max-width: 767px) { .post-btn { width: 44px; height: 44px; } .post-it .t1-acoes { gap: 4px; } }
+    .post-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .erro-thumbs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+    .erro-th { position: relative; display: block; width: 100%; aspect-ratio: 3 / 2; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: #fff; padding: 0; cursor: zoom-in; }
+    .post-it .erro-th { border-color: rgba(15,23,42,.3); }
+    .erro-th img { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; }
+    .erro-th .lupa { position: absolute; right: 4px; bottom: 4px; width: 28px; height: 28px; border-radius: 8px; background: rgba(15,23,42,.78); color: #fff; display: grid; place-items: center; font-size: 12px; }
+    /* tela de edição */
+    .erro-ed-barra { position: sticky; top: var(--cab-h, 73px); z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 12px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); }
+    .erro-ed-titulo { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .erro-ed-btn { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); font-weight: 700; font-size: 13px; display: inline-flex; gap: 8px; align-items: center; justify-content: center; white-space: nowrap; cursor: pointer; }
+    .erro-ed-btn:hover { background: var(--bg-hover); }
+    .erro-ed-salvar, .erro-ed-salvar:hover { background: var(--btn-iniciar-bg); color: var(--btn-iniciar-fg); border-color: var(--btn-iniciar-bg); }
+    .erro-ed-corpo { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+    @media (min-width: 1024px) { .erro-ed-corpo { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; } }
+    .erro-ed-col { display: grid; gap: 12px; min-width: 0; align-content: start; }
+    .erro-ed-bloco { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 12px; min-width: 0; }
+    .erro-ed-bloco h3 { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); margin: 0; }
+    .erro-cp { display: grid; gap: 4px; min-width: 0; } .erro-cp label { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+    .erro-in { width: 100%; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 10px 12px; font-size: 14px; outline: none; }
+    .erro-in:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+    .erro-duas { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+    @media (min-width: 640px) { .erro-duas { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; } }
+    .erro-chk { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; font-size: 14px; cursor: pointer; }
+    #erro-prioridade { width: 20px; height: 20px; accent-color: #f43f5e; flex: none; }
+    .erro-pgrade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    @media (min-width: 768px) and (max-width: 1023px) { .erro-pgrade { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .erro-pit { display: grid; gap: 6px; min-width: 0; }
+    .erro-pit-ac { display: flex; gap: 6px; }
+    .erro-pit-ac button { min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+    .erro-pit-ac .amp { flex: 1; } .erro-pit-ac .rem { width: 44px; flex: none; color: var(--perigo); }
+    .erro-vazio { grid-column: 1 / -1; font-size: 13px; color: var(--text-secondary); }
+    .erro-add { display: flex; flex-wrap: wrap; gap: 8px; }
+    .erro-add-b { flex: 1; min-width: 104px; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; padding: 0 12px; }
+    .erro-add-b:hover { background: var(--bg-hover); } .erro-add-b:focus-within, .erro-add-b:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .erro-dica { font-size: 12px; color: var(--text-secondary); margin: 0; min-height: 0; } .erro-dica:empty { display: none; }
+    .erro-excluir { min-height: 44px; border-radius: 12px; border: 0; background: color-mix(in srgb, var(--perigo) 12%, transparent); color: var(--perigo); font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; cursor: pointer; }
+    /* visualizador do print (tela cheia): print em cima e dados embaixo no celular; lado a lado no computador */
+    #visualizador-print { position: fixed; inset: 0; z-index: 95; background: #05070a; color: #f1f5f9; display: flex; flex-direction: column; }
+    @media (min-width: 1024px) { #visualizador-print { flex-direction: row; } }
+    .vz-col { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+    .vz-bar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: #0f172a; }
+    .vz-n { flex: 1; text-align: center; font-weight: 700; font-size: 13px; color: #e2e8f0; }
+    .vz-b { width: 44px; height: 44px; border-radius: 12px; border: 0; background: rgba(255,255,255,.12); color: #f1f5f9; display: grid; place-items: center; flex: none; font-size: 17px; cursor: pointer; }
+    .vz-b:hover { background: rgba(255,255,255,.2); } .vz-b:disabled { opacity: .4; cursor: not-allowed; }
+    .vz-zoomtxt { min-width: 52px; text-align: center; font-weight: 700; font-size: 12px; color: #e2e8f0; }
+    .vz-grupo-zoom { display: none; align-items: center; gap: 6px; }
+    @media (min-width: 768px) { .vz-bar .vz-grupo-zoom { display: flex; } .vz-rodape { display: none !important; } }
+    .vz-rodape { display: flex; gap: 6px; align-items: center; justify-content: center; padding: 8px; background: #0f172a; }
+    .vz-palco { position: relative; flex: 1; min-height: 0; overflow: hidden; display: grid; place-items: center; touch-action: none; cursor: grab; }
+    .vz-palco img { max-width: 100%; max-height: 100%; transform-origin: center; user-select: none; -webkit-user-drag: none; }
+    .vz-seta { position: absolute; top: 50%; translate: 0 -50%; width: 44px; height: 64px; border-radius: 12px; border: 0; background: rgba(15,23,42,.78); color: #f1f5f9; display: grid; place-items: center; z-index: 2; font-size: 18px; cursor: pointer; } .vz-seta:disabled { display: none; } .vz-seta.e { left: 8px; } .vz-seta.d { right: 8px; }
+    .vz-dados { background: var(--bg-panel); color: var(--text-primary); padding: 12px 14px; overflow: auto; max-height: 34vh; display: grid; gap: 8px; align-content: start; font-size: 13px; line-height: 1.4; }
+    @media (min-width: 1024px) { .vz-dados { width: 320px; max-height: none; flex: none; border-left: 1px solid var(--border-color); } }
+    .vz-dados small { display: block; color: var(--text-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .vz-dados .vz-enun { font-weight: 700; font-size: 14px; }
+    .vz-dados .vz-anot { color: var(--text-sub); white-space: pre-line; }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -661,10 +724,61 @@
             <button onclick="voltarVitrineErros()" class="px-3 py-2 rounded-lg bg-panel hover-bg border border-theme text-xs font-bold transition"><i class="fa-solid fa-arrow-left mr-1"></i> Vitrine</button>
             <h2 id="erros-disc-titulo" class="font-bold text-lg flex-1 min-w-[150px]"></h2>
             <select id="erros-filtro" onchange="mudarFiltroErros()" class="bg-panel border border-theme rounded-lg p-2 text-xs text-main outline-none max-w-xs"></select>
-            <button onclick="abrirModalErro(null)" class="px-4 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> Novo erro</button>
+            <button type="button" id="erros-btn-organizar" onclick="alternarOrganizarErros()" aria-pressed="false" class="edt-classificar" title="Mostrar as setas ▲ ▼ para mudar a ordem dos cartões"><i class="fa-solid fa-sort text-[10px]" aria-hidden="true"></i> <span>Organizar</span></button>
+            <button onclick="abrirEdicaoErro(null)" class="px-4 py-2 rounded-lg bg-brand hover:opacity-90 text-white text-xs font-bold transition"><i class="fa-solid fa-plus mr-1"></i> Novo erro</button>
           </div>
           <p id="erros-subtitulo" class="text-xs text-sec mb-5"></p>
           <div id="erros-mural" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </div>
+        <div id="erro-edicao" class="hidden" onkeydown="if (event.key === 'Escape') { event.preventDefault(); voltarEdicaoErro(); }">
+          <div class="erro-ed-barra">
+            <button type="button" onclick="voltarEdicaoErro()" class="erro-ed-btn" id="erro-ed-voltar"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span>Voltar</span></button>
+            <h2 id="erro-modal-titulo" class="erro-ed-titulo">Novo erro</h2>
+            <button type="button" onclick="salvarErro()" class="erro-ed-btn erro-ed-salvar" id="erro-ed-salvar"><i class="fa-solid fa-check" aria-hidden="true"></i> <span>Salvar</span></button>
+          </div>
+          <div class="erro-ed-corpo">
+            <div class="erro-ed-col">
+              <section class="erro-ed-bloco" aria-labelledby="erro-h-ident">
+                <h3 id="erro-h-ident">Identificação</h3>
+                <div class="erro-cp"><label for="erro-disc">Disciplina</label><select id="erro-disc" onchange="popularTopicosErro()" class="erro-in"></select></div>
+                <div class="erro-cp"><label for="erro-topico">Tópico do edital</label><select id="erro-topico" class="erro-in"></select></div>
+                <div class="erro-duas">
+                  <div class="erro-cp"><label for="erro-motivo">Motivo do erro</label><select id="erro-motivo" class="erro-in"></select></div>
+                  <label class="erro-chk" for="erro-prioridade"><input type="checkbox" id="erro-prioridade"> <span>Máxima prioridade</span></label>
+                </div>
+              </section>
+              <section class="erro-ed-bloco" aria-labelledby="erro-h-questao">
+                <h3 id="erro-h-questao">A questão</h3>
+                <div class="erro-cp"><label for="erro-enunciado">Enunciado / resumo da questão</label><textarea id="erro-enunciado" rows="3" class="erro-in"></textarea></div>
+                <div class="erro-duas">
+                  <div class="erro-cp"><label for="erro-minha">Minha resposta</label><input id="erro-minha" type="text" class="erro-in"></div>
+                  <div class="erro-cp"><label for="erro-correta">Resposta correta</label><input id="erro-correta" type="text" class="erro-in"></div>
+                </div>
+              </section>
+              <section class="erro-ed-bloco" aria-labelledby="erro-h-anot">
+                <h3 id="erro-h-anot">Anotações</h3>
+                <div class="erro-cp"><label for="erro-anotacao">O que lembrar</label><textarea id="erro-anotacao" rows="3" class="erro-in"></textarea></div>
+              </section>
+            </div>
+            <div class="erro-ed-col">
+              <section class="erro-ed-bloco" aria-labelledby="erro-h-prints">
+                <h3 id="erro-h-prints">Prints <span id="erro-prints-n">(0)</span></h3>
+                <div id="erro-imgs-preview" class="erro-pgrade"></div>
+                <div class="erro-add">
+                  <label class="erro-add-b" for="erro-imgs"><i class="fa-solid fa-file-image" aria-hidden="true"></i> Arquivo</label>
+                  <label class="erro-add-b so-toque" for="erro-imgs-cam"><i class="fa-solid fa-camera" aria-hidden="true"></i> Câmera</label>
+                  <button type="button" class="erro-add-b" onclick="colarPrintBotao()"><i class="fa-solid fa-paste" aria-hidden="true"></i> Colar<span class="so-mouse"> (Ctrl+V)</span></button>
+                </div>
+                <input type="file" id="erro-imgs" accept="image/*" multiple class="sr-only">
+                <input type="file" id="erro-imgs-cam" accept="image/*" capture="environment" class="sr-only">
+                <p id="erro-colar-dica" class="erro-dica" role="status" aria-live="polite"></p>
+              </section>
+              <section class="erro-ed-bloco" id="erro-zona" aria-labelledby="erro-h-zona">
+                <h3 id="erro-h-zona">Zona de cuidado</h3>
+                <button type="button" id="erro-btn-excluir" onclick="excluirErroAtual()" class="erro-excluir"><i class="fa-solid fa-trash" aria-hidden="true"></i> <span id="erro-excluir-txt">Excluir este erro</span></button>
+              </section>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1029,66 +1143,6 @@
   </div>
 
   <!-- ================= MODAL: ERRO ================= -->
-  <div id="modal-erro" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center backdrop-blur-sm p-4">
-    <div class="bg-panel w-full max-w-2xl max-h-[92vh] rounded-2xl border border-theme shadow-2xl flex flex-col overflow-hidden">
-      <div class="p-5 border-b border-theme flex justify-between items-center bg-card">
-        <h3 id="erro-modal-titulo" class="font-bold text-lg">Novo erro</h3>
-        <button onclick="fecharModalErro()" class="text-sec hover:text-main"><i class="fa-solid fa-xmark text-xl"></i></button>
-      </div>
-      <div class="p-6 space-y-4 overflow-y-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-sec mb-1">Disciplina</label>
-            <select id="erro-disc" onchange="popularTopicosErro()" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-sec mb-1">Tópico / Subtópico</label>
-            <select id="erro-topico" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-sec mb-1">Enunciado / resumo da questão</label>
-          <textarea id="erro-enunciado" rows="3" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></textarea>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-sec mb-1">Minha resposta</label>
-            <input id="erro-minha" type="text" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-sec mb-1">Resposta correta</label>
-            <input id="erro-correta" type="text" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none">
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
-          <div>
-            <label class="block text-xs font-bold text-sec mb-1">Motivo do erro</label>
-            <select id="erro-motivo" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></select>
-          </div>
-          <label class="flex items-center gap-2 text-sm font-semibold text-main cursor-pointer pb-2">
-            <input type="checkbox" id="erro-prioridade" class="w-4 h-4 accent-rose-500"> Máxima prioridade
-          </label>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-sec mb-1">Anotações</label>
-          <textarea id="erro-anotacao" rows="3" class="w-full bg-card border border-theme rounded-lg p-2.5 text-sm text-main outline-none"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-sec mb-1">Print (imagem)</label>
-          <input type="file" id="erro-imgs" accept="image/*" multiple class="block w-full text-xs text-sec">
-          <div id="erro-imgs-preview" class="flex flex-wrap gap-2 mt-2"></div>
-        </div>
-      </div>
-      <div class="p-5 border-t border-theme flex justify-between gap-3 bg-card">
-        <button id="erro-btn-excluir" onclick="excluirErroAtual()" class="hidden px-4 py-2 rounded-lg text-xs font-bold text-red-400 hover-bg transition">Excluir</button>
-        <div class="flex gap-3 ml-auto">
-          <button onclick="fecharModalErro()" class="px-4 py-2 rounded-lg text-xs font-bold text-sec hover:text-main transition">Cancelar</button>
-          <button onclick="salvarErro()" class="px-6 py-2 rounded-lg text-xs font-bold bg-brand hover:opacity-90 text-white transition">Salvar erro</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- ================= MODAL: INTERVALO DA REVISÃO (CRONÔMETRO) ================= -->
   <div id="modal-rev-intervalo" class="hidden fixed inset-0 bg-black/75 z-[60] flex items-center justify-center backdrop-blur-sm p-4">
     <div class="bg-panel w-full max-w-sm rounded-2xl border border-theme shadow-2xl p-6 text-center space-y-4">
@@ -1647,6 +1701,7 @@
   // =====================================================================
   const TELAS = ['dashboard', 'edital', 'cronograma', 'revisoes', 'erros', 'historico'];
   function navigate(tela) {
+    if (!liberarEdicaoErro()) return;
     TELAS.forEach(t => {
       document.getElementById(`view-${t}`).classList.add('hidden');
       const btn = document.getElementById(`nav-${t}`);
@@ -1686,6 +1741,12 @@
   }
   function irPeloMais(tela) { fecharMaisMovel(); navigate(tela); }
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape') fecharMaisMovel(); });
+  function medirCabecalho() {
+    const h = document.querySelector('header.cab-pag');
+    if (h) document.documentElement.style.setProperty('--cab-h', h.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', medirCabecalho);
+  if (window.ResizeObserver) new ResizeObserver(medirCabecalho).observe(document.querySelector('header.cab-pag'));
   function visivel(id) { return !document.getElementById(id).classList.contains('hidden'); }
   function atualizarTudoUI() {
     atualizarDashboard();
@@ -3838,6 +3899,7 @@
   // =====================================================================
   const errosCtx = { discId: null, filtro: 'geral' };
   let erroEdicao = null;
+  let errosOrganizando = false;   // botão Organizar: mostra ▲ ▼ nos cartões
   let previewToken = 0;
   let erroArrastando = null;
 
@@ -3878,7 +3940,7 @@
       tx.onerror = () => rej(tx.error);
     });
   }
-  function comprimirImagem(file, maxLado = 1280, qualidade = 0.72) {
+  function comprimirImagem(file, maxLado = 1600, qualidade = 0.8) {
     return new Promise((res, rej) => {
       const reader = new FileReader();
       reader.onerror = rej;
@@ -3924,11 +3986,13 @@
     }).join('');
   }
   function voltarVitrineErros() {
+    errosOrganizando = false;
     document.getElementById('erros-disc').classList.add('hidden');
     document.getElementById('erros-vitrine').classList.remove('hidden');
     renderizarVitrineErros();
   }
   function abrirDisciplinaErros(discId) {
+    errosOrganizando = false;
     errosCtx.discId = discId;
     errosCtx.filtro = 'geral';
     document.getElementById('erros-vitrine').classList.add('hidden');
@@ -3967,10 +4031,31 @@
       mural.innerHTML = `<div class="col-span-full text-center p-10 border border-dashed border-theme rounded-xl text-sec text-sm">Nenhum erro registrado aqui ainda.</div>`;
       return;
     }
-    mural.innerHTML = lista.map(cardErroHTML).join('');
+    const mesmoGrupo = (a, b) => !!a.prioridade === !!b.prioridade;
+    mural.innerHTML = lista.map((e, i) => cardErroHTML(e, { org: errosOrganizando,
+      sobe: i > 0 && mesmoGrupo(lista[i - 1], e), desce: i < lista.length - 1 && mesmoGrupo(lista[i + 1], e) })).join('');
+    const bo = document.getElementById('erros-btn-organizar');
+    bo.setAttribute('aria-pressed', String(errosOrganizando));
+    bo.querySelector('span').textContent = errosOrganizando ? 'Pronto' : 'Organizar';
+    bo.querySelector('i').className = 'fa-solid ' + (errosOrganizando ? 'fa-check' : 'fa-sort') + ' text-[10px]';
     carregarImagensErros();
   }
-  function cardErroHTML(e) {
+  function alternarOrganizarErros() {
+    errosOrganizando = !errosOrganizando;
+    renderizarMuralErros();
+  }
+  // ▲ ▼: troca com o vizinho do mesmo grupo (os de máxima prioridade ficam sempre antes) e regrava a ordem
+  function moverErro(id, dir) {
+    const lista = errosVisiveis();
+    const i = lista.findIndex(e => e.id === id), j = i + dir;
+    if (i < 0 || j < 0 || j >= lista.length || !!lista[j].prioridade !== !!lista[i].prioridade) return;
+    [lista[i], lista[j]] = [lista[j], lista[i]];
+    lista.forEach((e, k) => { e.ordem = k; });
+    salvarTudo();
+    const alvo = document.querySelector(`[data-mover="${id}:${dir}"]:not(:disabled)`) || document.querySelector(`[data-mover="${id}:${-dir}"]:not(:disabled)`);
+    if (alvo) alvo.focus();
+  }
+  function cardErroHTML(e, o = {}) {
     const cor = PALETA_POSTIT[Math.abs(e.id) % PALETA_POSTIT.length];
     const { node } = getNodeRef(e.discId, e.topicoId);
     const num = numeroEdital(node ? node.nome : '');
@@ -3989,9 +4074,11 @@
             ${espelho}
             ${pesoBadgeHTML(node, true)}
           </div>
-          <div class="flex gap-1 shrink-0">
-            <button onclick="toggleExpandErro(${e.id})" class="w-7 h-7 rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="${e.expandido ? 'Recolher' : 'Expandir'}"><i class="fa-solid ${e.expandido ? 'fa-compress' : 'fa-expand'}"></i></button>
-            <button onclick="abrirModalErro(${e.id})" class="w-7 h-7 rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="Editar"><i class="fa-solid fa-pen"></i></button>
+          <div class="t1-acoes flex flex-wrap justify-end gap-1 shrink-0">
+            ${o.org ? `<button type="button" data-mover="${e.id}:-1" onclick="moverErro(${e.id}, -1)" ${o.sobe ? '' : 'disabled'} class="post-btn rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="Mover para cima" aria-label="Mover para cima"><i class="fa-solid fa-chevron-up"></i></button>
+            <button type="button" data-mover="${e.id}:1" onclick="moverErro(${e.id}, 1)" ${o.desce ? '' : 'disabled'} class="post-btn rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="Mover para baixo" aria-label="Mover para baixo"><i class="fa-solid fa-chevron-down"></i></button>` : ''}
+            <button type="button" onclick="toggleExpandErro(${e.id})" class="post-btn rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="${e.expandido ? 'Recolher' : 'Expandir'}" aria-label="${e.expandido ? 'Recolher' : 'Expandir'}"><i class="fa-solid ${e.expandido ? 'fa-compress' : 'fa-expand'}"></i></button>
+            <button type="button" onclick="abrirEdicaoErro(${e.id})" class="post-btn rounded bg-slate-900/10 hover:bg-slate-900/20 text-xs transition" title="Editar" aria-label="Editar erro"><i class="fa-solid fa-pen"></i></button>
           </div>
         </div>
         <p class="font-semibold text-sm leading-snug ${e.expandido ? '' : 'truncate'}">${esc(e.expandido ? e.enunciado : resumo)}</p>
@@ -4005,8 +4092,8 @@
     if (e.motivo) partes.push(`<p class="text-xs"><b>Motivo:</b> ${esc(e.motivo)}</p>`);
     if (e.anotacao) partes.push(`<p class="text-xs whitespace-pre-line mt-2 pt-2 border-t border-slate-900/20">${esc(e.anotacao)}</p>`);
     if ((e.imgIds || []).length) {
-      partes.push(`<div class="grid grid-cols-2 gap-2 mt-2">${e.imgIds.map(id =>
-        `<img data-img="${id}" alt="Print do erro" class="rounded border border-slate-900/20 w-full h-auto bg-slate-900/5">`).join('')}</div>`);
+      partes.push(`<div class="erro-thumbs">${e.imgIds.map((id, k) =>
+        `<button type="button" class="erro-th" onclick="abrirPrintsErro(${e.id}, ${k}, this)" aria-label="Ampliar print ${k + 1} de ${e.imgIds.length}"><img data-img="${id}" alt="Print ${k + 1} do erro"><span class="lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>`).join('')}</div>`);
     }
     return partes.join('');
   }
@@ -4049,9 +4136,21 @@
   function popularTopicosErro(sel = '') {
     document.getElementById('erro-topico').innerHTML = optionsTopicos(document.getElementById('erro-disc').value, sel, '— tópico —');
   }
-  function abrirModalErro(id) {
+  // ----- Tela de edição do erro (substitui o modal): mesmos campos e ids, em blocos -----
+  function capturaCamposErro() {
+    const v = id => { const el = document.getElementById(id); return el.type === 'checkbox' ? el.checked : el.value; };
+    return JSON.stringify(['erro-disc', 'erro-topico', 'erro-enunciado', 'erro-minha', 'erro-correta', 'erro-motivo', 'erro-anotacao', 'erro-prioridade'].map(v));
+  }
+  function erroSujo() {
+    return !!erroEdicao && (capturaCamposErro() !== erroEdicao.snap || erroEdicao.imgsNovas.length > 0 || erroEdicao.imgsRemover.length > 0);
+  }
+  function abrirEdicaoErro(id) {
     const e = id ? cadernoErros.find(x => x.id === id) : null;
-    erroEdicao = { id: e ? e.id : null, imgsNovas: [], imgsRemover: [] };
+    if (id && !e) return;
+    if (erroEdicao) return;
+    const origem = visivel('view-erros') && visivel('erros-disc') ? 'disc' : 'vitrine';
+    if (!visivel('view-erros')) navigate('erros');
+    erroEdicao = { id: e ? e.id : null, imgsNovas: [], imgsRemover: [], lista: [], meta: [], origem, snap: '' };
     document.getElementById('erro-modal-titulo').innerText = e ? 'Editar erro' : 'Novo erro';
     document.getElementById('erro-disc').innerHTML = meusDados.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
     document.getElementById('erro-disc').value = e ? e.discId : (errosCtx.discId || meusDados[0].id);
@@ -4064,49 +4163,121 @@
     document.getElementById('erro-motivo').innerHTML = MOTIVOS.map(m => `<option>${m}</option>`).join('');
     document.getElementById('erro-motivo').value = e ? e.motivo : MOTIVOS[0];
     document.getElementById('erro-imgs').value = '';
-    document.getElementById('erro-btn-excluir').classList.toggle('hidden', !e);
+    document.getElementById('erro-imgs-cam').value = '';
+    document.getElementById('erro-colar-dica').textContent = '';
+    const n = e ? (e.imgIds || []).length : 0;
+    document.getElementById('erro-zona').classList.toggle('hidden', !e);
+    document.getElementById('erro-excluir-txt').textContent = n ? `Excluir este erro e ${n === 1 ? 'o print' : 'os ' + n + ' prints'}` : 'Excluir este erro';
+    erroEdicao.snap = capturaCamposErro();
+    document.getElementById('erros-vitrine').classList.add('hidden');
+    document.getElementById('erros-disc').classList.add('hidden');
+    document.getElementById('erro-edicao').classList.remove('hidden');
+    document.getElementById('main-content').scrollTop = 0;
     renderizarPreviewErro();
-    document.getElementById('modal-erro').classList.remove('hidden');
+    if (!aparelhoSemMouse()) document.getElementById('erro-enunciado').focus();
   }
-  function fecharModalErro() {
-    document.getElementById('modal-erro').classList.add('hidden');
+  function abrirModalErro(id) { abrirEdicaoErro(id); }   // nome antigo, mantido como atalho
+  // Fecha a tela de edição. silencioso: quem chamou (navigate) cuida de qual tela aparece depois.
+  function fecharEdicaoErro(silencioso = false) {
+    const origem = erroEdicao ? erroEdicao.origem : 'vitrine';
+    fecharVisualizadorPrint(true);
+    document.getElementById('erro-edicao').classList.add('hidden');
     erroEdicao = null;
+    previewToken++;
+    if (silencioso) return;
+    if (origem === 'disc' && errosCtx.discId) {
+      document.getElementById('erros-disc').classList.remove('hidden');
+      renderizarMuralErros();
+    } else {
+      voltarVitrineErros();
+    }
   }
+  function fecharModalErro() { fecharEdicaoErro(); }   // nome antigo, mantido como atalho
+  function voltarEdicaoErro() {
+    if (!erroEdicao) return;
+    if (erroSujo() && !confirm('Descartar as alterações deste erro?')) return;
+    fecharEdicaoErro();
+  }
+  // Ao trocar de tela com a edição aberta: pergunta só se houver alteração
+  function liberarEdicaoErro() {
+    if (!erroEdicao) return true;
+    if (erroSujo() && !confirm('Descartar as alterações deste erro?')) return false;
+    fecharEdicaoErro(true);
+    return true;
+  }
+  window.addEventListener('beforeunload', ev => { if (erroSujo()) { ev.preventDefault(); ev.returnValue = ''; } });
   async function renderizarPreviewErro() {
     const token = ++previewToken;
     const cont = document.getElementById('erro-imgs-preview');
-    cont.innerHTML = '';
     const e = erroEdicao.id ? cadernoErros.find(x => x.id === erroEdicao.id) : null;
-    const existentes = e ? (e.imgIds || []).filter(id => !erroEdicao.imgsRemover.includes(id)) : [];
-    for (const id of existentes) {
-      const src = await idbGet(id);
-      if (token !== previewToken || !src) return;
-      cont.appendChild(miniaturaErro(src, () => { erroEdicao.imgsRemover.push(id); renderizarPreviewErro(); }));
+    const itens = [];
+    if (e) {
+      for (const id of (e.imgIds || []).filter(i => !erroEdicao.imgsRemover.includes(i))) {
+        const src = await idbGet(id);
+        if (token !== previewToken || !erroEdicao) return;
+        if (src) itens.push({ src, salvo: id });
+      }
     }
-    erroEdicao.imgsNovas.forEach((src, idx) => {
-      if (token !== previewToken) return;
-      cont.appendChild(miniaturaErro(src, () => { erroEdicao.imgsNovas.splice(idx, 1); renderizarPreviewErro(); }));
-    });
+    if (token !== previewToken || !erroEdicao) return;
+    erroEdicao.imgsNovas.forEach((src, idx) => itens.push({ src, novo: idx }));
+    erroEdicao.meta = itens.map(it => ({ salvo: it.salvo, novo: it.novo }));
+    erroEdicao.lista = itens.map((it, k) => ({ src: it.src, nome: `erro-${erroEdicao.id || 'novo'}-print-${k + 1}.jpg` }));
+    document.getElementById('erro-prints-n').textContent = `(${itens.length})`;
+    cont.innerHTML = itens.length ? itens.map((it, k) => `
+      <div class="erro-pit">
+        <button type="button" class="erro-th" onclick="abrirPrintsEdicao(${k}, this)" aria-label="Ampliar print ${k + 1}"><img src="${it.src}" alt="Print ${k + 1}"><span class="lupa" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-plus"></i></span></button>
+        <div class="erro-pit-ac">
+          <button type="button" class="amp" onclick="abrirPrintsEdicao(${k}, this)"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i> Ampliar</button>
+          <button type="button" class="rem" onclick="removerPrintEdicao(${k})" aria-label="Remover print ${k + 1}" title="Remover"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+      </div>`).join('') : '<p class="erro-vazio">Nenhum print ainda. Use Arquivo, Câmera ou Colar.</p>';
   }
-  function miniaturaErro(src, onRemove) {
-    const wrap = document.createElement('div');
-    wrap.className = 'relative w-20 h-20 rounded-lg overflow-hidden border border-theme bg-card';
-    const img = document.createElement('img');
-    img.src = src; img.className = 'w-full h-full object-cover';
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-red-600 text-white text-[10px]';
-    btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    btn.onclick = onRemove;
-    wrap.append(img, btn);
-    return wrap;
+  function removerPrintEdicao(k) {
+    const m = erroEdicao && erroEdicao.meta[k];
+    if (!m) return;
+    if (m.salvo) erroEdicao.imgsRemover.push(m.salvo); else erroEdicao.imgsNovas.splice(m.novo, 1);
+    renderizarPreviewErro();
   }
+  async function adicionarPrintsEdicao(arquivos) {
+    if (!erroEdicao) return;
+    for (const f of arquivos) {
+      if (!f || !String(f.type).startsWith('image/')) continue;
+      try { erroEdicao.imgsNovas.push(await comprimirImagem(f)); } catch (err) { document.getElementById('erro-colar-dica').textContent = 'Não consegui ler uma das imagens.'; }
+    }
+    if (erroEdicao) renderizarPreviewErro();
+  }
+  async function colarPrintBotao() {
+    const dica = document.getElementById('erro-colar-dica');
+    dica.textContent = '';
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.read) throw new Error('sem acesso');
+      const itens = await navigator.clipboard.read();
+      const arquivos = [];
+      for (const it of itens) {
+        const tipo = it.types.find(t => t.startsWith('image/'));
+        if (tipo) arquivos.push(new File([await it.getType(tipo)], 'colado.' + tipo.split('/')[1], { type: tipo }));
+      }
+      if (!arquivos.length) { dica.textContent = 'Não há imagem na área de transferência.'; return; }
+      await adicionarPrintsEdicao(arquivos);
+    } catch (err) {
+      dica.textContent = 'Não consegui ler a área de transferência. Copie a imagem e use Ctrl+V com esta tela aberta.';
+    }
+  }
+  document.addEventListener('paste', async ev => {
+    if (!erroEdicao) return;
+    const arquivos = [...((ev.clipboardData && ev.clipboardData.files) || [])].filter(f => String(f.type).startsWith('image/'));
+    if (!arquivos.length) return;
+    ev.preventDefault();
+    await adicionarPrintsEdicao(arquivos);
+  });
   async function salvarErro() {
+    if (!erroEdicao || erroEdicao.salvando) return;
     const enunciado = document.getElementById('erro-enunciado').value.trim();
     const discId = document.getElementById('erro-disc').value;
     const topicoId = document.getElementById('erro-topico').value;
-    if (!enunciado) { alert('Escreva o enunciado ou um resumo do erro.'); return; }
+    if (!enunciado) { alert('Escreva o enunciado ou um resumo do erro.'); document.getElementById('erro-enunciado').focus(); return; }
     if (!topicoId) { alert('Escolha o tópico do edital.'); return; }
+    erroEdicao.salvando = true;
     const campos = {
       discId, topicoId, enunciado,
       minha: document.getElementById('erro-minha').value.trim(),
@@ -4130,23 +4301,142 @@
       await idbPut(imgId, src);
       e.imgIds.push(imgId);
     }
-    fecharModalErro();
+    fecharEdicaoErro();
     salvarTudo();
   }
   async function excluirErroAtual() {
     if (!erroEdicao || !erroEdicao.id) return;
-    if (!confirm('Excluir este erro e todos os seus prints? Essa ação não pode ser desfeita.')) return;
     const e = cadernoErros.find(x => x.id === erroEdicao.id);
+    const n = e ? (e.imgIds || []).length : 0;
+    const oque = n ? `este erro e ${n === 1 ? 'o print' : 'os ' + n + ' prints'}` : 'este erro';
+    if (!confirm(`Excluir ${oque}? Essa ação não pode ser desfeita.`)) return;
     if (e) for (const id of e.imgIds || []) await idbDel(id);
     cadernoErros = cadernoErros.filter(x => x.id !== erroEdicao.id);
-    fecharModalErro();
+    fecharEdicaoErro();
     salvarTudo();
   }
-  document.getElementById('erro-imgs').addEventListener('change', async ev => {
-    for (const f of ev.target.files) erroEdicao.imgsNovas.push(await comprimirImagem(f));
-    ev.target.value = '';
-    renderizarPreviewErro();
-  });
+  const aoEscolherPrints = async ev => { const arq = [...ev.target.files]; ev.target.value = ''; await adicionarPrintsEdicao(arq); };
+  document.getElementById('erro-imgs').addEventListener('change', aoEscolherPrints);
+  document.getElementById('erro-imgs-cam').addEventListener('change', aoEscolherPrints);
+
+  // ----- Visualizador do print (L2): tela cheia, zoom, setas, dados do erro ao lado -----
+  let vz = null;
+  function dadosParaVisualizador(e, disc, node) {
+    const num = node ? numeroEdital(node.nome) : '';
+    return { cab: [disc ? disc.nome : '', node ? (num ? num + '. ' : '') + nomeSemNumero(node.nome) : ''].filter(Boolean).join(' · '),
+      enunciado: e.enunciado || '', minha: e.minha || '', correta: e.correta || '', motivo: e.motivo || '', anotacao: e.anotacao || '' };
+  }
+  async function abrirPrintsErro(id, idx, origem) {
+    const e = cadernoErros.find(x => x.id === id);
+    if (!e) return;
+    const itens = []; let inicial = 0;
+    for (const [k, imgId] of (e.imgIds || []).entries()) {
+      const src = await idbGet(imgId);
+      if (!src) continue;
+      if (k === idx) inicial = itens.length;
+      itens.push({ src, nome: `erro-${e.id}-print-${k + 1}.jpg` });
+    }
+    if (!itens.length) return;
+    const { disc, node } = getNodeRef(e.discId, e.topicoId);
+    abrirVisualizadorPrint(itens, inicial, dadosParaVisualizador(e, disc, node), origem);
+  }
+  function abrirPrintsEdicao(k, origem) {
+    if (!erroEdicao || !erroEdicao.lista.length) return;
+    const v = id => document.getElementById(id).value;
+    const { disc, node } = getNodeRef(v('erro-disc'), v('erro-topico'));
+    abrirVisualizadorPrint(erroEdicao.lista, k, dadosParaVisualizador({ enunciado: v('erro-enunciado'), minha: v('erro-minha'), correta: v('erro-correta'), motivo: v('erro-motivo'), anotacao: v('erro-anotacao') }, disc, node), origem);
+  }
+  function abrirVisualizadorPrint(itens, i, dados, origem) {
+    fecharVisualizadorPrint(true);
+    vz = { itens, i: Math.max(0, Math.min(i, itens.length - 1)), zoom: 1, x: 0, y: 0, dados: dados || {}, origem: origem || document.activeElement, ptr: new Map(), pinch: 0 };
+    const el = document.createElement('div');
+    el.id = 'visualizador-print'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Print ampliado');
+    const grupoZoom = `<button type="button" class="vz-b" data-vz="menos" aria-label="Diminuir o zoom" title="Diminuir (−)"><i class="fa-solid fa-minus" aria-hidden="true"></i></button><span class="vz-zoomtxt" data-vz-txt>100%</span><button type="button" class="vz-b" data-vz="mais" aria-label="Aumentar o zoom" title="Aumentar (+)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button><button type="button" class="vz-b" data-vz="ajustar" aria-label="Ajustar à tela" title="Ajustar (0)"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>`;
+    el.innerHTML = `<div class="vz-col">
+        <div class="vz-bar"><button type="button" class="vz-b" data-vz="fechar" aria-label="Fechar o print" title="Fechar (Esc)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><span class="vz-n" data-vz-n aria-live="polite"></span><span class="vz-grupo-zoom">${grupoZoom}</span><button type="button" class="vz-b" data-vz="baixar" aria-label="Baixar o print" title="Baixar"><i class="fa-solid fa-download" aria-hidden="true"></i></button></div>
+        <div class="vz-palco" data-vz-palco><button type="button" class="vz-seta e" data-vz="ant" aria-label="Print anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><img data-vz-img alt="" draggable="false"><button type="button" class="vz-seta d" data-vz="prox" aria-label="Próximo print"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
+        <div class="vz-rodape">${grupoZoom}</div>
+      </div>
+      <div class="vz-dados" data-vz-dados></div>`;
+    document.body.appendChild(el);
+    el.addEventListener('click', ev => { const b = ev.target.closest('[data-vz]'); if (b) acaoVisualizador(b.dataset.vz); });
+    document.addEventListener('keydown', teclaVisualizador, true);
+    const palco = el.querySelector('[data-vz-palco]');
+    palco.addEventListener('wheel', ev => { ev.preventDefault(); ajustarZoomVz(vz.zoom * (ev.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
+    palco.addEventListener('dblclick', ev => { if (ev.target.closest('button')) return; if (vz.zoom > 1.01) { vz.zoom = 1; vz.x = vz.y = 0; aplicarVz(); } else ajustarZoomVz(2); });
+    palco.addEventListener('pointerdown', ev => { if (ev.target.closest('button')) return; vz.ptr.set(ev.pointerId, { x: ev.clientX, y: ev.clientY }); palco.setPointerCapture(ev.pointerId); vz.pinch = 0; });
+    palco.addEventListener('pointermove', ev => {
+      const p = vz.ptr.get(ev.pointerId); if (!p) return;
+      if (vz.ptr.size === 2) {
+        vz.ptr.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+        const [a, b] = [...vz.ptr.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (vz.pinch) ajustarZoomVz(vz.zoom * d / vz.pinch); vz.pinch = d; return;
+      }
+      vz.x += ev.clientX - p.x; vz.y += ev.clientY - p.y; vz.ptr.set(ev.pointerId, { x: ev.clientX, y: ev.clientY }); aplicarVz();
+    });
+    const soltar = ev => { vz.ptr.delete(ev.pointerId); vz.pinch = 0; };
+    palco.addEventListener('pointerup', soltar); palco.addEventListener('pointercancel', soltar);
+    renderizarVz();
+    el.querySelector('[data-vz="fechar"]').focus();
+  }
+  function ajustarZoomVz(z) { vz.zoom = Math.max(0.5, Math.min(4, z)); if (vz.zoom <= 1) { vz.x = 0; vz.y = 0; } aplicarVz(); }
+  function aplicarVz() {
+    const el = document.getElementById('visualizador-print'); if (!el || !vz) return;
+    el.querySelector('[data-vz-img]').style.transform = `translate(${vz.x}px, ${vz.y}px) scale(${vz.zoom})`;
+    el.querySelectorAll('[data-vz-txt]').forEach(t => { t.textContent = Math.round(vz.zoom * 100) + '%'; });
+  }
+  function renderizarVz() {
+    const el = document.getElementById('visualizador-print'); if (!el || !vz) return;
+    const it = vz.itens[vz.i], d = vz.dados;
+    const img = el.querySelector('[data-vz-img]'); img.src = it.src; img.alt = `Print ${vz.i + 1} de ${vz.itens.length}`;
+    el.querySelector('[data-vz-n]').textContent = `Print ${vz.i + 1} de ${vz.itens.length}`;
+    el.querySelectorAll('[data-vz="ant"], [data-vz="prox"]').forEach(b => { b.disabled = vz.itens.length < 2; });
+    el.querySelector('[data-vz-dados]').innerHTML = `<small>${esc(d.cab || 'Erro')}</small>`
+      + (d.enunciado ? `<span class="vz-enun">${esc(d.enunciado)}</span>` : '')
+      + (d.minha || d.correta ? `<span><b>Minha resposta:</b> ${esc(d.minha || '—')} · <b>Correta:</b> ${esc(d.correta || '—')}</span>` : '')
+      + (d.motivo ? `<span><b>Motivo:</b> ${esc(d.motivo)}</span>` : '')
+      + (d.anotacao ? `<span class="vz-anot">${esc(d.anotacao)}</span>` : '');
+    aplicarVz();
+  }
+  function acaoVisualizador(a) {
+    if (!vz) return;
+    if (a === 'fechar') return fecharVisualizadorPrint();
+    if (a === 'mais') return ajustarZoomVz(vz.zoom * 1.25);
+    if (a === 'menos') return ajustarZoomVz(vz.zoom / 1.25);
+    if (a === 'ajustar') { vz.zoom = 1; vz.x = vz.y = 0; return aplicarVz(); }
+    if (a === 'ant' || a === 'prox') {
+      if (vz.itens.length < 2) return;
+      vz.i = (vz.i + (a === 'prox' ? 1 : vz.itens.length - 1)) % vz.itens.length; vz.zoom = 1; vz.x = vz.y = 0; return renderizarVz();
+    }
+    if (a === 'baixar') {
+      const it = vz.itens[vz.i], link = document.createElement('a');
+      link.href = it.src; link.download = it.nome || 'print.jpg'; document.body.appendChild(link); link.click(); link.remove();
+    }
+  }
+  function teclaVisualizador(ev) {
+    if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); return fecharVisualizadorPrint(); }
+    if (ev.key === 'ArrowLeft') { ev.preventDefault(); return acaoVisualizador('ant'); }
+    if (ev.key === 'ArrowRight') { ev.preventDefault(); return acaoVisualizador('prox'); }
+    if (ev.key === '+' || ev.key === '=') { ev.preventDefault(); return acaoVisualizador('mais'); }
+    if (ev.key === '-' || ev.key === '_') { ev.preventDefault(); return acaoVisualizador('menos'); }
+    if (ev.key === '0') { ev.preventDefault(); return acaoVisualizador('ajustar'); }
+    if (ev.key === 'Tab') {   // foco preso no visualizador
+      const foc = [...document.getElementById('visualizador-print').querySelectorAll('button:not(:disabled)')].filter(b => b.offsetParent !== null);
+      if (!foc.length) return;
+      const i = foc.indexOf(document.activeElement);
+      if (i < 0) { ev.preventDefault(); foc[ev.shiftKey ? foc.length - 1 : 0].focus(); }
+      else if (ev.shiftKey && i === 0) { ev.preventDefault(); foc[foc.length - 1].focus(); }
+      else if (!ev.shiftKey && i === foc.length - 1) { ev.preventDefault(); foc[0].focus(); }
+    }
+  }
+  function fecharVisualizadorPrint(semFoco = false) {
+    const el = document.getElementById('visualizador-print');
+    if (el) el.remove();
+    document.removeEventListener('keydown', teclaVisualizador, true);
+    const origem = vz && vz.origem;
+    vz = null;
+    if (!semFoco && origem && document.body.contains(origem)) { try { origem.focus(); } catch (e) {} }
+  }
 
   // =====================================================================
   // 15. BACKUP
@@ -4411,6 +4701,7 @@
     restaurarBilhete();
     atualizarTudoUI();
     navigate('dashboard');
+    medirCabecalho();
     restaurarEstadoTimer();
     atualizarAvisoNotificacao();
     avisarAbas({ tipo: 'ola' });   // se o cronômetro já estiver aberto em outra aba, ela responde
