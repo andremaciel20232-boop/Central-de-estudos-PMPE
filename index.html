@@ -415,7 +415,22 @@
     .cr-min { width: 68px; min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-primary); text-align: center; font-weight: 700; }
     .cr-add { justify-self: start; }
     .cr-hist { display: flex; gap: 8px; flex-wrap: wrap; } .cr-hist span { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-size: 13px; color: var(--text-secondary); } .cr-hist b { color: var(--text-primary); }
+    /* Fase 2: tópico sugerido e previsão no seu ritmo */
+    .cr-sug { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 800; color: var(--ms-acento-t); margin-right: 4px; white-space: nowrap; }
+    .cr-bl-a.lado { flex-wrap: nowrap; }
+    .cr-troca { min-height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--pf-borda); background: var(--bg-panel); color: var(--text-secondary); font-weight: 700; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+    .cr-troca:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .cr-rt[hidden] { display: none; }
+    .cr-rt-cab { display: flex; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; align-items: baseline; } .cr-rt-cab small { font-size: 12.5px; color: var(--text-secondary); }
+    .cr-rt-k { display: grid; gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cr-rt-k > div { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+    .cr-rt-k span { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); } .cr-rt-k b { font-size: 20px; font-variant-numeric: tabular-nums; } .cr-rt-k small { font-size: 12px; color: var(--text-secondary); }
+    .cr-cb { display: grid; gap: 6px; } .cr-cb > div { display: grid; grid-template-columns: 84px minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 12.5px; }
+    .cr-cb .bb { height: 12px; border-radius: 99px; background: var(--ms-trilho); box-shadow: inset 0 0 0 1px var(--pf-borda); overflow: hidden; display: block; } .cr-cb .bb i { display: block; height: 100%; border-radius: 99px; background: var(--c); }
+    .cr-cb b { text-align: right; font-variant-numeric: tabular-nums; }
+    .cr-rt .mc-aviso { display: block; font-size: 13.5px; }
     @container cr (max-width: 640px) {
+      .cr-rt-k { grid-template-columns: minmax(0, 1fr); }
       .cr-bl { grid-template-columns: 44px minmax(0, 1fr); } .cr-bl-c { display: grid; } .cr-bl-a { grid-column: 2; justify-content: flex-start; padding: 0 0 8px; } .cr-bl-a:empty { display: none; }
       .cr-dia-cab .cr-mini { flex-basis: 100%; padding-left: 52px; } .cr-acoes .mc-btn { flex: 1 1 auto; }
       .cr-bl-a .sel-gatilho { max-width: 100%; flex: 1 1 100%; }
@@ -1059,6 +1074,7 @@
           </div>
         </header>
         <section class="cr-cartao" id="cron-resumo" aria-label="Resumo do ciclo"></section>
+        <section class="cr-cartao cr-rt" id="cron-ritmo" aria-label="Previsão no seu ritmo" hidden></section>
         <section class="cr-sec" aria-labelledby="cron-dias-tit">
           <h3 class="mc-rot" id="cron-dias-tit">Dias do ciclo</h3>
           <div id="cron-dias" class="cr-lista"></div>
@@ -3094,11 +3110,40 @@
     percorrerNos(disc.topicos, n => { if (!n.concluido) { if (n.peso === 'alto') alto++; if (n.aocp) estrela++; } });
     return alto || estrela ? `${alto} de peso alto e ${estrela} com estrela ainda sem concluir` : 'Nenhum tópico de peso alto ou com estrela pendente';
   }
-  function blocoCronHTML(s, i, atual, proxId) {
+  // ---------- Fase 2: tópico sugerido para blocos "Disciplina inteira" ----------
+  // Ordem (C2): em estudo (o mais recente primeiro) → estrela → peso → diagnóstico → ordem do edital. Só subtópicos não concluídos.
+  const SUG_PESO = { alto: 0, medio: 1, baixo: 2 }, SUG_DIAG = { nao_estudado: 0, revisar: 1, dominio: 3, menor: 4 };
+  function rankingTopicosDisc(discId) {
+    const d = meusDados.find(x => x.id === discId); if (!d) return [];
+    const l = []; let i = 0;
+    percorrerNos(d.topicos, n => { if (!(n.children && n.children.length) && !n.concluido) l.push({ n, i, em: (n.tempo || 0) > 0, ult: n.ultimaData || '' }); i++; });
+    const k = x => [x.em ? 0 : 1, x.n.aocp ? 0 : 1, SUG_PESO[x.n.peso] ?? 3, SUG_DIAG[x.n.diagnostico] ?? 2, x.i];
+    l.sort((a, b) => {
+      if (a.em && b.em && a.ult !== b.ult) return a.ult < b.ult ? 1 : -1;
+      const ka = k(a), kb = k(b); for (let j = 0; j < ka.length; j++) if (ka[j] !== kb[j]) return ka[j] - kb[j]; return 0;
+    });
+    return l.map(x => x.n);
+  }
+  // sugestão de cada bloco sem tópico (e não feito) da letra/dia; a mesma disciplina não repete tópico na letra
+  function sugestoesDia(dia) {
+    const out = {}, usados = {}, cache = {};
+    if (!dia) return out;
+    dia.sessoes.forEach(s => { if (s.topicoId && !s.feita) (usados[s.disc] = usados[s.disc] || new Set()).add(String(s.topicoId)); });
+    dia.sessoes.forEach(s => {
+      if (s.topicoId || s.feita) return;
+      const r = cache[s.disc] || (cache[s.disc] = rankingTopicosDisc(s.disc)), u = usados[s.disc] || (usados[s.disc] = new Set());
+      const n = r.find(x => !u.has(String(x.id))) || r[0];
+      if (n) { u.add(String(n.id)); out[s.id] = n; }
+    });
+    return out;
+  }
+  const SUG_SELO = '<span class="cr-sug"><span aria-hidden="true">✦</span> Sugerido</span>';
+  function blocoCronHTML(s, i, atual, proxId, sug) {
     const d = meusDados.find(x => x.id === s.disc), nomeD = esc(d ? d.nome : '—'), { node } = getNodeRef(s.disc, s.topicoId);
     const parcial = s.feita && s.parcial, prox = atual && s.id === proxId, emCurso = cronEmCurso(i, s), v = vocabCron();
-    const topico = node ? esc(node.nome) : 'Disciplina inteira';
-    const marcas = node ? `<span class="marcas">${badgeAOCPHTML(node)}${pesoBadgeHTML(node)}${diagnosticoBadgeHTML(node)}</span>` : `<span class="resumo-disc">${resumoDisciplinaTexto(s.disc)}</span>`;
+    const sn = !node && !s.feita && !cronEditando && sug ? sug : null, nd = node || sn;
+    const topico = nd ? (sn ? SUG_SELO : '') + esc(nd.nome) : 'Disciplina inteira';
+    const marcas = nd ? `<span class="marcas">${badgeAOCPHTML(nd)}${pesoBadgeHTML(nd)}${diagnosticoBadgeHTML(nd)}${sn && noEmEstudo(sn) ? '<span class="edt-em">em estudo</span>' : ''}</span>` : `<span class="resumo-disc">${resumoDisciplinaTexto(s.disc)}</span>`;
     const tags = parcial ? `<span class="selo-parcial">Parcial · ${s.parcial.estudadoMin}/${s.min} min</span>` : s.feita ? `<span class="cr-tg ok">${v.feito}</span>` : prox ? '<span class="cr-tg prox">Próximo</span>' : '';
     let acao = '';
     if (cronEditando) {
@@ -3110,23 +3155,24 @@
     } else if (parcial) acao = `<span class="cr-falta">Faltam ${Math.max(0, s.min - s.parcial.estudadoMin)} min</span>`;
     else if (atual && !s.feita) acao = emCurso
       ? `<button type="button" class="cr-ini parar" onclick="alternarIniciarParar()"><i class="fa-solid fa-stop" aria-hidden="true"></i> Parar</button>`
-      : `<button type="button" class="cr-ini${prox ? ' pri' : ''}" onclick="iniciarSessaoCron(${i}, ${s.id})" aria-label="Iniciar ${nomeD}"><i class="fa-solid fa-play" aria-hidden="true"></i> Iniciar</button>`;
+      : (sn ? `<button type="button" class="cr-troca" onclick="abrirSeletorSessao(${i}, ${s.id})" aria-haspopup="dialog" aria-label="Trocar o tópico sugerido de ${nomeD}">Trocar</button>` : '')
+        + `<button type="button" class="cr-ini${prox ? ' pri' : ''}" onclick="iniciarSessaoCron(${i}, ${s.id})" aria-label="Iniciar ${nomeD}"><i class="fa-solid fa-play" aria-hidden="true"></i> Iniciar</button>`;
     return `<div class="cr-bl ses-cron ${parcial ? 'parcial sessao-parcial' : s.feita ? 'feito sessao-concluida' : ''} ${prox ? 'prox' : ''}">
         <label class="cr-ck chk-toque"><input type="checkbox" ${s.feita ? 'checked' : ''} onchange="alternarSessao(${i}, ${s.id})" aria-label="${v.ses === 'bloco' ? 'Bloco' : 'Sessão'} feito: ${nomeD}"></label>
         <div class="cr-bl-c"><span class="cr-bl-d">${nomeD}</span><span class="cr-bl-t">${topico}</span><span class="cr-bl-m">${tags}${marcas}${cronEditando ? '' : `<span class="cr-bl-min">${s.min} min</span>`}</span></div>
-        <div class="cr-bl-a">${acao}</div></div>`;
+        <div class="cr-bl-a${cronEditando ? '' : ' lado'}">${acao}</div></div>`;
   }
   function diaHTML(dia, i) {
     const v = vocabCron(), atual = i === cronograma.diaAtual, feito = diaCompleto(dia), aberto = cronAberto(dia, i);
     const totalMin = dia.sessoes.reduce((acc, s) => acc + s.min, 0), nf = dia.sessoes.filter(s => s.feita).length;
     const alto = dia.sessoes.filter(s => { const { node } = getNodeRef(s.disc, s.topicoId); return node && node.peso === 'alto'; }).length;
-    const proxId = atual ? (dia.sessoes.find(s => !s.feita) || {}).id : null;
+    const proxId = atual ? (dia.sessoes.find(s => !s.feita) || {}).id : null, sg = atual ? sugestoesDia(dia) : {};
     const tag = atual ? `<span class="cr-tag h">${v.agora}</span>` : feito ? `<span class="cr-tag f"><i class="fa-solid fa-check" aria-hidden="true"></i> ${v.feito}</span>` : `<span class="cr-tag">${v.tag(i)}</span>`;
     const resumo = `${dia.sessoes.length} ${dia.sessoes.length === 1 ? v.ses : v.sess} · ${formatarMinutos(totalMin)}`;
     const nome = cronEditando ? `<input class="cr-nome-in" value="${esc(dia.nome)}" onchange="renomearDia(${i}, this.value)" aria-label="Nome ${v.un === 'letra' ? 'da letra' : 'do dia'}">` : `<span class="cr-dia-nome"><b>${esc(dia.nome)}</b><span>${resumo}</span></span>`;
     const mini = !aberto && dia.sessoes.length ? `<span class="cr-mini"><span class="bar" aria-hidden="true"><i style="width:${Math.round(nf / dia.sessoes.length * 100)}%"></i></span>${nf}/${dia.sessoes.length}${alto ? ` · peso alto ×${alto}` : ''}</span>` : '';
     const ed = cronEditando ? `<span class="cr-ed"><button type="button" class="cr-q" onclick="moverDia(${i}, -1)" aria-label="Subir ${esc(dia.nome)}" title="Subir"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" class="cr-q" onclick="moverDia(${i}, 1)" aria-label="Descer ${esc(dia.nome)}" title="Descer"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button><button type="button" class="cr-q perigo" onclick="removerDia(${i})" aria-label="Remover ${esc(dia.nome)}" title="Remover"><i class="fa-solid fa-trash" aria-hidden="true"></i></button></span>` : '';
-    const corpo = aberto ? `<div class="cr-dia-corpo" id="cron-corpo-${dia.id}">${dia.sessoes.length ? dia.sessoes.map(s => blocoCronHTML(s, i, atual, proxId)).join('') : `<p class="cr-vazio">${v.vazio}</p>`}${cronEditando ? `<button type="button" class="mc-btn pri cr-add" onclick="adicionarBlocoCron(${i})"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar ${v.ses}</button>` : ''}</div>` : '';
+    const corpo = aberto ? `<div class="cr-dia-corpo" id="cron-corpo-${dia.id}">${dia.sessoes.length ? dia.sessoes.map(s => blocoCronHTML(s, i, atual, proxId, sg[s.id])).join('') : `<p class="cr-vazio">${v.vazio}</p>`}${cronEditando ? `<button type="button" class="mc-btn pri cr-add" onclick="adicionarBlocoCron(${i})"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar ${v.ses}</button>` : ''}</div>` : '';
     return `<div class="cr-dia card-dia ${atual ? 'atual' : feito ? 'feito' : ''}" id="cron-dia-${dia.id}"><div class="cr-dia-cab">
         <button type="button" class="cr-seta" onclick="alternarDiaCron(${dia.id})" aria-expanded="${aberto}" ${aberto ? `aria-controls="cron-corpo-${dia.id}"` : ''} aria-label="${aberto ? 'Recolher' : 'Abrir'} ${esc(dia.nome)}"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
         ${tag}${nome}${mini}${ed}</div>${corpo}</div>`;
@@ -3141,13 +3187,50 @@
     if (!dia) prox = '';
     else if (!s) prox = `<div class="cr-prox fim"><div><span class="mc-rot">${v.prox} · <span id="cron-dia">${esc(dia.nome)}</span></span><b>${dia.sessoes.length ? v.fim : v.vazio}</b></div></div>`;
     else {
-      const d = meusDados.find(x => x.id === s.disc), { node } = getNodeRef(s.disc, s.topicoId), emCurso = cronEmCurso(cronograma.diaAtual, s);
+      const d = meusDados.find(x => x.id === s.disc), { node } = getNodeRef(s.disc, s.topicoId), emCurso = cronEmCurso(cronograma.diaAtual, s), sn = node ? null : sugestoesDia(dia)[s.id];
       const bt = emCurso ? `<button type="button" class="cr-ini parar" onclick="alternarIniciarParar()"><i class="fa-solid fa-stop" aria-hidden="true"></i> Parar</button>`
         : `<button type="button" class="cr-ini pri" onclick="iniciarSessaoCron(${cronograma.diaAtual}, ${s.id})" aria-label="Iniciar ${esc(d ? d.nome : '')}"><i class="fa-solid fa-play" aria-hidden="true"></i> Iniciar</button>`;
-      prox = `<div class="cr-prox"><div><span class="mc-rot">${v.prox} · <span id="cron-dia">${esc(dia.nome)}</span></span><b>${esc(d ? d.nome : '—')} · ${s.min} min</b><span class="t">${node ? esc(node.nome) : 'Disciplina inteira'}</span></div>${bt}</div>`;
+      prox = `<div class="cr-prox"><div><span class="mc-rot">${v.prox} · <span id="cron-dia">${esc(dia.nome)}</span></span><b>${esc(d ? d.nome : '—')} · ${s.min} min</b><span class="t">${node ? esc(node.nome) : sn ? SUG_SELO + esc(sn.nome) : 'Disciplina inteira'}</span></div>${bt}</div>`;
     }
     return `<div class="cr-lin"><span class="mc-rot">Rodada <span id="cron-rodada">${cronograma.rodada}</span></span><span class="cr-frase">${prog.feitas} de ${prog.total} ${v.sess} · ${formatarMinutos(plan)} planejadas</span><span class="cr-pc" id="cron-progresso">${prog.pct}%</span></div>
       <div class="cr-trilha" role="group" aria-label="${v.tit}">${bolas}</div>${prox}`;
+  }
+  // ---------- Fase 2: previsão "No seu ritmo" (minutos registrados de verdade × plano do Montar ciclo) ----------
+  function previsaoRitmo() {
+    const p = cronograma.plano;
+    if (!p || !p.ultimoUso || !cronograma.dias.length) return null;   // só depois de montar o ciclo pelo Montar ciclo
+    const hoje = hojeISO(), datas = registrosEstudo.map(r => r.data).filter(x => x && x <= hoje).sort();
+    if (!datas.length) return null;
+    const uso = Math.round((mcS2d(hoje) - mcS2d(datas[0])) / 864e5) + 1;
+    if (uso < 7) return null;   // poucos dias de uso: a conta ainda não diz nada
+    const jan = Math.min(14, uso), ini = mcAdd(hoje, -(jan - 1));
+    const minJan = registrosEstudo.reduce((a, r) => a + (r.data >= ini && r.data <= hoje ? (Number(r.minutos) || 0) : 0), 0);
+    const ritmo = minJan / jan, R = mcCalcular(), diasRest = Math.max(0, Math.round((mcS2d(R.revIni) - mcS2d(hoje)) / 864e5));
+    if (!diasRest || !(R.H > 0)) return null;
+    const planTot = R.H * 60, planoDia = planTot / diasRest, realTot = ritmo * diasRest, razao = ritmo / planoDia;
+    const minFecha = R.c.todas && Number.isFinite(R.fecha) ? R.fecha * R.c.cicloMin : Infinity;
+    const diasFecha = ritmo > 0 && Number.isFinite(minFecha) ? Math.ceil(minFecha / ritmo) : Infinity;
+    return { jan, ritmo, planoDia, planTot, realTot, diasRest, revIni: R.revIni, final: p.revisaoFinal ? 'a revisão final' : 'a prova', concluido: R.fecha === 0,
+      fechaReal: diasFecha <= diasRest ? mcAdd(hoje, diasFecha) : null, fechaPlano: R.dataFecha,
+      estado: razao >= 1.05 ? 'ok' : razao >= 0.9 ? 'ritmo' : 'ruim', porDia: Math.max(0, Math.ceil((planTot - realTot) / diasRest)) };
+  }
+  function ritmoCronHTML() {
+    const P = previsaoRitmo(); if (!P) return '';
+    const fm = m => formatarMinutos(Math.round(m)), dm = iso => iso ? iso.slice(8, 10) + '/' + iso.slice(5, 7) : '';
+    const ate = dm(P.revIni), ruim = P.estado === 'ruim';
+    const ed = P.concluido ? 'Todos os tópicos do edital já estão concluídos.' : P.fechaReal ? `O edital fecha ≈ ${dm(P.fechaReal)}.` : `Nesse ritmo, o edital <b>não fecha</b> antes d${P.final === 'a prova' ? 'a prova' : 'a revisão final'}.`;
+    const msg = P.estado === 'ok' ? `<b>Você está à frente do plano.</b> No seu ritmo, faz ${fm(P.realTot - P.planTot)} a mais até ${ate}. ${ed}`
+      : ruim ? `<b>No seu ritmo, faltam ${fm(P.planTot - P.realTot)} para cumprir o plano até ${ate}.</b> Para recuperar: <b>+${P.porDia} min por dia</b>. ${ed}`
+      : `<b>Você está no ritmo do plano.</b> ${ed}`;
+    const mx = Math.max(P.ritmo, P.planoDia) || 1;
+    return `<div class="cr-rt-cab"><span class="mc-rot">No seu ritmo · últimos ${P.jan} dias</span><small>até ${P.final} (${ate})</small></div>
+      <div class="cr-rt-k"><div><span>Ritmo real</span><b>${fm(P.ritmo)}/dia</b><small>plano: ${fm(P.planoDia)}/dia</small></div>
+        <div><span>Até ${P.final}</span><b>${fm(P.realTot)}</b><small>plano: ${fm(P.planTot)}</small></div>
+        <div><span>Edital fecha</span><b>${P.concluido ? 'concluído' : P.fechaReal ? '≈ ' + dm(P.fechaReal) : 'não fecha'}</b><small>plano: ${P.fechaPlano ? '≈ ' + dm(P.fechaPlano) : 'não fecha'}</small></div></div>
+      <div class="cr-cb" role="img" aria-label="Seu ritmo ${fm(P.ritmo)} por dia; plano ${fm(P.planoDia)} por dia">
+        <div><span>Seu ritmo</span><span class="bb"><i style="--c:${ruim ? 'var(--mc-ruim-bd)' : 'var(--brand)'};width:${Math.round(P.ritmo / mx * 100)}%"></i></span><b>${fm(P.ritmo)}</b></div>
+        <div><span>Plano</span><span class="bb"><i style="--c:var(--pf-borda);width:${Math.round(P.planoDia / mx * 100)}%"></i></span><b>${fm(P.planoDia)}</b></div></div>
+      <div class="mc-aviso ${P.estado === 'ritmo' ? '' : P.estado}" role="status">${msg}</div>`;
   }
   function renderizarCronograma() {
     const v = vocabCron(), vazio = !cronograma.dias.length;
@@ -3161,6 +3244,7 @@
     be.setAttribute('aria-pressed', String(cronEditando)); be.classList.toggle('hidden', vazio);
     be.innerHTML = `<i class="fa-solid ${cronEditando ? 'fa-check' : 'fa-pen'}" aria-hidden="true"></i> <span>${cronEditando ? 'Pronto' : 'Editar ciclo'}</span>`;
     document.getElementById('cron-resumo').innerHTML = resumoCronHTML();
+    const rt = ritmoCronHTML(), er = document.getElementById('cron-ritmo'); er.innerHTML = rt; er.hidden = !rt;
     document.getElementById('cron-dias').innerHTML = cronograma.dias.map((d, i) => diaHTML(d, i)).join('');
     document.getElementById('cron-historico').innerHTML = cronograma.historico.length
       ? cronograma.historico.slice().reverse().map(h => `<span><b>Rodada ${h.rodada}</b> · concluída em ${formatarDataBR(h.concluidaEm)}</span>`).join('')
@@ -4230,7 +4314,9 @@
     toggleFloatingTimer(true);
     document.getElementById('timer-disc').value = s.disc;
     popularTopicosTimer();
-    if (s.topicoId) document.getElementById('timer-topico').value = s.topicoId;
+    // sem tópico fixo no bloco, o cronômetro abre com o tópico sugerido (dá para trocar lá)
+    const alvo = s.topicoId || ((sugestoesDia(dia)[s.id] || {}).id || '');
+    if (alvo) document.getElementById('timer-topico').value = alvo;
     // a meta e o alarme vêm da duração planejada da própria sessão
     timerMetaPreparadaMin = s.min;
     setOrigemTimer(`Sessão do cronograma · alarme em ${s.min} min`);
